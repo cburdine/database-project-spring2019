@@ -12,9 +12,7 @@ CREATE TABLE IF NOT EXISTS `Curriculum` (
     `min_credit_hours` int NOT NULL,
 	`id_in_charge` int NOT NULL,
     PRIMARY KEY (`name`),
-    FOREIGN KEY (`name`) REFERENCES CurriculumListings(`curriculum_name`),
-    FOREIGN KEY (`name`) REFERENCES CurriculumTopics(`curriculum_name`),
-	FOREIGN KEY (`name`) REFERENCES Goal(`curriculum_name`)
+	FOREIGN KEY (`id_in_charge`) REFERENCES Person(`id`)
     /* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -26,11 +24,7 @@ CREATE TABLE IF NOT EXISTS `Course` (
     `subject_code` varchar(4) NOT NULL,
     `credit_hours` int NOT NULL,
     `description` varchar(1023),
-    PRIMARY KEY (`name`),
-	FOREIGN KEY (`name`) REFERENCES CurriculumListings(`course_name`),
-    FOREIGN KEY (`name`) REFERENCES Section(`course_name`),
-	FOREIGN KEY (`name`) REFERENCES CourseTopics(`course_name`),
-	FOREIGN KEY (`name`) REFERENCES CourseGoals(`course_name`)
+    PRIMARY KEY (`name`)
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -43,7 +37,6 @@ CREATE TABLE IF NOT EXISTS `CurriculumListings` (
     `required` boolean NOT NULL,
     PRIMARY KEY (`curriculum_name`,`course_name`),
 	FOREIGN KEY (`curriculum_name`) REFERENCES Curriculum(`name`),
-	FOREIGN KEY (`curriculum_name`) REFERENCES CurriculumTopics(`curriculum_name`),
     FOREIGN KEY (`course_name`) REFERENCES Course(`name`)
 	/* Add foreign key constraints*/
     
@@ -59,7 +52,6 @@ CREATE TABLE IF NOT EXISTS `CurriculumTopics` (
     `time_unit` int NOT NULL,
     PRIMARY KEY (`curriculum_name`,`topic_id`),
 	FOREIGN KEY (`curriculum_name`) REFERENCES Curriculum(`name`),
-	FOREIGN KEY (`curriculum_name`) REFERENCES CurriculumListings(`curriculum_name`),
     FOREIGN KEY (`topic_id`) REFERENCES Topic(`id`)
 	/* Add foreign key constraints*/
     
@@ -85,9 +77,7 @@ DROP TABLE IF EXISTS `Topic`;
 CREATE TABLE IF NOT EXISTS `Topic` (
 	`id` int NOT NULL,
     `name` varchar(25) NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`id`) REFERENCES CurriculumTopics(`topic_id`),
-    FOREIGN KEY (`id`) REFERENCES CourseTopics(`topic_id`)
+    PRIMARY KEY (`id`)
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -171,8 +161,7 @@ CREATE TABLE IF NOT EXISTS `Goal` (
     `curriculum_name` varchar(25) NOT NULL,
     `description` varchar(255) NOT NULL,
     PRIMARY KEY (`id`,`curriculum_name`),
-    FOREIGN KEY (`curriculum_name`) REFERENCES Curriculum(`name`),
-	FOREIGN KEY (`id`) REFERENCES CourseGoals(`goal_id`)
+    FOREIGN KEY (`curriculum_name`) REFERENCES Curriculum(`name`)
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
