@@ -1,9 +1,9 @@
 #!usr/bin/python3
 
 import kivy
-kivy.require('1.0.7')
+kivy.require('1.10.1')
 from kivy.lang.builder import Builder
-from src.app import CurriculaApp
+from app import CurriculaApp
 
 def main():
     # import/build .kv file:
