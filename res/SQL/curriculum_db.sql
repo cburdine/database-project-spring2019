@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `Topic` (
 -- initialize `SectionGrades` table
 DROP TABLE IF EXISTS `SectionGrades`;
 CREATE TABLE IF NOT EXISTS `SectionGrades` (
-	`course` int NOT NULL,
+	`course_name` varchar(25) NOT NULL, NOT NULL,
     `semester` char NOT NULL,
     `unit_id` int NOT NULL,
     
