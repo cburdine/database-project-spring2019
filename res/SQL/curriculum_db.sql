@@ -5,6 +5,16 @@ DROP DATABASE IF EXISTS `Curricula`;
 CREATE DATABASE IF NOT EXISTS `Curricula` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `Curricula`;
 
+-- initialize `Person` table
+DROP TABLE IF EXISTS `Person`;
+CREATE TABLE IF NOT EXISTS `Person` (
+	`id` int NOT NULL,
+    `name` varchar(25) NOT NULL,
+    PRIMARY KEY (`id`)
+	/* Add foreign key constraints*/
+    
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- initialize 'Curriculum' table
 DROP TABLE IF EXISTS `Curriculum`;
 CREATE TABLE IF NOT EXISTS `Curriculum` (
@@ -42,6 +52,16 @@ CREATE TABLE IF NOT EXISTS `CurriculumListings` (
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- initialize `Topic` table
+DROP TABLE IF EXISTS `Topic`;
+CREATE TABLE IF NOT EXISTS `Topic` (
+	`id` int NOT NULL,
+    `name` varchar(25) NOT NULL,
+    PRIMARY KEY (`id`)
+	/* Add foreign key constraints*/
+    
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- initialize `CurriculumTopics` table
 DROP TABLE IF EXISTS `CurriculumTopics`;
 CREATE TABLE IF NOT EXISTS `CurriculumTopics` (
@@ -72,20 +92,10 @@ CREATE TABLE IF NOT EXISTS `Section` (
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- initialize `Topic` table
-DROP TABLE IF EXISTS `Topic`;
-CREATE TABLE IF NOT EXISTS `Topic` (
-	`id` int NOT NULL,
-    `name` varchar(25) NOT NULL,
-    PRIMARY KEY (`id`)
-	/* Add foreign key constraints*/
-    
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 -- initialize `SectionGrades` table
 DROP TABLE IF EXISTS `SectionGrades`;
 CREATE TABLE IF NOT EXISTS `SectionGrades` (
-	`course_name` varchar(25) NOT NULL, NOT NULL,
+	`course` varchar(25) NOT NULL,
     `semester` char NOT NULL,
     `unit_id` int NOT NULL,
     
@@ -174,16 +184,6 @@ CREATE TABLE IF NOT EXISTS `CourseGoals` (
     PRIMARY KEY (`course_name`,`goal_id`),
 	FOREIGN KEY (`course_name`) REFERENCES Course(`name`),
     FOREIGN KEY (`goal_id`) REFERENCES Goal(`id`)
-	/* Add foreign key constraints*/
-    
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- initialize `Person` table
-DROP TABLE IF EXISTS `Person`;
-CREATE TABLE IF NOT EXISTS `Person` (
-	`id` int NOT NULL,
-    `name` varchar(25) NOT NULL,
-    PRIMARY KEY (`id`)
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
