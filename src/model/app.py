@@ -1,6 +1,7 @@
 import kivy
 from src.view.main_screen import MainScreen
-from kivy.uix.screenmanager import ScreenManager, Screen
+from src.view.login_screen import LoginScreen
+from kivy.uix.screenmanager import ScreenManager
 from kivy.app import App
 kivy.require('1.10.1')
 
@@ -10,7 +11,7 @@ class CurriculaApp(App):
         App.__init__(self)
         self.db_adapter = None
         self.screen_manager = ScreenManager()
-        self.screen = MainScreen()
+        self.screen = LoginScreen()
 
 
     def build(self):

@@ -1,6 +1,6 @@
 #:kivy 1.0
 
-#:import main_menu src.view.main_screen
+#:import login_screen src.view.main_screen
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -9,31 +9,68 @@
 # https://kivy.org/doc/stable/guide/lang.html
 #
 
-MainScreenRoot:
+LoginScreenRoot:
+    AnchorLayout
+        center: (root.center_x, root.center_y + 98)
+        size: (80, 40)
+
+        Label:
+            font_size: '36sp'
+            text: 'Curricula DB'
+
 
     AnchorLayout:
         center: root.center
-        size: (400, 200)
+        size: (320, 160)
 
         GridLayout
             rows: 4
-            cols: 1
+            cols: 2
             padding: 5
             spacing: 8
 
-            Button:
-                text: 'Option 1'
-                on_press: root.option_1_callback()
+            Label:
+                size_hint_x: None
+                width: 80
+                text: 'Username:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: username
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 80
+                text: 'Password:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: password
+                multiline: False
+                password: True
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 80
+                text: 'Host:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: host
+                multiline: False
+                text: ''
+
+            Widget: # empty widget
+                size_hint_x: None
+                width: 80
 
             Button:
-                text: 'Option 2'
-                on_press: root.option_2_callback()
-
-            Button:
-                text: 'Option 3'
-                on_press: root.option_3_callback()
-
-            Button:
-                text: 'Option 4'
-                on_press: root.option_4_callback()
+                text: 'Login'
+                on_press: root.login_callback()
 
