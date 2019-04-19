@@ -1,0 +1,39 @@
+#:kivy 1.0
+
+#:import main_menu src.view.main_screen
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+MainScreenRoot:
+
+    AnchorLayout:
+        center: root.center
+        size: (400, 200)
+
+        GridLayout
+            rows: 4
+            cols: 1
+            padding: 5
+            spacing: 8
+
+            Button:
+                text: 'Option 1'
+                on_press: root.option_1_callback()
+
+            Button:
+                text: 'Option 2'
+                on_press: root.option_2_callback()
+
+            Button:
+                text: 'Option 3'
+                on_press: root.option_3_callback()
+
+            Button:
+                text: 'Option 4'
+                on_press: root.option_4_callback()
+
