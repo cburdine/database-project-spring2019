@@ -6,7 +6,12 @@ Notes: - classes are made based off of actual entities
 
 import mysql.connector
 
-mydb = mysql.connector.connect
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="jabtexas23",
+    database="Curricula"
+)
 
 
 """
@@ -19,9 +24,9 @@ object and not have to use multiple
 class Curriculum:
 
     def __init__(self):
-        self.name = []
-        self.min_credit_hours = []
-        self.id_in_charge = []
+        self.name = None
+        self.min_credit_hours = None
+        self.id_in_charge = None
 
     def debug_print(self):
         """
@@ -33,13 +38,13 @@ class Curriculum:
         print(f"id_in_charge: {self.id_in_charge}")
 
     def set_name(self, n):
-        self.name.append(n)
+        self.name = n
 
     def set_min_credit_hours(self, mch):
-        self.min_credit_hours.append(mch)
+        self.min_credit_hours = mch
 
     def set_id_in_charge(self, idc):
-        self.id_in_charge.append(idc)
+        self.id_in_charge = idc
 
     def send_to_db(self):
         """
@@ -58,10 +63,10 @@ Class to store and retrieve information from the course table
 """
 class Course:
     def __init__(self):
-        self.name = []
-        self.subject_code = []
-        self.credit_hours = []
-        self.description = []
+        self.name = None
+        self.subject_code = None
+        self.credit_hours = None
+        self.description = None
 
     def debug_print(self):
         """
@@ -74,7 +79,7 @@ class Course:
         print(f"id_in_charge: {self.description}")
 
     def set_name(self, n):
-        self.nam.append(n)
+        self.name = n
 
     def set_min_credit_hours(self, mch):
         self.subject_code = mch
