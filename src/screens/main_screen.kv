@@ -1,6 +1,6 @@
 #:kivy 1.0
 
-#:import main_screen src.view.main_screen
+#:import main_screen src.screens.main_screen
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -10,6 +10,18 @@
 #
 
 MainScreenRoot:
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (100, 100)
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (100, 30)
+            text: 'Back'
+            on_press: root.logout_callback()
+
 
     AnchorLayout:
         center: root.center
