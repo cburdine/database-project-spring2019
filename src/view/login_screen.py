@@ -36,3 +36,4 @@ class LoginScreenRoot(Widget):
         print('Username: ' + self.ids.username.text)
         print('Password: ' + self.ids.password.text)
         print('Host: ' + self.ids.host.text)
+
