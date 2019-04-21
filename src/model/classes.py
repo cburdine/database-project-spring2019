@@ -4,14 +4,6 @@ Notes: - classes are made based off of actual entities
        - classes are meant to help store class information retrieved from database
 """
 
-import mysql.connector
-
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="jabtexas23",
-    database="Curricula"
-)
 
 
 """
@@ -28,23 +20,13 @@ class Curriculum:
         self.min_credit_hours = None
         self.id_in_charge = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"name: {self.name}")
         print(f"min_credit_hours: {self.min_credit_hours}")
         print(f"id_in_charge: {self.id_in_charge}")
-
-    def set_name(self, n):
-        self.name = n
-
-    def set_min_credit_hours(self, mch):
-        self.min_credit_hours = mch
-
-    def set_id_in_charge(self, idc):
-        self.id_in_charge = idc
 
     def send_to_db(self):
         """
@@ -68,27 +50,15 @@ class Course:
         self.credit_hours = None
         self.description = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"name: {self.name}")
         print(f"min_credit_hours: {self.subject_code}")
         print(f"id_in_charge: {self.credit_hours}")
         print(f"id_in_charge: {self.description}")
 
-    def set_name(self, n):
-        self.name = n
-
-    def set_min_credit_hours(self, mch):
-        self.subject_code = mch
-
-    def set_id_in_charge(self, idc):
-        self.credit_hours = idc
-
-    def set_id_in_charge(self, idc):
-        self.description = idc
 
     def send_to_db(self):
         """

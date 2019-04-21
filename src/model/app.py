@@ -25,7 +25,6 @@ class CurriculaApp(App):
 
         return self.screen_manager
 
-
-
     def changeScreen(self, screen):
         print(screen)
+

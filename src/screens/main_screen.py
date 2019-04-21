@@ -16,8 +16,8 @@ class MainScreen(Screen):
 
     view_kv_filepath = 'screens/main_screen.kv'
 
-    def __init__(self,root_app=None):
-        Screen.__init__(self,name=self.screen_name)
+    def __init__(self, root_app=None):
+        Screen.__init__(self, name=self.screen_name)
         root_widget = Builder.load_file(self.view_kv_filepath)
         root_widget.link_to_app(root_app)
         self.add_widget(root_widget)
@@ -37,17 +37,17 @@ class MainScreenRoot(Widget):
     def link_to_app(self, app_ref):
         self.app = app_ref
 
-    def option_1_callback(self):
-        print('OPTION 1')
+    def add_curriculum_callback(self):
+        print('Add Curriculum')
 
-    def option_2_callback(self):
-        print('OPTION 2')
+    def curriculum_dashboard_callback(self):
+        print('Curriculum Dashboard')
 
-    def option_3_callback(self):
-        print('OPTION 3')
+    def course_dashboard_callback(self):
+        print('Course Dashboard')
 
-    def option_4_callback(self):
-        print('OPTION 4')
+    def course_stats_callback(self):
+        print('Course Stats')
 
     def logout_callback(self):
         self.app.screen_manager.transition.direction = 'right'
