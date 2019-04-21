@@ -83,9 +83,12 @@ class LoginScreenRoot(Widget):
 
 
     def initialize_schema(self, *args):
+
+        # Make this call threaded in the future.
         self.app.db_adapter.execute_source(schema.SCHEMA_SOURCE,
                      max_statements=20,
                      value_progress_callback= self.login_prog.update_value)
+
         logging.info("LoginScreenRoot: " + "accessing " + schema.DATABASE)
         self.login_prog.dismiss()
         self.app.screen_manager.transition.direction = 'left'

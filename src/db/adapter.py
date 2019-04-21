@@ -38,6 +38,7 @@ class DBAdapter:
 
     def execute_source(self, src_path, max_statements= None,value_progress_callback=None):
         logging.info("DBAdapter: " + "Opening source at " + src_path)
+
         try:
             sql_file = open(src_path, 'rt')
             queries = sql_file.read()
@@ -46,20 +47,20 @@ class DBAdapter:
             logging.error("DBAdapter: " + "Cannot find source file at " + src_path)
             return False
 
-        try:
-            prog = 0
-            for statement in queries.split(';'):
-                if len(statement.strip()) > 0:
-                    self.db_cursor.execute(statement.strip() + ';')
-                    self.db_connection.commit()
-                    prog += 1
-                    if max_statements and value_progress_callback != None:
-                        value_progress_callback(prog/max_statements)
+        #try:
+        prog = 0
+        for statement in queries.split(';'):
+            if len(statement.strip()) > 0:
+                self.db_cursor.execute(statement.strip() + ';')
+                self.db_connection.commit()
+                prog += 1
+                if max_statements and value_progress_callback != None:
+                    value_progress_callback(prog/max_statements)
 
-            logging.info("DBAdapter: " + "Successfully executed source at " + src_path)
-
+        logging.info("DBAdapter: " + "Successfully executed source at " + src_path)
+        """
         except:
-            logging.error("DBAdapter: " + "Cannot find source file at " + src_path)
+            logging.error("DBAdapter: " + "Failed to execute source at " + src_path)
             return False
-
+        """
         return True
