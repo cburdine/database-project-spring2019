@@ -10,6 +10,8 @@
 # https://kivy.org/doc/stable/guide/lang.html
 #
 
+
+
 CurriculumDashboardScreenRoot:
 
     BoxLayout:
@@ -17,14 +19,42 @@ CurriculumDashboardScreenRoot:
         orientation: 'horizontal'
         size: root.size
 
-        RowSelectorWidget:
+        BoxLayout:
+            orientation: 'vertical'
             size_hint_x: 0.25
 
-            id: curriculum_selector
+            Label:
+                canvas.before:
+                    Color:
+                        rgb: 0.37, 0.37, 0.37
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                text: 'Curriculum'
+                size_hint: (1.0, None)
+                height: 60
 
-        StackLayout:
-            Button:
-                text: 'course description here'
+            RowSelectorWidget:
+                size_hint_x: 1.0
+                id: curriculum_selector
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                canvas.before:
+                    Color:
+                        rgb: 0.37, 0.37, 0.37
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                text: 'Curriculum Description'
+                background_color: (1,0,0,1)
+                size_hint_y: None
+                height: 60
+
+            Label:
+                text: 'Here is some text describing a curriculum'
 
 
     AnchorLayout:
