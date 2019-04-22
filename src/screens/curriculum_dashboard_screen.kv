@@ -1,0 +1,76 @@
+#:kivy 1.0
+
+#:import login_screen src.screens.main_screen
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+LoginScreenRoot:
+    AnchorLayout
+        center: (root.center_x, root.center_y + 98)
+        size: (80, 40)
+
+        Label:
+            font_size: '36sp'
+            text: 'Curricula DB'
+
+
+    AnchorLayout:
+        center: root.center
+        size: (320, 160)
+
+        GridLayout
+            rows: 4
+            cols: 2
+            padding: 5
+            spacing: 8
+
+            Label:
+                size_hint_x: None
+                width: 80
+                text: 'Username:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: username
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 80
+                text: 'Password:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: password
+                multiline: False
+                password: True
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 80
+                text: 'Host:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: host
+                multiline: False
+                text: 'localhost'
+
+            Widget: # empty widget
+                size_hint_x: None
+                width: 80
+
+            Button:
+                text: 'Login'
+                on_press: root.login_callback()
+
