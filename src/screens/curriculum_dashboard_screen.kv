@@ -13,16 +13,19 @@
 CurriculumDashboardScreenRoot:
 
     BoxLayout:
-        id: frame
+        id: boxlayoutframe
         orientation: 'horizontal'
         size: root.size
 
-        TestTreeWidget:
-            id: tv
+        RowSelectorWidget:
+            size_hint_x: 0.25
+
+            id: curriculum_selector
 
         StackLayout:
             Button:
                 text: 'course description here'
+
 
     AnchorLayout:
         anchor_x: 'left'

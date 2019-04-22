@@ -16,9 +16,9 @@ class Curriculum:
         self.name = None
         self.min_credit_hours = None
         self.id_in_charge = None
-        self.topic_ids = []
+        self.cur_topics = []
         self.opt_course_names = []
-        self.required_course_names = []
+        self.req_course_names = []
 
     def __str__(self):
         """
@@ -86,7 +86,7 @@ class Topic:
     def set_id(self, mch):
         self.id = mch
 
-class CurriculumTopics:
+class CurriculumTopic:
     def __init__(self):
         self.curriculum_name = None
         self.topic_id = None

@@ -5,6 +5,7 @@ from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
+from kivy.clock import Clock
 
 """
 This class represents the Curriculum Dashboard screen (This is an instance of a 
@@ -31,23 +32,18 @@ the Curriculum Dashboard controller logic.
 """
 class CurriculumDashboardScreenRoot(Widget):
 
-    def __init__(self):
-        self.tv = tree = {'node_id': '1',
-        'children': [{'node_id': '1.1',
-                      'children': [{'node_id': '1.1.1',
-                                    'children': [{'node_id': '1.1.1.1',
-                                                  'children': []}]},
-                                   {'node_id': '1.1.2',
-                                    'children': []},
-                                   {'node_id': '1.1.3',
-                                    'children': []}]},
-                      {'node_id': '1.2',
-                       'children': []}]}
-
 
     def __init__(self):
         Widget.__init__(self)
         self.app = None
+        self.curriculum_selector = None;
+        Clock.schedule_once(self.post_init, 0)
+
+    #Ensure widgets are instantiated before calling this:
+    def post_init(self, *args):
+        rows = ['Row 1', 'Row 2', 'Row 3']
+        self.curriculum_selector = self.ids.curriculum_selector
+        self.curriculum_selector.setRows(rows)
 
     def link_to_app(self, app_ref):
         self.app = app_ref
