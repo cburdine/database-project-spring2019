@@ -19,7 +19,6 @@ INSERT INTO `Person` (`id`, `name`) VALUES
 (1, 'John Doe'),
 (2, 'Jane Doe');
 
-
 -- initialize 'Curriculum' table
 DROP TABLE IF EXISTS `Curriculum`;
 CREATE TABLE IF NOT EXISTS `Curriculum` (

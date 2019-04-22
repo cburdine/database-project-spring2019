@@ -19,12 +19,14 @@ class CurriculumDashboardScreen(Screen):
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        root_widget = Builder.load_file(self.view_kv_filepath)
-        root_widget.link_to_app(root_app)
-        self.add_widget(root_widget)
+        self.root_widget = Builder.load_file(self.view_kv_filepath)
+        self.root_widget.link_to_app(root_app)
+        self.add_widget(self.root_widget)
 
+    def on_enter(self, *args):
+        self.root_widget.populate()
 
-
+    
 """
 This is the artificial 'Root' widget for the Curriculum Dashboard screen
 designed to handle Main Menu callback functions and the rest of
@@ -36,12 +38,12 @@ class CurriculumDashboardScreenRoot(Widget):
     def __init__(self):
         Widget.__init__(self)
         self.app = None
-        self.curriculum_selector = None;
-        Clock.schedule_once(self.post_init, 0)
+        self.curriculum_selector = None
+
 
     #Ensure widgets are instantiated before calling this:
-    def post_init(self, *args):
-        rows = ['Row 1', 'Row 2', 'Row 3']
+    def populate(self):
+        rows = self.app.client_model.get_curriculum_names()
         self.curriculum_selector = self.ids.curriculum_selector
         self.curriculum_selector.setRows(rows)
 

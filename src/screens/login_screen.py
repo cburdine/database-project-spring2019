@@ -24,9 +24,9 @@ class LoginScreen(Screen):
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        root_widget = Builder.load_file(self.view_kv_filepath)
-        root_widget.link_to_app(app_ref=root_app)
-        self.add_widget(root_widget)
+        self.root_widget = Builder.load_file(self.view_kv_filepath)
+        self.root_widget.link_to_app(app_ref=root_app)
+        self.add_widget(self.root_widget)
 
 
 """

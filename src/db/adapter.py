@@ -92,11 +92,11 @@ class DBAdapter:
         try:
             self.db_cursor.execute(CURRICULA_NAMES)
             self.db_connection.commit()
-            return_list = self.db_cursor.fetchall()
-            print(return_list)
-
+            tups = self.db_cursor.fetchall()
+            for t in tups:
+                return_list.append(t[0])
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve Curricula names.")
+           logging.warning("DBAdapter: Error- cannot retrieve Curricula names.")
 
         return return_list
 
