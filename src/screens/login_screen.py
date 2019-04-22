@@ -78,9 +78,11 @@ class LoginScreenRoot(Widget):
         self.login_prog = ProgressBarDialogue(title="Uploading Schema",
                                    message="Executing SQL Statements...")
 
-        self.login_prog.bind(on_open=self.initialize_schema)
+        t = threading.Thread(target=self.initialize_schema)
+        t.start()
         self.login_prog.open()
-
+        t.join()
+        self.login_prog.dismiss()
 
     def initialize_schema(self, *args):
 
@@ -90,8 +92,6 @@ class LoginScreenRoot(Widget):
                      value_progress_callback= self.login_prog.update_value)
 
         logging.info("LoginScreenRoot: " + "accessing " + schema.DATABASE)
-        self.login_prog.dismiss()
         self.app.screen_manager.transition.direction = 'left'
         self.app.screen_manager.current = 'main'
-
 

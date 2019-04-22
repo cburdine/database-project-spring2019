@@ -28,14 +28,19 @@ tree = {'node_id': '1',
                        'children': []}]}
 
 
-class TreeWidget(BoxLayout):
+class TestTreeWidget(BoxLayout):
     def __init__(self, **kwargs):
-        super(TreeWidget, self).__init__(**kwargs)
+        super(TestTreeWidget, self).__init__(**kwargs)
 
-        tv = TreeView(root_options=dict(text='Tree One'),
+        tv = TreeView(root_options=dict(text='Test Tree'),
                       hide_root=False,
                       indent_level=4)
 
         populate_tree_view(tv, None, tree)
 
         self.add_widget(tv)
+
+class ColumnSelectorWidget(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super(TestTreeWidget, self).__init__(**kwargs)

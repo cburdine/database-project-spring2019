@@ -42,6 +42,8 @@ class MainScreenRoot(Widget):
 
     def curriculum_dashboard_callback(self):
         print('Curriculum Dashboard')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'curriculum_dashboard'
 
     def course_dashboard_callback(self):
         print('Course Dashboard')

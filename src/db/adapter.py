@@ -26,7 +26,6 @@ class DBAdapter:
             logging.error("DBAdapter: " + "Cannot connect to host- " + hostname)
             return False
 
-
     def try_use_db(self, db_name):
         try:
             self.db_cursor.execute("USE %s" % db_name)
@@ -34,7 +33,6 @@ class DBAdapter:
             return True
         except:
             return False
-
 
     def execute_source(self, src_path, max_statements= None,value_progress_callback=None):
         logging.info("DBAdapter: " + "Opening source at " + src_path)
@@ -64,3 +62,37 @@ class DBAdapter:
             return False
         """
         return True
+
+    def get_curricula_names(self):
+        CURRICULA_NAMES = """SELECT name FROM Curriculum"""
+        return_list = []
+
+        try:
+            self.db_cursor.execute(CURRICULA_NAMES)
+            self.db_connection.commit()
+            return_list = self.db_cursor.fetchall()
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve Curricula names.")
+
+        return return_list
+
+    def get_curriculum(self):
+        CURRICULUM = """SELECT * FROM Curriculum
+                        WHERE name = %s"""
+        TOPICS = """SELECT * FROM CurriculumTopics
+                    WHERE curriculum_name = %s"""
+
+
+        curricula_list = []
+
+        names = self.get_curricula_names()
+
+        for c_name in names:
+            self.db_cursor.execute(CURRICULUM, c_name)
+            self.db_connection.commit()
+            result = self.db_cursor.fetchall()
+            print("RESULT:")
+            print(result)
+
+        return curricula_list
