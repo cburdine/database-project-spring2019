@@ -1,5 +1,13 @@
 from src.db.adapter import DBAdapter
 
+"""
+The purpose of this class is to serve as a
+'Flyweight' model for the database, which
+caches all values retrieved from the
+database so that they do not need to 
+be read from again. Values can then
+be updated as often as needed.
+"""
 class ClientModel:
 
     def __init__(self, adapter_ref):

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `Person` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 DELETE FROM `Person`;
 INSERT INTO `Person` (`id`, `name`) VALUES
-(1, 'John Doe')
+(1, 'John Doe'),
 (2, 'Jane Doe');
 
 
