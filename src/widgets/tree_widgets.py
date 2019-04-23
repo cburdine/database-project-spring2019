@@ -44,12 +44,28 @@ class RowSelectorWidget(BoxLayout):
         super(RowSelectorWidget, self).__init__(**kwargs)
         self.tree_view = TreeView(hide_root=True,indent_level=4)
         self.add_widget(self.tree_view)
+        self.row_names = {}
+        self.callback = None
+
+    def set_callback(self, callback_func):
+        self.callback = callback_func
+
+    def on_touch_down(self, touch):
+        super(RowSelectorWidget, self).on_touch_down(touch)
+        self.callback()
+
+    def setDemoRows(self, numRows):
+        self.clearRows()
+        for i in range(numRows):
+            self.addRow('Row ' + str(i))
 
     def addRow(self, row_text):
         node = TreeViewLabel(text=str(row_text))
         self.tree_view.add_node(node)
+        self.row_names[node] = str(row_text)
 
     def clearRows(self):
+        self.row_names = {}
         self.remove_widget(self.tree_view)
         self.tree_view = TreeView(hide_root=True, indent_level=4)
         self.add_widget(self.tree_view)
@@ -58,4 +74,18 @@ class RowSelectorWidget(BoxLayout):
         self.clearRows()
         for r in row_text_list:
             self.addRow(r)
+
+    def get_selected_row(self):
+        sel_node = self.tree_view.selected_node
+        if sel_node and sel_node in self.row_names:
+            return self.row_names[sel_node]
+        else:
+            return None
+
+    def get_height(self):
+        #TODO: Account for text wrapping
+        return 14 * len(self.row_names) + 60
+
+    def get_num_Rows(self):
+        return len(self.row_names)
 

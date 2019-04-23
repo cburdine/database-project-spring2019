@@ -46,6 +46,11 @@ class CurriculumDashboardScreenRoot(Widget):
         rows = self.app.client_model.get_curriculum_names()
         self.curriculum_selector = self.ids.curriculum_selector
         self.curriculum_selector.setRows(rows)
+        self.curriculum_selector.set_callback(self.set_curriculum_text_description)
+
+        #manually adjust height of selector box to fit unwrapped text:
+        self.ids.sv_container.height = self.curriculum_selector.get_height()
+        self.set_curriculum_text_description()
 
     def link_to_app(self, app_ref):
         self.app = app_ref
@@ -53,3 +58,17 @@ class CurriculumDashboardScreenRoot(Widget):
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'main'
+
+    def set_curriculum_text_description(self):
+
+        cur_name = self.curriculum_selector.get_selected_row()
+        if cur_name != None:
+            #A str Builder object might be better to use later on:
+            description = ""
+            cur = self.app.client_model.get_curriculum(cur_name)
+            description += "     [color=ffffff][size=40]" + cur_name + "[/size][/color]"
+
+            self.ids.description_field.halign = 'left'
+            self.ids.description_field.valign = 'top'
+            self.ids.description_field.markup = True
+            self.ids.description_field.text = description

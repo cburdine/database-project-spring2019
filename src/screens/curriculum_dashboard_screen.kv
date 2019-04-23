@@ -32,11 +32,23 @@ CurriculumDashboardScreenRoot:
                         size: self.size
                 text: 'Curriculum'
                 size_hint: (1.0, None)
-                height: 60
+                height: 40
 
-            RowSelectorWidget:
-                size_hint_x: 1.0
-                id: curriculum_selector
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y:
+
+                StackLayout:
+                    id: sv_container
+                    orientation: 'lr-tb'
+                    size_hint_y: None
+                    height: 2000
+
+                    RowSelectorWidget:
+                        pos: root.x, root.y
+                        size_hint_x: 1.0
+                        size_hint_y: 1.0
+                        id: curriculum_selector
 
         BoxLayout:
             orientation: 'vertical'
@@ -51,10 +63,13 @@ CurriculumDashboardScreenRoot:
                 text: 'Curriculum Description'
                 background_color: (1,0,0,1)
                 size_hint_y: None
-                height: 60
+                height: 40
 
             Label:
-                text: 'Here is some text describing a curriculum'
+                size: self.texture_size
+                text_size: self.size
+                id: description_field
+                text: ''
 
 
     AnchorLayout:
