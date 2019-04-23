@@ -24,9 +24,10 @@ class Curriculum:
         """
         Overridden str function
         """
-        print(f"name: {self.name}")
-        print(f"min_credit_hours: {self.min_credit_hours}")
-        print(f"id_in_charge: {self.id_in_charge}")
+        str = f"name: {self.name}" + \
+              f"\nmin_credit_hours: {self.min_credit_hours}" + \
+              f"\nid_in_charge: {self.id_in_charge}"
+        return str
 
 """
 Class to store and retrieve information from the course table
@@ -42,11 +43,11 @@ class Course:
         """
         Overridden str function
         """
-        print(f"name: {self.name}")
-        print(f"min_credit_hours: {self.subject_code}")
-        print(f"id_in_charge: {self.credit_hours}")
-        print(f"id_in_charge: {self.description}")
-
+        str = f"name: {self.name}" + \
+              f"\nmin_credit_hours: {self.subject_code}" + \
+              f"\nid_in_charge: {self.credit_hours}" + \
+              f"\nid_in_charge: {self.description}"
+        return str
 
 """Person class"""
 
@@ -59,8 +60,9 @@ class Person:
         """
         Overridden str function
         """
-        print(f"name: {self.name}")
-        print(f"id: {self.id}")
+        str = f"name: {self.name}" + \
+              f"\nid: {self.id}"
+        return str
 
     def set_name(self, n):
         self.name = n
