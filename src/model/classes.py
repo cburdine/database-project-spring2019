@@ -4,16 +4,6 @@ Notes: - classes are made based off of actual entities
        - classes are meant to help store class information retrieved from database
 """
 
-import mysql.connector
-
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="jabtexas23",
-    database="Curricula"
-)
-
-
 """
 The idea behind this class is to store and retrieve information from the curriculum table
 
@@ -22,29 +12,21 @@ This is so that when we store/retrieve information from this table in the databa
 object and not have to use multiple
 """
 class Curriculum:
-
     def __init__(self):
         self.name = None
         self.min_credit_hours = None
         self.id_in_charge = None
+        self.cur_topics = []
+        self.opt_course_names = []
+        self.req_course_names = []
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"name: {self.name}")
         print(f"min_credit_hours: {self.min_credit_hours}")
         print(f"id_in_charge: {self.id_in_charge}")
-
-    def set_name(self, n):
-        self.name = n
-
-    def set_min_credit_hours(self, mch):
-        self.min_credit_hours = mch
-
-    def set_id_in_charge(self, idc):
-        self.id_in_charge = idc
 
 """
 Class to store and retrieve information from the course table
@@ -56,27 +38,14 @@ class Course:
         self.credit_hours = None
         self.description = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"name: {self.name}")
         print(f"min_credit_hours: {self.subject_code}")
         print(f"id_in_charge: {self.credit_hours}")
         print(f"id_in_charge: {self.description}")
-
-    def set_name(self, n):
-        self.name = n
-
-    def set_min_credit_hours(self, mch):
-        self.subject_code = mch
-
-    def set_id_in_charge(self, idc):
-        self.credit_hours = idc
-
-    def set_id_in_charge(self, idc):
-        self.description = idc
 
 
 """Person class"""
@@ -86,10 +55,9 @@ class Person:
         self.name = None
         self.id = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"name: {self.name}")
         print(f"id: {self.id}")
@@ -99,42 +67,15 @@ class Person:
 
     def set_id(self, mch):
         self.id = mch
-
-
-class CurriculumListings:
-    def __init__(self):
-        self.curriculum_name = None
-        self.course_name = None
-        self.required = None
-
-    def debug_print(self):
-        """
-        Function used for debugging to see what this object
-        contains
-        """
-        print(f"curriculum name: {self.curriculum_name}")
-        print(f"course name: {self.course_name}")
-        print(f"required: {self.required}")
-
-    def set_curriculum_name(self, n):
-        self.curriculum_name = n
-
-    def set_course_name(self, mch):
-        self.course_name = mch
-
-    def set_required(self, mch):
-        self.required = mch
-
 
 class Topic:
     def __init__(self):
         self.id = None
         self.name = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"name: {self.name}")
         print(f"id: {self.id}")
@@ -145,8 +86,7 @@ class Topic:
     def set_id(self, mch):
         self.id = mch
 
-
-class CurriculumTopics:
+class CurriculumTopic:
     def __init__(self):
         self.curriculum_name = None
         self.topic_id = None
@@ -154,10 +94,9 @@ class CurriculumTopics:
         self.subject_area = None
         self.time_unit = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"curriculum_name: {self.curriculum_name}")
         print(f"topic_id: {self.topic_id}")
@@ -180,7 +119,6 @@ class CurriculumTopics:
     def set_time_unit(self, n):
         self.time_unit = n
 
-
 class Section:
     def __init__(self):
         self.course_name = None
@@ -190,10 +128,9 @@ class Section:
         self.comment1 = None
         self.comment2 = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"course_name: {self.course_name}")
         print(f"semester: {self.semester}")
@@ -220,8 +157,9 @@ class Section:
     def set_comment2(self, n):
         self.comment2 = n
 
-
 class SectionGrades:
+
+    #Maybe use an array here?
     def __init__(self):
         self.course = None
         self.semester = None
@@ -241,10 +179,9 @@ class SectionGrades:
         self.count_i = 0
         self.count_w = 0
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"course: {self.course}")
         print(f"semester: {self.semester}")
@@ -335,10 +272,9 @@ class SectionGoalGrades:
         self.count_d = 0
         self.count_dm = 0
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"course: {self.course}")
         print(f"semester: {self.semester}")
@@ -405,37 +341,15 @@ class SectionGoalGrades:
     def set_count_dm(self, n):
         self.count_dm = n
 
-
-class CourseTopics:
-    def __init__(self):
-        self.course_name = None
-        self.topic_id = None
-
-    def debug_print(self):
-        """
-        Function used for debugging to see what this object
-        contains
-        """
-        print(f"course_name: {self.course_name}")
-        print(f"topic_id: {self.topic_id}")
-
-    def set_course_name(self, n):
-        self.course_name = n
-
-    def set_topic_id(self, n):
-        self.topic_id = n
-
-
 class Goal:
     def __init__(self):
         self.id = None
         self.curriculum_name = None
         self.description = None
 
-    def debug_print(self):
+    def __str__(self):
         """
-        Function used for debugging to see what this object
-        contains
+        Overridden str function
         """
         print(f"id: {self.id}")
         print(f"curriculum_name: {self.curriculum_name}")
@@ -449,23 +363,3 @@ class Goal:
 
     def set_description(self, n):
         self.description = n
-
-
-class CourseGoals:
-    def __init__(self):
-        self.course_name = None
-        self.goal_id = None
-
-    def debug_print(self):
-        """
-        Function used for debugging to see what this object
-        contains
-        """
-        print(f"course_name: {self.course_name}")
-        print(f"goal_id: {self.goal_id}")
-
-    def set_course_name(self, n):
-        self.course_name = n
-
-    def set_goal_id(self, n):
-        self.goal_id = n

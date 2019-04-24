@@ -14,6 +14,10 @@ CREATE TABLE IF NOT EXISTS `Person` (
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DELETE FROM `Person`;
+INSERT INTO `Person` (`id`, `name`) VALUES
+(1, 'John Doe'),
+(2, 'Jane Doe');
 
 -- initialize 'Curriculum' table
 DROP TABLE IF EXISTS `Curriculum`;
@@ -26,6 +30,12 @@ CREATE TABLE IF NOT EXISTS `Curriculum` (
     /* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DELETE FROM `Curriculum`;
+INSERT INTO `Curriculum` (`name`, `min_credit_hours`,`id_in_charge`) VALUES
+('Mathematics', 60, 1),
+('Computer Science', 64, 2),
+('Electrical Engineering', 62, 2);
+
     
 -- initialize 'Course' table
 DROP TABLE IF EXISTS `Course`;
@@ -38,6 +48,11 @@ CREATE TABLE IF NOT EXISTS `Course` (
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `Course` (`name`, `subject_code`,`credit_hours`,`description`) VALUES
+('Intro to CS I', 'CSI-1420', 4, 'Do computer stuff'),
+('Intro to CS II', 'CSI-1430', 4, 'Do more computer stuff'),
+('Intro to EE','EGR-1400', 4, 'Learn about EE stuff'),
+('Calculus I','MTH-1302', 3, 'Basics of calculus');
 
 -- initialize `CurriculumListings` table
 DROP TABLE IF EXISTS `CurriculumListings`;
@@ -51,6 +66,11 @@ CREATE TABLE IF NOT EXISTS `CurriculumListings` (
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `CurriculumListings` (`curriculum_name`, `course_name`,`required`) VALUES
+('Computer Science', 'Intro to CS I', true),
+('Computer Science', 'Intro to CS II',false),
+('Electrical Engineering','Intro to EE',true),
+('Mathematics','Calculus I',true);
 
 -- initialize `Topic` table
 DROP TABLE IF EXISTS `Topic`;
@@ -61,6 +81,14 @@ CREATE TABLE IF NOT EXISTS `Topic` (
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `Topic` (`id`, `name`) VALUES
+(0, 'C++ programing'),
+(1, 'C Programming'),
+(2, 'Circuits'),
+(3, 'Design'),
+(4, 'Boolean Logic'),
+(5, 'Derivatives'),
+(6, 'Integrals');
 
 -- initialize `CurriculumTopics` table
 DROP TABLE IF EXISTS `CurriculumTopics`;
@@ -76,6 +104,14 @@ CREATE TABLE IF NOT EXISTS `CurriculumTopics` (
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `CurriculumTopics` (`curriculum_name`, `topic_id`,`level`,`subject_area`,`time_unit`) VALUES
+('Computer Science', 0, 1, 'programming', 4),
+('Computer Science', 1, 2, 'advanced programming', 4),
+('Electrical Engineering', 2, 2, 'circuits and hardware', 4),
+('Electrical Engineering', 3, 1, 'design projects', 4),
+('Electrical Engineering', 4, 1, 'math skills', 2),
+('Mathematics', 5, 1, 'foundational calculus', 2),
+('Mathematics', 6, 2, 'foundational calculus', 2);
 
 -- initialize `Section` table
 DROP TABLE IF EXISTS `Section`;

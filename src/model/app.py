@@ -1,7 +1,9 @@
 import kivy
 from src.screens.main_screen import MainScreen
-from src.db.adapter import DBAdapter
 from src.screens.login_screen import LoginScreen
+from src.screens.curriculum_dashboard_screen import CurriculumDashboardScreen
+from src.db.adapter import DBAdapter
+from src.model.client_model import ClientModel
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from kivy.app import App
 kivy.require('1.10.1')
@@ -12,6 +14,7 @@ class CurriculaApp(App):
         App.__init__(self)
         self.db_adapter = DBAdapter()
         self.screen_manager = ScreenManager()
+        self.client_model = ClientModel(self.db_adapter)
 
 
     def build(self):
@@ -19,13 +22,13 @@ class CurriculaApp(App):
         screen_list = []
         screen_list.append(LoginScreen(root_app=self))
         screen_list.append(MainScreen(root_app=self))
+        screen_list.append(CurriculumDashboardScreen(root_app=self))
 
         for screen in screen_list:
             self.screen_manager.add_widget(screen)
 
         return self.screen_manager
 
-
-
     def changeScreen(self, screen):
         print(screen)
+

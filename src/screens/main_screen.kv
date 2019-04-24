@@ -22,7 +22,6 @@ MainScreenRoot:
             text: 'Back'
             on_press: root.logout_callback()
 
-
     AnchorLayout:
         center: root.center
         size: (400, 200)
@@ -34,18 +33,18 @@ MainScreenRoot:
             spacing: 8
 
             Button:
-                text: 'Option 1'
-                on_press: root.option_1_callback()
+                text: 'Add Curriculum'
+                on_press: root.add_curriculum_callback()
 
             Button:
-                text: 'Option 2'
-                on_press: root.option_2_callback()
+                text: 'Curriculum Dashboard'
+                on_press: root.curriculum_dashboard_callback()
 
             Button:
-                text: 'Option 3'
-                on_press: root.option_3_callback()
+                text: 'Course Dashboard'
+                on_press: root.course_dashboard_callback()
 
             Button:
-                text: 'Option 4'
-                on_press: root.option_4_callback()
+                text: 'Course Statistics'
+                on_press: root.course_stats_callback()
 
