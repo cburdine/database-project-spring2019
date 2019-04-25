@@ -30,6 +30,8 @@ class AddNewScreenRoot(Widget):
 
     def add_curriculum_callback(self):
         print('Add Curriculum')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'new_curriculum'
 
     def add_topic_callback(self):
         print('Add Topic')
