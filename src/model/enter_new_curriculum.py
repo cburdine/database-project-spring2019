@@ -13,7 +13,7 @@ my_cursor = mydb.cursor()
 # this variable should contain all the current curriculum names in the database
 #       - its first used in the function that adds new curriculums (make sure it doesn't already exist)
 all_curriculums = client_model.ClientModel
-# all_curriculums.get_curriculum_names() todo: don't know how this works
+# all_curriculums.get_curriculum_names()
 
 
 def enter_new_curriculum(curriculum_name, min_credit_hours, id_person_in_charge):

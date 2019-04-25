@@ -34,7 +34,6 @@ the Curriculum Dashboard controller logic.
 """
 class CurriculumDashboardScreenRoot(Widget):
 
-
     def __init__(self):
         Widget.__init__(self)
         self.app = None

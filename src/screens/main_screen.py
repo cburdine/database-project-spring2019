@@ -37,8 +37,10 @@ class MainScreenRoot(Widget):
     def link_to_app(self, app_ref):
         self.app = app_ref
 
-    def add_curriculum_callback(self):
-        print('Add Curriculum')
+    def add_new_callback(self):
+        print('Add New')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'add_new_screen'
 
     def curriculum_dashboard_callback(self):
         print('Curriculum Dashboard')
