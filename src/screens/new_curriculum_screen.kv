@@ -10,28 +10,20 @@
 #
 
 NewCurriculumScreenRoot:
-    AnchorLayout
-        center: (root.center_x, root.center_y + 98)
-        size: (80, 40)
-
-        Label:
-            font_size: '36sp'
-            text: 'Curricula DB'
-
 
     AnchorLayout:
         center: root.center
-        size: (320, 160)
+        size: (1000, 1200)
 
         GridLayout
-            rows: 4
+            rows: 8
             cols: 2
-            padding: 10
-            spacing: 10
+            padding: 100
+            spacing: 75
 
             Label:
                 size_hint_x: None
-                width: 500
+                width: 300
                 text: 'Curriculum Name:'
                 text_size: self.size
                 halign: 'right'
@@ -43,7 +35,7 @@ NewCurriculumScreenRoot:
 
             Label:
                 size_hint_x: None
-                width: 500
+                width: 300
                 text: 'Minimum Credit Hours:'
                 text_size: self.size
                 halign: 'right'
@@ -51,12 +43,11 @@ NewCurriculumScreenRoot:
             TextInput:
                 id: min_credit_hours
                 multiline: False
-                password: True
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 500
+                width: 300
                 text: 'ID of Person in Charge:'
                 text_size: self.size
                 halign: 'right'
@@ -64,7 +55,43 @@ NewCurriculumScreenRoot:
             TextInput:
                 id: id_in_charge
                 multiline: False
-                text: 'localhost'
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 300
+                text: 'Curriculum Topics'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: curriculum_topics
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 300
+                text: 'Required Courses'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: required_courses
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: 300
+                text: 'Optional Courses'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                id: optional_courses
+                multiline: False
+                text: ''
 
             Widget: # empty widget
                 size_hint_x: None
@@ -73,3 +100,11 @@ NewCurriculumScreenRoot:
             Button:
                 text: 'Back'
                 on_press: root.back_callback()
+
+            Widget: # empty widget
+                size_hint_x: None
+                width: 80
+
+            Button:
+                text: 'Submit'
+                on_press: root.submit_callback()

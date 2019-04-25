@@ -31,3 +31,20 @@ class NewCurriculumScreenRoot(Widget):
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
+
+    def submit_callback(self):
+
+        new_curriculum = classes.Curriculum()
+
+        # getting input from ui
+        new_curriculum.name = None if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
+        new_curriculum.min_credit_hours = 0 if len(self.ids.min_credit_hours.text) == 0 else self.ids.min_credit_hours.text
+        new_curriculum.id_in_charge = None if len(self.ids.id_in_charge.text) == 0 else self.ids.id_in_charge.text
+        new_curriculum.cur_topics = None if len(self.ids.curriculum_topics.text) == 0 else self.ids.curriculum_topics.text
+        new_curriculum.req_course_names = None if len(self.ids.required_courses.text) == 0 else self.ids.required_courses.text
+        new_curriculum.opt_course_names = None if len(self.ids.optional_courses.text) == 0 else self.ids.optional_courses.text
+
+        # todo: validating input
+
+
+        print("submit")
