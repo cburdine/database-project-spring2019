@@ -8,10 +8,11 @@ from src.model import classes
 from src.db import adapter
 
 
-class AllFieldsMustContainInputScreen(Screen):
-    screen_name = 'all_fields_must_contain_input'
+class CreditHoursMustBeNumericScreen(Screen):
 
-    view_kv_filepath = 'screens/all_fields_must_contain_input_screen.kv'
+    screen_name = 'credit_hours_must_be_numeric'
+
+    view_kv_filepath = 'screens/credit_hours_must_be_numeric_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
@@ -20,7 +21,7 @@ class AllFieldsMustContainInputScreen(Screen):
         self.add_widget(self.root_widget)
 
 
-class AllFieldsMustContainInputScreenRoot(Widget):
+class CreditHoursMustBeNumericScreenRoot(Widget):
 
     def __init__(self):
         Widget.__init__(self)
@@ -30,6 +31,5 @@ class AllFieldsMustContainInputScreenRoot(Widget):
         self.app = app_ref
 
     def back_callback(self):
-        print("back")
         self.app.screen_manager.transition.direction = 'down'
-        self.app.screen_manager.current = 'add_new_screen'
+        self.app.screen_manager.current = 'new_course'

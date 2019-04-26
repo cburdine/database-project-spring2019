@@ -11,7 +11,6 @@ from src.model import client_model
 
 # todo: error I'm getting that I don't understand is that if I try to enter in a topic back to back it crashes
 
-
 class NewTopicScreen(Screen):
 
     screen_name = 'new_topic'
@@ -50,9 +49,10 @@ class NewTopicScreenRoot(Widget):
         new_topic.id = None if len(self.ids.topic_id.text) == 0 else self.ids.topic_id.text
 
         # we need to determine if the id is numeric and if it has not already been entered
-        id_is_numeric = False
-        if str.isdigit(new_topic.id):
-            id_is_numeric = True
+        if new_topic.id is not None:
+            id_is_numeric = False
+            if str.isdigit(new_topic.id):
+                id_is_numeric = True
 
         already_in_db = None
         already_in_db = self.app.client_model.get_topic(new_topic.id)
@@ -71,7 +71,6 @@ class NewTopicScreenRoot(Widget):
             self.app.screen_manager.transition.direction = 'up'
             self.app.screen_manager.current = 'topic_already_exists'
         else:
-            print('nyc')
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_topic(new_topic)

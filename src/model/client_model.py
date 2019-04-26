@@ -23,9 +23,14 @@ class ClientModel:
 
     def get_person(self, id):
 
-        if id not in self._person_map.keys():
-            self._person_map[id] = self.adapter.get_person(id)
-        return self._person_map[id]
+        #if id not in self._person_map.keys():
+            #self._person_map[id] = self.adapter.get_person(id)
+        #return self._person_map[id]
+
+        if id in self._person_map.keys():
+            return self._person_map[id]
+        else:
+            return self.adapter.get_person(id)
 
     def get_curriculum_names(self):
 
@@ -54,7 +59,6 @@ class ClientModel:
 
     def get_topic(self, id):
         if id in self._topic_map.keys():
-            print(self._topic_map[id])
             return self._topic_map[id]
         else:
             return self.adapter.get_topic(id)
@@ -64,6 +68,22 @@ class ClientModel:
         self.adapter.set_topic(new_topic)
         self._topic_map[new_topic.id] = new_topic.name # updating our topic map
 
-    #def update
+    def set_person(self, new_person):
+        """Function to add new person to the db"""
+        self.adapter.set_person(new_person)
+        self._person_map[new_person.id] = new_person.name  # updating our topic map
+
+    def get_course(self, course_name):
+        """Function to retrieve a topic from the db"""
+        if course_name in self._course_map.keys():
+            return self._course_map[course_name]
+        else:
+            return self.adapter.get_course(course_name)
+
+    def set_course(self, new_course):
+        """Function to add new course to the database"""
+        self.adapter.set_course(new_course)
+        self._course_map[new_course.name] = [new_course.subject_code, new_course.credit_hours, new_course.description]
+        # print(self._course_map)
 
 
