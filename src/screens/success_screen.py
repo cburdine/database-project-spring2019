@@ -8,11 +8,11 @@ from src.model import classes
 from src.db import adapter
 
 
-class TopicAlreadyExistsScreen(Screen):
+class SuccessScreen(Screen):
 
-    screen_name = 'topic_already_exists'
+    screen_name = 'success'
 
-    view_kv_filepath = 'screens/topic_already_exists_screen.kv'
+    view_kv_filepath = 'screens/success_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
@@ -21,7 +21,7 @@ class TopicAlreadyExistsScreen(Screen):
         self.add_widget(self.root_widget)
 
 
-class TopicAlreadyExistsScreenRoot(Widget):
+class SuccessScreenRoot(Widget):
 
     def __init__(self):
         Widget.__init__(self)
@@ -32,4 +32,4 @@ class TopicAlreadyExistsScreenRoot(Widget):
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'down'
-        self.app.screen_manager.current = 'new_topic'
+        self.app.screen_manager.current = 'main'

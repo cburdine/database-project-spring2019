@@ -10,6 +10,8 @@ from src.screens.new_goal_screen import NewGoalScreen
 from src.screens.new_topic_screen import NewTopicScreen
 from src.screens.topic_already_exists_screen import TopicAlreadyExistsScreen
 from src.screens.all_fields_must_contain_input_screen import AllFieldsMustContainInputScreen
+from src.screens.topic_id_must_be_numeric_screen import TopicIdMustBeNumericScreen
+from src.screens.success_screen import SuccessScreen
 from src.db.adapter import DBAdapter
 from src.model.client_model import ClientModel
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
@@ -38,6 +40,8 @@ class CurriculaApp(App):
         screen_list.append(NewTopicScreen(root_app=self))
         screen_list.append(TopicAlreadyExistsScreen(root_app=self))
         screen_list.append(AllFieldsMustContainInputScreen(root_app=self))
+        screen_list.append(TopicIdMustBeNumericScreen(root_app=self))
+        screen_list.append(SuccessScreen(root_app=self))
 
         for screen in screen_list:
             self.screen_manager.add_widget(screen)

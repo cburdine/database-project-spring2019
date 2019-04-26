@@ -198,7 +198,31 @@ class DBAdapter:
 
     def add_new_topic_to_db(self, topic_obj):
         """Function to add a brand new topic to the database"""
-
+        # todo: don't need this anymore
         self.db_cursor.execute("""INSERT INTO Topic (id, name) VALUES (%s, %s)""", (topic_obj.id, topic_obj.name))
-        self.db_connection.commit
+        self.db_connection.commit()
+
+    def get_topic(self, id):
+        """Function to retrieve a topic from the database to store in client model"""
+        TOPIC = """SELECT COUNT(*) FROM Topic WHERE id = %s"""
+
+        ret = None
+        try:
+            self.db_cursor.execute("""SELECT name, id FROM Topic WHERE id = %s""", (id,))
+            t = self.db_cursor.fetchall()
+            ret = Topic()
+            ret.name = t[0][0]
+            ret.id = id
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve person: " + str(id))
+
+        return ret
+
+    def set_topic(self, new_topic):
+        """Function to add a new topic to the database"""
+        self.db_cursor.execute("""INSERT INTO Topic (id, name) VALUES (%s, %s)""", (new_topic.id, new_topic.name))
+        self.db_connection.commit()
+
+
 

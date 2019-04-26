@@ -51,3 +51,19 @@ class ClientModel:
 
         if name in self._curricula_map.keys():
             self._curricula_map[name] = self.adapter.get_curriculum(name)
+
+    def get_topic(self, id):
+        if id in self._topic_map.keys():
+            print(self._topic_map[id])
+            return self._topic_map[id]
+        else:
+            return self.adapter.get_topic(id)
+
+    def set_topic(self, new_topic):
+        """Function to add new topic to the db"""
+        self.adapter.set_topic(new_topic)
+        self._topic_map[new_topic.id] = new_topic.name # updating our topic map
+
+    #def update
+
+

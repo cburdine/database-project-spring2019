@@ -8,11 +8,11 @@ from src.model import classes
 from src.db import adapter
 
 
-class TopicAlreadyExistsScreen(Screen):
+class TopicIdMustBeNumericScreen(Screen):
 
-    screen_name = 'topic_already_exists'
+    screen_name = 'topic_id_must_be_numeric'
 
-    view_kv_filepath = 'screens/topic_already_exists_screen.kv'
+    view_kv_filepath = 'screens/topic_id_must_be_numeric_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
@@ -21,7 +21,7 @@ class TopicAlreadyExistsScreen(Screen):
         self.add_widget(self.root_widget)
 
 
-class TopicAlreadyExistsScreenRoot(Widget):
+class TopicIdMustBeNumericScreenRoot(Widget):
 
     def __init__(self):
         Widget.__init__(self)

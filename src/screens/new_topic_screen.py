@@ -7,6 +7,9 @@ from kivy.app import Widget
 from src.model import classes
 from kivy.properties import ObjectProperty
 from src.db import adapter
+from src.model import client_model
+
+# todo: error I'm getting that I don't understand is that if I try to enter in a topic back to back it crashes
 
 
 class NewTopicScreen(Screen):
@@ -42,27 +45,37 @@ class NewTopicScreenRoot(Widget):
     def submit_callback(self):
         new_topic = classes.Topic()
 
-        # todo: do not know how to connect to the database rn
-
         # getting input from ui
         new_topic.name = None if len(self.ids.topic_name.text) == 0 else self.ids.topic_name.text
         new_topic.id = None if len(self.ids.topic_id.text) == 0 else self.ids.topic_id.text
 
-        # todo: validating input
+        # we need to determine if the id is numeric and if it has not already been entered
+        id_is_numeric = False
+        if str.isdigit(new_topic.id):
+            id_is_numeric = True
+
+        already_in_db = None
+        already_in_db = self.app.client_model.get_topic(new_topic.id)
+
+        # validating input before writing to db and updating client model
         if new_topic.name is None or new_topic.id is None:
             print("All fields must contain input")
             self.app.screen_manager.transition.direction = 'up'
             self.app.screen_manager.current = 'all_fields_must_contain_input'
+        elif not id_is_numeric:
+            print("id must be numeric")
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'topic_id_must_be_numeric'
+        elif already_in_db.name is not None:
+            print("A topic with this ID is already in the database")
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'topic_already_exists'
         else:
-            a = adapter.DBAdapter()
-            topic_already_exists = adapter.DBAdapter.validate_new_topic(a,new_topic.id)
-            if topic_already_exists:
-                print("a topic with this id already exists in the database") # todo
-                self.app.screen_manager.transition.direction = 'up'
-                self.app.screen_manager.current = 'add_new_screen'
-            else:
-                # we can safely add it to the db
-                adapter.DBAdapter.add_new_topic_to_db(a, new_topic)
-
+            print('nyc')
+            # we can safely add it to the db
+            # note: we have to update our client model as well as add it to the db
+            self.app.client_model.set_topic(new_topic)
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'success'
 
         print("submit")
