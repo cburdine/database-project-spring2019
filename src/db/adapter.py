@@ -195,3 +195,10 @@ class DBAdapter:
         if ct == 0:
             return False
         return True
+
+    def add_new_topic_to_db(self, topic_obj):
+        """Function to add a brand new topic to the database"""
+
+        self.db_cursor.execute("""INSERT INTO Topic (id, name) VALUES (%s, %s)""", (topic_obj.id, topic_obj.name))
+        self.db_connection.commit
+
