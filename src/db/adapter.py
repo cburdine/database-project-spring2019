@@ -140,3 +140,58 @@ class DBAdapter:
                 cur.opt_course_names.append(c[2])
         return cur
 
+    def validate_new_curriculum_topics(self, curriculum_topics):
+        """Function to determine if list of topics is
+        in the general topics table.
+
+        Note: this function assumes the curriculum already exists
+        """
+
+        for cur in curriculum_topics:
+            # check to make sure its in the general topics table
+            self.db_cursor.execute("""SELECT COUNT(*) FROM Topic WHERE name = %s""", (cur,))
+            ct = self.db_cursor.fetchone()
+            ct = ct[0]
+            if ct == 0:
+                print("topic does not exist, we must create new one or cancel") # todo
+
+        return True
+
+    def validate_new_curriculum_courses(self, curriculum_courses):
+        """Function to determine if the list of courses is
+        in the general courses table
+
+        Note: this function assumes the curriculum already exists
+        """
+
+        for cur in curriculum_courses:
+            # check to make sure its in the general courses table
+            self.db_cursor.execute("""SELECT COUNT(*) FROM Course WHERE name = %s""", (cur,))
+            ct = self.db_cursor.fetchone()
+            ct = ct[0]
+            if ct == 0:
+                print("course does not exist, we must create new one or cancel")  # todo
+
+        return True
+
+    def validate_new_person(self, person_id):
+        """Funtion to determine if a person with the same id as a new person
+        already exists in the database"""
+
+        self.db_cursor.execute("""SELECT COUNT(*) FROM Person WHERE id == %s""", (person_id,))
+        ct = self.db_cursor.fetchone()
+        ct = ct[0]
+        if ct == 0:
+            return False
+        return True
+
+    def validate_new_topic(self, topic_id):
+        """Function to determine if a topic with the same id as the new topic
+        already exists in the database"""
+
+        self.db_cursor.execute("""SELECT COUNT(*) FROM Topic WHERE id == %s""", (topic_id,))
+        ct = self.db_cursor.fetchone()
+        ct = ct[0]
+        if ct == 0:
+            return False
+        return True

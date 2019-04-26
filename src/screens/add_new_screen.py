@@ -35,9 +35,13 @@ class AddNewScreenRoot(Widget):
 
     def add_topic_callback(self):
         print('Add Topic')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'new_topic'
 
     def add_person_callback(self):
         print('Add Person')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'new_person'
 
     def add_section_callback(self):
         print('Add Section')
@@ -47,6 +51,8 @@ class AddNewScreenRoot(Widget):
 
     def add_goal_callback(self):
         print('Add Goal')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'new_goal'
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
