@@ -28,7 +28,7 @@ class ClientModel:
         #return self._person_map[id]
 
         if id in self._person_map.keys():
-            return self._person_map[id]
+            return self._person_map[id] # todo: note this is causing errors when I try to check for duplicate entries
         else:
             return self.adapter.get_person(id)
 

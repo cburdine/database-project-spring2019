@@ -6,6 +6,9 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 from src.model import classes
 from src.db import adapter
+import logging
+from src.widgets.dialogues import MessageDialogue
+
 
 
 class NewSectionScreen(Screen):
@@ -69,29 +72,31 @@ class NewSectionScreenRoot(Widget):
 
         if new_section.course_name is None or new_section.unit_id is None \
                 or new_section.semester is None or new_section.num_students is None:
-            print("All fields must contain input")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'all_fields_must_contain_input'
+            logging.info("NewSectionScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue.open()
         elif not unit_id_is_numeric:
-            print("unit id must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'unit_id_must_be_numeric'
+            logging.info("NewSectionScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="Unit id must be numeric")
+            dialogue.open()
         elif not num_students_is_numeric:
-            print("number of students must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'num_students_must_be_numeric'
+            logging.info("NewSectionScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="num students must be numeric")
+            dialogue.open()
         elif course_not_in_db.name is None:
-            print("This course does not exist in the db")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'course_does_not_exist_in_database'
+            logging.info("NewSectionScreenRoot: db issue")
+            dialogue = MessageDialogue(title="Database error", message="course is not in the db")
+            dialogue.open()
         elif already_in_db.unit_id is not None:
-            print("Section is already in the db")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'section_already_exists'
+            logging.info("NewSectionScreenRoot: trying to create somehting that's already there")
+            dialogue = MessageDialogue(title="DB error", message="entry already in the database")
+            dialogue.open()
         else:
             # can safely add it to the database
             self.app.client_model.set_section(new_section)
+            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            dialogue.open()
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'success'
+            self.app.screen_manager.current = 'main'
 
         print("submit")

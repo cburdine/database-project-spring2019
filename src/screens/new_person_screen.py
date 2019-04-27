@@ -70,8 +70,10 @@ class NewPersonScreenRoot(Widget):
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_person(new_person)
+            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            dialogue.open()
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'success'
+            self.app.screen_manager.current = 'main'
 
 
         print("submit")
