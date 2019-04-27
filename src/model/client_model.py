@@ -23,9 +23,14 @@ class ClientModel:
 
     def get_person(self, id):
 
-        if id not in self._person_map.keys():
-            self._person_map[id] = self.adapter.get_person(id)
-        return self._person_map[id]
+        #if id not in self._person_map.keys():
+            #self._person_map[id] = self.adapter.get_person(id)
+        #return self._person_map[id]
+
+        if id in self._person_map.keys():
+            return self._person_map[id]
+        else:
+            return self.adapter.get_person(id)
 
     def get_curriculum_names(self):
 
@@ -51,3 +56,45 @@ class ClientModel:
 
         if name in self._curricula_map.keys():
             self._curricula_map[name] = self.adapter.get_curriculum(name)
+
+    def get_topic(self, id):
+        if id in self._topic_map.keys():
+            return self._topic_map[id]
+        else:
+            return self.adapter.get_topic(id)
+
+    def set_topic(self, new_topic):
+        """Function to add new topic to the db"""
+        self.adapter.set_topic(new_topic)
+        self._topic_map[new_topic.id] = new_topic.name # updating our topic map
+
+    def set_person(self, new_person):
+        """Function to add new person to the db"""
+        self.adapter.set_person(new_person)
+        self._person_map[new_person.id] = new_person.name  # updating our topic map
+
+    def get_course(self, course_name):
+        """Function to retrieve a topic from the db"""
+        if course_name in self._course_map.keys():
+            return self._course_map[course_name]
+        else:
+            return self.adapter.get_course(course_name)
+
+    def set_course(self, new_course):
+        """Function to add new course to the database"""
+        self.adapter.set_course(new_course)
+        self._course_map[new_course.name] = [new_course.subject_code, new_course.credit_hours, new_course.description]
+        # print(self._course_map)
+
+    def get_section(self, new_section):
+        if new_section.unit_id in self._section_map.keys():
+            return self._section_map[new_section.unit_id]
+        else:
+            return self.adapter.get_section(new_section)
+
+    def set_section(self, new_section):
+        """Function that adds new section to the database"""
+        self.adapter.set_section(new_section)
+        self._section_map[new_section.unit_id] = [new_section.course_name, new_section.semester, new_section.unit_id, new_section.num_students, new_section.comment1, new_section.comment2]
+
+
