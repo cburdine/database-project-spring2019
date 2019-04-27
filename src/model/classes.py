@@ -86,6 +86,7 @@ class Topic:
     def set_id(self, mch):
         self.id = mch
 
+
 class CurriculumTopic:
     def __init__(self):
         self.curriculum_name = None
@@ -118,6 +119,7 @@ class CurriculumTopic:
 
     def set_time_unit(self, n):
         self.time_unit = n
+
 
 class Section:
     def __init__(self):

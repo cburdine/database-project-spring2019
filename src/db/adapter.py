@@ -1,7 +1,7 @@
 import mysql.connector
 import logging
 
-from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic
+from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic, Section
 
 import threading
 from kivy.clock import Clock
@@ -253,6 +253,42 @@ class DBAdapter:
         self.db_cursor.execute("""INSERT INTO Course (name, subject_code, credit_hours, description) VALUES (%s, %s, %s, %s)""", (new_course.name, new_course.subject_code, new_course.credit_hours, new_course.description))
         self.db_connection.commit()
 
+    def get_section(self, new_section):
+        """Function to retrieve section from the db"""
 
+        SECTION = """SELECT COUNT(*) FROM Section WHERE id = %s"""
+
+        ret = None
+        try:
+            self.db_cursor.execute("""SELECT num_students, comment1, comment2 FROM Section WHERE course_name = %s AND semester = %s AND unit_id  = %s""",
+                                   (new_section.course_name, new_section.semester, new_section.unit_id))
+            c = self.db_cursor.fetchall()
+            ret = Section()
+            if c:
+                ret.num_students = c[0][0]
+                ret.comment1 = c[0][1]
+                ret.comment2 = c[0][2]
+                ret.course_name = new_section.course_name
+                ret.semester = new_section.semester
+                ret.unit_id = new_section.unit_id
+            else:
+                ret.num_students = None
+                ret.comment1 = None
+                ret.comment2 = None
+                ret.course_name = None
+                ret.semester = None
+                ret.unit_id = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve person: " + str(id))
+
+        return ret
+
+    def set_section(self, new_section):
+        """Function for adding a section to the db"""
+        self.db_cursor.execute(
+            """INSERT INTO Section (course_name, semester, unit_id, num_students, comment1, comment2) VALUES (%s, %s, %s, %s, %s, %s)""",
+            (new_section.course_name, new_section.semester, new_section.unit_id, new_section.num_students, new_section.comment1, new_section.comment2))
+        self.db_connection.commit()
 
 

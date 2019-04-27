@@ -80,6 +80,3 @@ class NewCourseScreenRoot(Widget):
             self.app.client_model.set_course(new_course)
             self.app.screen_manager.transition.direction = 'up'
             self.app.screen_manager.current = 'success'
-
-
-        print("submit")

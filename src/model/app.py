@@ -16,6 +16,10 @@ from src.screens.new_course_screen import NewCourseScreen
 from src.screens.subject_code_must_be_numeric_screen import SubjectCodeMustBeNumericScreen
 from src.screens.credit_hours_must_be_numeric_screen import CreditHoursMustBeNumericScreen
 from src.screens.course_already_exists_screen import CourseAlreadyExistsScreen
+from src.screens.new_section_screen import NewSectionScreen
+from src.screens.unit_id_must_be_numeric_screen import UnitIdMustBeNumericScreen
+from src.screens.num_students_must_be_numeric_screen import NumStudentsMustBeNumericScreen
+from src.screens.course_does_not_exist_in_database_screen import CourseDoesNotExistScreen
 from src.db.adapter import DBAdapter
 from src.model.client_model import ClientModel
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
@@ -50,6 +54,10 @@ class CurriculaApp(App):
         screen_list.append(SubjectCodeMustBeNumericScreen(root_app=self))
         screen_list.append(CreditHoursMustBeNumericScreen(root_app=self))
         screen_list.append(CourseAlreadyExistsScreen(root_app=self))
+        screen_list.append(NewSectionScreen(root_app=self))
+        screen_list.append(UnitIdMustBeNumericScreen(root_app=self))
+        screen_list.append(NumStudentsMustBeNumericScreen(root_app=self))
+        screen_list.append(CourseDoesNotExistScreen(root_app=self))
 
         for screen in screen_list:
             self.screen_manager.add_widget(screen)

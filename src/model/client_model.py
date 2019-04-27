@@ -86,4 +86,15 @@ class ClientModel:
         self._course_map[new_course.name] = [new_course.subject_code, new_course.credit_hours, new_course.description]
         # print(self._course_map)
 
+    def get_section(self, new_section):
+        if new_section.unit_id in self._section_map.keys():
+            return self._section_map[new_section.unit_id]
+        else:
+            return self.adapter.get_section(new_section)
+
+    def set_section(self, new_section):
+        """Function that adds new section to the database"""
+        self.adapter.set_section(new_section)
+        self._section_map[new_section.unit_id] = [new_section.course_name, new_section.semester, new_section.unit_id, new_section.num_students, new_section.comment1, new_section.comment2]
+
 

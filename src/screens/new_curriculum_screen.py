@@ -93,6 +93,4 @@ class NewCurriculumScreenRoot(Widget):
                 print("user wants to return to main menu")
 
 
-
-
         print("submit")
