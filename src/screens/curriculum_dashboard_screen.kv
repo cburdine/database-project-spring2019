@@ -32,7 +32,7 @@ CurriculumDashboardScreenRoot:
                         size: self.size
                 text: 'Curriculum'
                 size_hint: (1.0, None)
-                height: 40
+                height: dp(40)
 
             ScrollView:
                 do_scroll_x: False
@@ -42,7 +42,7 @@ CurriculumDashboardScreenRoot:
                     id: sv_container
                     orientation: 'lr-tb'
                     size_hint_y: None
-                    height: 2000
+                    height: dp(2000)
 
                     RowSelectorWidget:
                         pos: root.x, root.y
@@ -63,7 +63,7 @@ CurriculumDashboardScreenRoot:
                 text: 'Curriculum Description'
                 background_color: (1,0,0,1)
                 size_hint_y: None
-                height: 40
+                height: dp(40)
 
             Label:
                 size: self.texture_size
@@ -75,11 +75,11 @@ CurriculumDashboardScreenRoot:
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'bottom'
-        size: (100, 40)
-        padding: 10
+        size: (dp(100), dp(40))
+        padding: dp(10)
 
         Button:
             size_hint: (None, None)
-            size: (100, 30)
+            size: (dp(100), dp(30))
             text: 'Back'
             on_press: root.back_callback()
