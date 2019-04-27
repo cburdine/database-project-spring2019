@@ -73,7 +73,7 @@ class DBAdapter:
 
         ret = None
         try:
-            self.db_cursor.execute("""SELECT name, id FROM Topic WHERE id = %s""", (id,))
+            self.db_cursor.execute("""SELECT name, id FROM Person WHERE id = %s""", (id,))
             self.db_connection.commit()
             p_attribs = self.db_cursor.fetchall()
             ret = Person()
