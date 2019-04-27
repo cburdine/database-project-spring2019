@@ -63,9 +63,13 @@ class CurriculumDashboardScreenRoot(Widget):
         cur_name = self.curriculum_selector.get_selected_row()
         if cur_name != None:
             #A str Builder object might be better to use later on:
+            IND = "\n     "
             description = ""
             cur = self.app.client_model.get_curriculum(cur_name)
-            description += "     [color=ffffff][size=40]" + cur_name + "[/size][/color]"
+            person = self.app.client_model.get_person(cur.id_in_charge)
+            description += IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]"
+            description += IND + f"Minimum Credit Hours: {cur.min_credit_hours}"
+            description += IND + f"Person in charge: {person.name} (id:{person.id})"
 
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'

@@ -13,24 +13,24 @@ MainScreenRoot:
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'bottom'
-        size: (100, 100)
+        size: (dp(100), dp(100))
         padding: 10
 
         Button:
             size_hint: (None, None)
-            size: (100, 30)
+            size: (dp(100), dp(30))
             text: 'Back'
             on_press: root.logout_callback()
 
     AnchorLayout:
         center: root.center
-        size: (400, 200)
+        size: (dp(400), dp(200))
 
         GridLayout
             rows: 4
             cols: 1
-            padding: 5
-            spacing: 8
+            padding: dp(5)
+            spacing: dp(8)
 
             Button:
                 text: 'Add New'

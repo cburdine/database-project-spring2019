@@ -13,7 +13,8 @@ def populate_tree_view(tree_view, parent, node):
         populate_tree_view(tree_view, tree_node, child_node)
 
 
-tree = {'node_id': '1',
+# sample const for the testTree widget:
+TREE_DEMO = {'node_id': '1',
         'children': [{'node_id': '1.1',
                       'children': [{'node_id': '1.1.1',
                                     'children': [{'node_id': '1.1.1.1',
@@ -34,7 +35,7 @@ class TestTreeWidget(BoxLayout):
                       hide_root=False,
                       indent_level=4)
 
-        populate_tree_view(tv, None, tree)
+        populate_tree_view(tv, None, TREE_DEMO)
 
         self.add_widget(tv)
 
@@ -45,7 +46,10 @@ class RowSelectorWidget(BoxLayout):
         self.tree_view = TreeView(hide_root=True,indent_level=4)
         self.add_widget(self.tree_view)
         self.row_names = {}
-        self.callback = None
+        self.callback = self.null_callback
+
+    def null_callback(self):
+        pass
 
     def set_callback(self, callback_func):
         self.callback = callback_func
@@ -88,4 +92,36 @@ class RowSelectorWidget(BoxLayout):
 
     def get_num_Rows(self):
         return len(self.row_names)
+
+class InteractiveTreeWidget(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super(InteractiveTreeWidget, self).__init__(**kwargs)
+        self.tree_view = TreeView(hide_root=False, indent_level=6)
+        self.add_widget(self.tree_view)
+        self.node_dict = {}
+        self.tree_dict = {}
+        self.callback = self.null_callback
+
+    def set_tree(self, tree_dict):
+        self.remove_widget(self.tree_view)
+        self.tree_view = TreeView(hide_root=False, indent_level=6)
+        populate_tree_view(self.tree_view, None, tree_dict)
+
+    def set_demo_tree(self):
+        self.remove_widget(self.tree_view)
+        self.tree_view = TreeView(hide_root=False, indent_level=6)
+        populate_tree_view(self.tree_view, None, TREE_DEMO)
+
+    def null_callback(self):
+        pass
+
+    def set_callback(self, callback_func):
+        self.callback = callback_func
+
+    def on_touch_down(self, touch):
+        super(InteractiveTreeWidget, self).on_touch_down(touch)
+        self.callback()
+
+
 
