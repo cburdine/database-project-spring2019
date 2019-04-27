@@ -98,3 +98,8 @@ class ClientModel:
         self.adapter.set_section(new_section)
         self._section_map[new_section.unit_id] = new_section
 
+    def set_curriculum(self, new_curriculum):
+        """Function to set new curriculum"""
+        self.adapter.set_curriculum(new_curriculum)
+        self._curricula_map[new_curriculum.name] = new_curriculum
+

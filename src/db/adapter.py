@@ -291,4 +291,24 @@ class DBAdapter:
             (new_section.course_name, new_section.semester, new_section.unit_id, new_section.num_students, new_section.comment1, new_section.comment2))
         self.db_connection.commit()
 
+    def set_curriculum(self, new_curriculum):
+        """Function for adding curriculum to the db"""
+        # addnig into curriculum table
+        self.db_cursor.execute("""INSERT INTO Curriculum (name, min_credit_hours, id_in_charge) VALUES (%s, %s, %s)""",
+                               (new_curriculum.name, new_curriculum.min_credit_hours, new_curriculum.id_in_charge))
+        self.db_connection.commit()
+        # adding into curriculum listings table
+        # todo make sure these two have no errors
+        self.db_cursor.execute("""INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
+                               (new_curriculum.name, new_curriculum.req_course_names, 1))
+        self.db_connection.commit()
+        self.db_cursor.execute(
+            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
+            (new_curriculum.name, new_curriculum.opt_course_names, 0))
+        self.db_connection.commit()
+        # adding into curriculum topics table
+        self.db_cursor.execute(
+            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
+            (new_curriculum.name, new_curriculum.opt_course_names, 0))
+        self.db_connection.commit()
 
