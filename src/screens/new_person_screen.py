@@ -63,9 +63,9 @@ class NewPersonScreenRoot(Widget):
             dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
             dialogue.open()
         elif not id_is_numeric:
-            print("id must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'topic_id_must_be_numeric'
+            logging.info("NewPersonScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="id must be numeric")
+            dialogue.open()
         elif already_in_db.name is not None:
             print("A topic with this ID is already in the database")
             self.app.screen_manager.transition.direction = 'up'
