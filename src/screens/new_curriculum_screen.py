@@ -45,52 +45,38 @@ class NewCurriculumScreenRoot(Widget):
         new_curriculum.req_course_names = None if len(self.ids.required_courses.text) == 0 else self.ids.required_courses.text
         new_curriculum.opt_course_names = None if len(self.ids.optional_courses.text) == 0 else self.ids.optional_courses.text
 
-        # validating input
-        if new_curriculum.name is None or new_curriculum.min_credit_hours is None or new_curriculum.id_in_charge is None \
-                or new_curriculum.cur_topics is None or new_curriculum.req_course_names is None or \
-                new_curriculum.opt_course_names is None:
+        # to validate input
+        #       need to make sure min_credit_hours and id_in_charge are numbers
+        #       need to make sure id_in_charge in database
+        #       need to make sure topics are in topics table
+        #       need to make sure courses are in courses table
+
+        if new_curriculum.min_credit_hours is not None:
+            min_credit_hours_is_numeric = False
+            if str.isdigit(new_curriculum.min_credit_hours):
+                min_credit_hours_is_numeric = True
+
+        if new_curriculum.id_in_charge is not None:
+            id_in_charge_is_numeric = False
+            if str.isdigit(new_curriculum.id_in_charge):
+                id_in_charge_is_numeric = True
+
+
+
+        if new_curriculum.name is None or new_curriculum.id_in_charge is None \
+                or new_curriculum.min_credit_hours is None or new_curriculum.cur_topics is None\
+                or new_curriculum.req_course_names is None:
             print("All fields must contain input")
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'add_new_screen'
-
-        if new_curriculum.name is not None and new_curriculum.name in adapter.DBAdapter.get_curricula_names():
-            print("curriculum with this name already exists")
+            self.app.screen_manager.current = 'all_fields_must_contain_input'
+        elif not min_credit_hours_is_numeric:
+            print("min credit hours must be numeric")
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'add_new_screen'
-
-        if not isinstance(new_curriculum.min_credit_hours, int):
-            print("the minimum credit hours must be a number")
+            self.app.screen_manager.current = 'min_credit_hours_must_be_numeric'
+        elif not id_in_charge_is_numeric:
+            print("person id must be numeric")
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'add_new_screen'
-
-        if not isinstance(new_curriculum.id_in_charge, int):
-            print("the id of the person in charge must be a number")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'add_new_screen'
-
-        if new_curriculum.cur_topics is not None:
-            new_curriculum.cur_topics = new_curriculum.cur_topics.split(', ')
-            valid_topics = adapter.DBAdapter.validate_new_curriculum_topics(new_curriculum.cur_topics)
-            if valid_topics:
-                print("topics exist, now we must get information for the curriculum topics table") # todo
-            else:
-                print("user wants to return to main menu")
-
-        if new_curriculum.req_course_names is not None:
-            new_curriculum.cur_topics = new_curriculum.req_course_names.split(', ')
-            valid_courses = adapter.DBAdapter.validate_new_curriculum_courses(new_curriculum.req_course_names)
-            if valid_courses:
-                print("courses exist, now we must get information for the curriculum listings table") # todo
-            else:
-                print("user wants to return to main menu")
-
-        if new_curriculum.opt_course_names is not None:
-            new_curriculum.cur_topics = new_curriculum.opt_course_names.split(', ')
-            valid_courses = adapter.DBAdapter.validate_new_curriculum_courses(new_curriculum.opt_course_names)
-            if valid_courses:
-                print("courses exist, now we must get information for the curriculum listings table") # todo
-            else:
-                print("user wants to return to main menu")
+            self.app.screen_manager.current = 'id_in_charge_must_be_numeric'
 
 
         print("submit")
