@@ -6,6 +6,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 from src.model import classes
 from src.db import adapter
+import logging
+from src.widgets.dialogues import MessageDialogue
 
 class NewCurriculumScreen(Screen):
 
@@ -66,17 +68,17 @@ class NewCurriculumScreenRoot(Widget):
         if new_curriculum.name is None or new_curriculum.id_in_charge is None \
                 or new_curriculum.min_credit_hours is None or new_curriculum.cur_topics is None\
                 or new_curriculum.req_course_names is None:
-            print("All fields must contain input")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'all_fields_must_contain_input'
+            logging.info("NewCurriculumScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue.open()
         elif not min_credit_hours_is_numeric:
-            print("min credit hours must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'min_credit_hours_must_be_numeric'
+            logging.info("NewCurriculumScreenRoot: minimum credit hours must be numeric")
+            dialogue = MessageDialogue(title="Format error", message="minimum credit hours must be numeric")
+            dialogue.open()
         elif not id_in_charge_is_numeric:
-            print("person id must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'id_in_charge_must_be_numeric'
+            logging.info("NewCurriculumScreenRoot: id in charge must be numeric")
+            dialogue = MessageDialogue(title="Format error", message="id of person in charge must be numeric")
+            dialogue.open()
 
 
         print("submit")

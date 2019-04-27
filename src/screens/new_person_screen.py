@@ -6,6 +6,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 from src.model import classes
 from src.db import adapter
+import logging
+from src.widgets.dialogues import MessageDialogue
 
 
 class NewPersonScreen(Screen):
@@ -57,9 +59,9 @@ class NewPersonScreenRoot(Widget):
 
         # validating input before writing to db and updating client model
         if new_person.name is None or new_person.id is None:
-            print("All fields must contain input")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'all_fields_must_contain_input'
+            logging.info("NewPersonScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue.open()
         elif not id_is_numeric:
             print("id must be numeric")
             self.app.screen_manager.transition.direction = 'up'
