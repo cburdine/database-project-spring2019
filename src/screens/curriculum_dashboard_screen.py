@@ -71,6 +71,7 @@ class CurriculumDashboardScreenRoot(Widget):
             description += IND + f"Minimum Credit Hours: {cur.min_credit_hours}"
             description += IND + f"Person in charge: {person.name} (id:{person.id})"
 
+
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
             self.ids.description_field.markup = True
