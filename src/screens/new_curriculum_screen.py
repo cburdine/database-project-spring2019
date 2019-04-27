@@ -50,7 +50,7 @@ class NewCurriculumScreenRoot(Widget):
         # to validate input
         #       need to make sure min_credit_hours and id_in_charge are numbers
         #       need to make sure id_in_charge in database
-        #       need to make sure topics are in topics table
+        #       need to make sure topics are in topics table todo: needs to work for multiple topics
         #       need to make sure courses are in courses table
 
         if new_curriculum.min_credit_hours is not None:
@@ -63,7 +63,8 @@ class NewCurriculumScreenRoot(Widget):
             if str.isdigit(new_curriculum.id_in_charge):
                 id_in_charge_is_numeric = True
 
-
+        topic_exists = None
+        topic_exists = self.app.client_model.get_topic(new_curriculum.cur_topics)
 
         if new_curriculum.name is None or new_curriculum.id_in_charge is None \
                 or new_curriculum.min_credit_hours is None or new_curriculum.cur_topics is None\
@@ -79,6 +80,11 @@ class NewCurriculumScreenRoot(Widget):
             logging.info("NewCurriculumScreenRoot: id in charge must be numeric")
             dialogue = MessageDialogue(title="Format error", message="id of person in charge must be numeric")
             dialogue.open()
+        elif topic_exists.name is None:
+            logging.info("NewCurriculumScreenRoot: topic does not exist")
+            dialogue = MessageDialogue(title="Data error", message="topic for curriculum does not exist in db")
+            dialogue.open()
+
 
 
         print("submit")
