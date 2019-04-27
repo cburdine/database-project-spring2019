@@ -2,6 +2,7 @@ from src.model import client_model
 from src.model import classes
 import mysql.connector
 
+
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
