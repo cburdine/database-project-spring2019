@@ -6,6 +6,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 from src.model import classes
 from src.db import adapter
+import logging
+from src.widgets.dialogues import MessageDialogue
 
 
 class NewGoalScreen(Screen):
@@ -43,9 +45,9 @@ class NewGoalScreenRoot(Widget):
         new_goal.description =  None if len(self.ids.description.text) == 0 else self.ids.description.text
 
         if new_goal.curriculum_name is None or new_goal.id is None:
-            print("All fields must contain input")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'add_new_screen'
+            logging.info("NewGoalScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue.open()
 
         # todo: validating input (holding off for now because this depends on a curriculum's existence)
 
