@@ -84,6 +84,10 @@ class NewSectionScreenRoot(Widget):
             print("This course does not exist in the db")
             self.app.screen_manager.transition.direction = 'up'
             self.app.screen_manager.current = 'course_does_not_exist_in_database'
+        elif already_in_db.unit_id is not None:
+            print("Section is already in the db")
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'section_already_exists'
         else:
             # can safely add it to the database
             self.app.client_model.set_section(new_section)
