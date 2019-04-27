@@ -74,6 +74,7 @@ class DBAdapter:
         ret = None
         try:
             self.db_cursor.execute("""SELECT name, id FROM Person WHERE id = %s""", (id,))
+            self.db_cursor.execute(PERSON, (id,))
             self.db_connection.commit()
             p_attribs = self.db_cursor.fetchall()
             ret = Person()
@@ -103,23 +104,22 @@ class DBAdapter:
     def get_curriculum(self, name):
         CURRICULUM = """SELECT * FROM Curriculum WHERE name = %s"""
         TOPICS = """SELECT * FROM CurriculumTopics WHERE curriculum_name = %s"""
-        COURSES = """SELECT course_name FROM CurriculumListings WHERE curriculum_name = %s"""
+        COURSES = """SELECT * FROM CurriculumListings WHERE curriculum_name = %s"""
 
-        cur = None
-        try:
-            self.db_cursor.execute(CURRICULUM, name)
-            self.db_connection.commit()
-            attribs = self.db_cursor.fetchall()
-            self.db_cursor.execute(TOPICS, name)
-            self.db_connection.commit()
-            topics = self.db_cursor.fetchall()
-            self.db_cursor.execute(COURSES, name)
-            self.db_connection.commit()
-            courses = self.db_cursor.fetchall()
-        except:
-            logging.warning("DBAdapter: Error- cannot retrieve Curriculum " + str(name))
-            return None
-
+        #try:
+        self.db_cursor.execute(CURRICULUM, (name,))
+        self.db_connection.commit()
+        attribs = self.db_cursor.fetchall()
+        self.db_cursor.execute(TOPICS, (name,))
+        self.db_connection.commit()
+        topics = self.db_cursor.fetchall()
+        self.db_cursor.execute(COURSES, (name,))
+        self.db_connection.commit()
+        courses = self.db_cursor.fetchall()
+        #except:
+        #    logging.warning("DBAdapter: Error- cannot retrieve Curriculum " + str(name))
+        #    return None
+        cur = Curriculum()
         cur.name = attribs[0][0]
         cur.min_credit_hours = attribs[0][1]
         cur.id_in_charge = attribs[0][2]
@@ -131,7 +131,7 @@ class DBAdapter:
             ct.level = t[2]
             ct.subject_area = t[3]
             ct.time_unit = t[3]
-            cur.course_topics.append(ct)
+            cur.cur_topics.append(ct)
 
         for c in courses:
             if (c[2]):  # if required course
