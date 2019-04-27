@@ -7,7 +7,7 @@ from kivy.app import Widget
 
 
 class AddNewScreen(Screen):
-    
+
     screen_name = 'add_new_screen'
 
     view_kv_filepath = 'screens/add_new_screen.kv'

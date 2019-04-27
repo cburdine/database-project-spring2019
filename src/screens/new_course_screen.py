@@ -6,6 +6,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 from src.model import classes
 from src.db import adapter
+import logging
+from src.widgets.dialogues import MessageDialogue
 
 
 class NewCourseScreen(Screen):
@@ -60,23 +62,25 @@ class NewCourseScreenRoot(Widget):
 
         if new_course.name is None or new_course.subject_code is None or\
                 new_course.credit_hours is None or new_course.description is None :
-            print("All fields must contain input")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'all_fields_must_contain_input'
+            logging.info("NewCourseScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue.open()
         elif not subject_code_is_numeric:
-            print("subject code must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'subject_code_must_be_numeric'
+            logging.info("NewCourseScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="subject code must be a number")
+            dialogue.open()
         elif not credit_hours_is_numeric:
-            print("credit hours must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'credit_hours_must_be_numeric'
+            logging.info("NewCourseScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="credit hours must be a number")
+            dialogue.open()
         elif already_in_db.name is not None:
-            print("A course with this name is already in the database")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'course_already_exists'
+            logging.info("NewCourseScreenRoot: trying to create somehting that's already there")
+            dialogue = MessageDialogue(title="DB error", message="entry already in the database")
+            dialogue.open()
         else:
             # can safely enter course into the db
             self.app.client_model.set_course(new_course)
+            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            dialogue.open()
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'success'
+            self.app.screen_manager.current = 'main'
