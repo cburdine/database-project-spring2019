@@ -1,16 +1,20 @@
 from kivy.uix.treeview import TreeView, TreeViewLabel, TreeViewNode
 from kivy.uix.boxlayout import BoxLayout
 
-def populate_tree_view(tree_view, parent, node):
+
+
+def populate_tree_view(tree_view, parent, node, node_dict=None):
     if parent is None:
         tree_node = tree_view.add_node(TreeViewLabel(text=node['node_id'],
                                                      is_open=True))
     else:
         tree_node = tree_view.add_node(TreeViewLabel(text=node['node_id'],
                                                      is_open=True), parent)
+    if node_dict != None:
+        node_dict[tree_node] = node['node_id']
 
     for child_node in node['children']:
-        populate_tree_view(tree_view, tree_node, child_node)
+        populate_tree_view(tree_view, tree_node, child_node, node_dict)
 
 
 # sample const for the testTree widget:
@@ -97,21 +101,24 @@ class InteractiveTreeWidget(BoxLayout):
 
     def __init__(self, **kwargs):
         super(InteractiveTreeWidget, self).__init__(**kwargs)
-        self.tree_view = TreeView(hide_root=False, indent_level=6)
+        self.tree_view = TreeView(hide_root=True, indent_level=6)
         self.add_widget(self.tree_view)
         self.node_dict = {}
-        self.tree_dict = {}
         self.callback = self.null_callback
 
     def set_tree(self, tree_dict):
+        self.node_dict = {}
         self.remove_widget(self.tree_view)
-        self.tree_view = TreeView(hide_root=False, indent_level=6)
-        populate_tree_view(self.tree_view, None, tree_dict)
+        self.tree_view = TreeView(hide_root=True, indent_level=6)
+        populate_tree_view(self.tree_view, None, tree_dict, node_dict=self.node_dict)
+        self.add_widget(self.tree_view)
 
     def set_demo_tree(self):
+        self.node_dict = {}
         self.remove_widget(self.tree_view)
-        self.tree_view = TreeView(hide_root=False, indent_level=6)
-        populate_tree_view(self.tree_view, None, TREE_DEMO)
+        self.tree_view = TreeView(hide_root=True, indent_level=6)
+        populate_tree_view(self.tree_view, None, TREE_DEMO, self.node_dict)
+        self.add_widget(self.tree_view)
 
     def null_callback(self):
         pass

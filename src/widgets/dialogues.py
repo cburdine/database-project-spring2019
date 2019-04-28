@@ -15,7 +15,8 @@ class MessageDialogue(Popup):
         self.content.add_widget(dismiss_button)
         Popup.__init__(self,title=title,
                             content=self.content,
-                            size_hint=(None, None), size=(300, 170))
+                            size_hint=(None, None), size=(300, 170),
+                       auto_dismiss=False)
         dismiss_button.bind(on_release=self.dismiss)
 
 

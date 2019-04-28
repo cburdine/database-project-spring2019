@@ -3,7 +3,7 @@ import kivy
 kivy.require('1.10.1')
 from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen
-from kivy.uix.gridlayout import GridLayout
+from src.widgets.tree_widgets import InteractiveTreeWidget
 from kivy.app import Widget
 from kivy.clock import Clock
 
@@ -51,6 +51,8 @@ class CurriculumDashboardScreenRoot(Widget):
         self.ids.sv_container.height = self.curriculum_selector.get_height()
         self.set_curriculum_text_description()
 
+
+
     def link_to_app(self, app_ref):
         self.app = app_ref
 
@@ -64,15 +66,23 @@ class CurriculumDashboardScreenRoot(Widget):
         if cur_name != None:
             #A str Builder object might be better to use later on:
             IND = "\n     "
+            ENDL = "\n"
+
             description = ""
             cur = self.app.client_model.get_curriculum(cur_name)
             person = self.app.client_model.get_person(cur.id_in_charge)
             description += IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]"
             description += IND + f"Minimum Credit Hours: {cur.min_credit_hours}"
             description += IND + f"Person in charge: {person.name} (id:{person.id})"
-
+            description += ENDL + IND + f"[size=28]Curriculum Topics[/size]"
+            description += ENDL + IND + "[anchor=xxx]"
 
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
             self.ids.description_field.markup = True
             self.ids.description_field.text = description
+            self.ids.description_field.texture_update()
+
+            print(self.ids.description_field.anchors)
+            #self.ids.topics_tree.pos = self.ids.description_field.anchors['topic_tree_pos']
+            self.ids.topics_tree.set_demo_tree()
