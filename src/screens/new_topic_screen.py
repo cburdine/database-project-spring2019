@@ -8,6 +8,8 @@ from src.model import classes
 from kivy.properties import ObjectProperty
 from src.db import adapter
 from src.model import client_model
+import logging
+from src.widgets.dialogues import MessageDialogue
 
 # todo: error I'm getting that I don't understand is that if I try to enter in a topic back to back it crashes
 
@@ -59,22 +61,24 @@ class NewTopicScreenRoot(Widget):
 
         # validating input before writing to db and updating client model
         if new_topic.name is None or new_topic.id is None:
-            print("All fields must contain input")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'all_fields_must_contain_input'
+            logging.info("NewTopicScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue.open()
         elif not id_is_numeric:
-            print("id must be numeric")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'topic_id_must_be_numeric'
+            logging.info("NewTopicScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="ID must be numeric")
+            dialogue.open()
         elif already_in_db.name is not None:
-            print("A topic with this ID is already in the database")
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'topic_already_exists'
+            logging.info("NewTopicScreenRoot: trying to create somehting that's already there")
+            dialogue = MessageDialogue(title="DB error", message="entry already in the database")
+            dialogue.open()
         else:
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_topic(new_topic)
+            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            dialogue.open()
             self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'success'
+            self.app.screen_manager.current = 'main'
 
         print("submit")

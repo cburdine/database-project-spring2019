@@ -1,4 +1,5 @@
 from src.db.adapter import DBAdapter
+from src.model.classes import Person
 
 """
 The purpose of this class is to serve as a
@@ -66,12 +67,12 @@ class ClientModel:
     def set_topic(self, new_topic):
         """Function to add new topic to the db"""
         self.adapter.set_topic(new_topic)
-        self._topic_map[new_topic.id] = new_topic.name # updating our topic map
+        self._topic_map[new_topic.id] = new_topic # updating our topic map
 
     def set_person(self, new_person):
         """Function to add new person to the db"""
         self.adapter.set_person(new_person)
-        self._person_map[new_person.id] = new_person.name  # updating our topic map
+        self._person_map[new_person.id] = new_person # updating our person map
 
     def get_course(self, course_name):
         """Function to retrieve a topic from the db"""
@@ -83,7 +84,7 @@ class ClientModel:
     def set_course(self, new_course):
         """Function to add new course to the database"""
         self.adapter.set_course(new_course)
-        self._course_map[new_course.name] = [new_course.subject_code, new_course.credit_hours, new_course.description]
+        self._course_map[new_course.name] = new_course
         # print(self._course_map)
 
     def get_section(self, new_section):
@@ -95,6 +96,10 @@ class ClientModel:
     def set_section(self, new_section):
         """Function that adds new section to the database"""
         self.adapter.set_section(new_section)
-        self._section_map[new_section.unit_id] = [new_section.course_name, new_section.semester, new_section.unit_id, new_section.num_students, new_section.comment1, new_section.comment2]
+        self._section_map[new_section.unit_id] = new_section
 
+    def set_curriculum(self, new_curriculum):
+        """Function to set new curriculum"""
+        self.adapter.set_curriculum(new_curriculum)
+        self._curricula_map[new_curriculum.name] = new_curriculum
 
