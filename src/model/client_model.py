@@ -103,3 +103,14 @@ class ClientModel:
         self.adapter.set_curriculum(new_curriculum)
         self._curricula_map[new_curriculum.name] = new_curriculum
 
+    def get_goal(self, new_goal):
+        """Function to get a goal from the db"""
+        if new_goal.id in self._goal_map.keys():
+            return self._goal_map.keys()
+        else:
+            return self.adapter.get_goal(new_goal)
+
+    def set_goal(self, new_goal):
+        """Function to set goal"""
+        self.adapter.set_goal(new_goal)
+        self._curricula_map[new_goal.id] = new_goal

@@ -27,7 +27,7 @@ MainScreenRoot:
         size: (dp(400), dp(200))
 
         GridLayout
-            rows: 4
+            rows: 5
             cols: 1
             padding: dp(5)
             spacing: dp(8)
@@ -47,4 +47,8 @@ MainScreenRoot:
             Button:
                 text: 'Course Statistics'
                 on_press: root.course_stats_callback()
+
+            Button:
+                text: 'Enter Grades'
+                on_press: root.enter_grades_callback()
 

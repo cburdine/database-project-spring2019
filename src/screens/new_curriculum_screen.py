@@ -56,7 +56,7 @@ class NewCurriculumScreenRoot(Widget):
         # to validate input
         #       need to make sure min_credit_hours and id_in_charge are numbers
         #       need to make sure id_in_charge in person table
-        #       need to make sure topics are in topics table todo: needs to work for multiple topics
+        #       need to make sure topics are in topics table
         #       need to make sure courses are in courses table
 
         can_submit = True
@@ -73,23 +73,24 @@ class NewCurriculumScreenRoot(Widget):
 
         topic_exists = False
         tp = None
-        for ct in new_curriculum.cur_topics:
-            if str.isdigit(ct):
-                tp = self.app.client_model.get_topic(ct)
-                if tp.name is not None:
-                    topic_exists = True
-                    tp = None
-            if not topic_exists:
-                logging.info("NewCurriculumScreenRoot: Invalid topic")
-                dialogue = MessageDialogue(title="Database error", message="One of the topics does not exist in the db")
-                dialogue.open()
-                can_submit = False
-            topic_exists = False
+        if new_curriculum.cur_topics is not None:
+            for ct in new_curriculum.cur_topics:
+                if str.isdigit(ct):
+                    tp = self.app.client_model.get_topic(ct)
+                    if tp.name is not None:
+                        topic_exists = True
+                        tp = None
+                if not topic_exists:
+                    logging.info("NewCurriculumScreenRoot: Invalid topic")
+                    dialogue = MessageDialogue(title="Database error", message="One of the topics does not exist in the db")
+                    dialogue.open()
+                    can_submit = False
+                topic_exists = False
 
         courses_exist = False
         cs = None
         if new_curriculum.req_course_names is not None and new_curriculum.opt_course_names is not None:
-            courses =  new_curriculum.req_course_names + new_curriculum.opt_course_names
+            courses = new_curriculum.req_course_names + new_curriculum.opt_course_names
         elif new_curriculum.req_course_names is not None:
             courses = new_curriculum.req_course_names
         elif new_curriculum.opt_course_names is not None:
@@ -136,12 +137,12 @@ class NewCurriculumScreenRoot(Widget):
             can_submit = False
         elif can_submit:
             # describe the topic further
-
-            self.app.client_model.set_curriculum(new_curriculum)
-            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
-            dialogue.open()
-            self.app.screen_manager.transition.direction = 'up'
-            self.app.screen_manager.current = 'main' # todo, need to further describe
+            print('nyc')
+            #self.app.client_model.set_curriculum(new_curriculum)
+            #dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            #dialogue.open()
+            #self.app.screen_manager.transition.direction = 'up'
+            #self.app.screen_manager.current = 'main' # todo, need to further describe
                                                       # curriculum topic before we can finish
 
         print("submit")

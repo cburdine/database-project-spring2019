@@ -1,7 +1,7 @@
 import mysql.connector
 import logging
 
-from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic, Section
+from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic, Section, Goal
 
 import threading
 from kivy.clock import Clock
@@ -312,3 +312,37 @@ class DBAdapter:
             (new_curriculum.name, new_curriculum.opt_course_names, 0))
         self.db_connection.commit()
 
+
+    def get_goal(self, new_goal):
+        """Function to retrieve goal from the db"""
+
+        GOAL = """SELECT COUNT(*) FROM Section WHERE id = %s"""
+
+        ret = None
+        try:
+            self.db_cursor.execute(
+                """SELECT description FROM Goal WHERE id = %s AND curriculum_name = %s""",
+                (new_goal.id, new_goal.curriculum_name,))
+            c = self.db_cursor.fetchall()
+            ret = Goal()
+            if c:
+                ret.description = c[0][0]
+                ret.id = new_goal.id
+                ret.curriculum_name = new_goal.curriculum_name
+            else:
+                ret.description = None
+                ret.id = None
+                ret.curriculum_name = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve goal: " + str(id))
+
+        return ret
+
+
+    def set_goal(self, new_goal):
+        """Function to write goal to the db"""
+        self.db_cursor.execute(
+            """INSERT INTO Goal (id, curriculum_name, description) VALUES (%s, %s, %s)""",
+            (new_goal.id, new_goal.curriculum_name, new_goal.description))
+        self.db_connection.commit()
