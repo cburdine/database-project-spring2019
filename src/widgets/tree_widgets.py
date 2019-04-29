@@ -1,7 +1,6 @@
 from kivy.uix.treeview import TreeView, TreeViewLabel, TreeViewNode
 from kivy.uix.boxlayout import BoxLayout
-
-
+from kivy.clock import Clock
 
 def populate_tree_view(tree_view, parent, node, node_dict=None):
     if parent is None:
@@ -15,6 +14,8 @@ def populate_tree_view(tree_view, parent, node, node_dict=None):
 
     for child_node in node['children']:
         populate_tree_view(tree_view, tree_node, child_node, node_dict)
+
+
 
 
 # sample const for the testTree widget:
@@ -91,8 +92,10 @@ class RowSelectorWidget(BoxLayout):
             return None
 
     def get_height(self):
-        #TODO: Account for text wrapping
-        return 14 * len(self.row_names) + 60
+        height = 0
+        for node in self.tree_view.iterate_open_nodes(self.tree_view.root):
+            height += node.height
+        return height
 
     def get_num_Rows(self):
         return len(self.row_names)
@@ -113,6 +116,12 @@ class InteractiveTreeWidget(BoxLayout):
         populate_tree_view(self.tree_view, None, tree_dict, node_dict=self.node_dict)
         self.add_widget(self.tree_view)
 
+    def get_height(self):
+        height = 0
+        for node in self.tree_view.iterate_open_nodes(self.tree_view.root):
+            height += node.height
+        return height
+
     def set_demo_tree(self):
         self.node_dict = {}
         self.remove_widget(self.tree_view)
@@ -128,7 +137,7 @@ class InteractiveTreeWidget(BoxLayout):
 
     def on_touch_down(self, touch):
         super(InteractiveTreeWidget, self).on_touch_down(touch)
-        self.callback()
+        Clock.schedule_once(self.callback, 0.0)
 
 
 

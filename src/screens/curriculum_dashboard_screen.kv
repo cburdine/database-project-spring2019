@@ -13,15 +13,18 @@
 
 
 CurriculumDashboardScreenRoot:
+    on_size: root.resize_callback()
 
     BoxLayout:
         id: boxlayoutframe
         orientation: 'horizontal'
         size: root.size
 
+
         BoxLayout:
             orientation: 'vertical'
             size_hint_x: 0.25
+            id: sv_container
 
             Label:
                 canvas.before:
@@ -36,7 +39,13 @@ CurriculumDashboardScreenRoot:
 
             ScrollView:
                 do_scroll_x: False
-                do_scroll_y:
+                do_scroll_y: True
+                canvas.before:
+                    Color:
+                        rgb: 0.05, 0.05, 0.05
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
                 StackLayout:
                     id: sv_container
@@ -49,37 +58,47 @@ CurriculumDashboardScreenRoot:
                         size_hint_x: 1.0
                         size_hint_y: 1.0
                         id: curriculum_selector
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
 
-        BoxLayout:
-            orientation: 'vertical'
-
-            Label:
-                canvas.before:
-                    Color:
-                        rgb: 0.37, 0.37, 0.37
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                text: 'Curriculum Description'
-                background_color: (1,0,0,1)
+            BoxLayout:
+                orientation: 'vertical'
+                id: sv_description_container
                 size_hint_y: None
-                height: dp(40)
 
-            Label:
-                size: self.texture_size
-                text_size: self.size
-                id: description_field
-                text: ''
+                Label:
+                    canvas.before:
+                        Color:
+                            rgb: 0.37, 0.37, 0.37
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    text: 'Curriculum Description'
+                    background_color: (1,0,0,1)
+                    size_hint_y: None
+                    height: dp(40)
 
-            InteractiveTreeWidget:
-                id: topics_tree
+                Label:
+                    text_size: self.size
+                    id: description_field
+                    text: ''
 
-            Label:
-                size: self.texture_size
-                text_size: self.size
-                id: description_field_lower
-                text: 'TEXT'
+                Label:
+                    text_size: self.size
+                    id: topic_tree_label
+                    text: ''
 
+                InteractiveTreeWidget:
+                    id: topics_tree
+
+                Label:
+                    text_size: self.size
+                    id: course_tree_label
+                    text: ''
+
+                InteractiveTreeWidget:
+                    id: courses_tree
 
     AnchorLayout:
         anchor_x: 'left'

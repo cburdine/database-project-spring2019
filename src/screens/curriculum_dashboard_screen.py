@@ -6,6 +6,7 @@ from kivy.uix.screenmanager import Screen
 from src.widgets.tree_widgets import InteractiveTreeWidget
 from kivy.app import Widget
 from kivy.clock import Clock
+from kivy.metrics import dp
 
 """
 This class represents the Curriculum Dashboard screen (This is an instance of a 
@@ -46,12 +47,10 @@ class CurriculumDashboardScreenRoot(Widget):
         self.curriculum_selector = self.ids.curriculum_selector
         self.curriculum_selector.setRows(rows)
         self.curriculum_selector.set_callback(self.set_curriculum_text_description)
+        self.populated_sv = False
 
         #manually adjust height of selector box to fit unwrapped text:
         self.ids.sv_container.height = self.curriculum_selector.get_height()
-        self.set_curriculum_text_description()
-
-
 
     def link_to_app(self, app_ref):
         self.app = app_ref
@@ -60,7 +59,11 @@ class CurriculumDashboardScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'main'
 
-    def set_curriculum_text_description(self):
+    def resize_callback(self, *args):
+        if self.curriculum_selector and self.curriculum_selector.get_selected_row():
+            Clock.schedule_once(self.set_curriculum_text_description , 0.0)
+
+    def set_curriculum_text_description(self, *args):
 
         cur_name = self.curriculum_selector.get_selected_row()
         if cur_name != None:
@@ -68,14 +71,15 @@ class CurriculumDashboardScreenRoot(Widget):
             IND = "\n     "
             ENDL = "\n"
 
+            pane_size = dp(1000) #+ self.ids.courses_tree.get_height() + self.ids.topics_tree.get_height()
+            self.ids.sv_description_container.height = pane_size
+
             description = ""
             cur = self.app.client_model.get_curriculum(cur_name)
             person = self.app.client_model.get_person(cur.id_in_charge)
             description += IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]"
             description += IND + f"Minimum Credit Hours: {cur.min_credit_hours}"
             description += IND + f"Person in charge: {person.name} (id:{person.id})"
-            description += ENDL + IND + f"[size=28]Curriculum Topics[/size]"
-            description += ENDL + IND + "[anchor=xxx]"
 
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
@@ -83,6 +87,29 @@ class CurriculumDashboardScreenRoot(Widget):
             self.ids.description_field.text = description
             self.ids.description_field.texture_update()
 
-            print(self.ids.description_field.anchors)
-            #self.ids.topics_tree.pos = self.ids.description_field.anchors['topic_tree_pos']
-            self.ids.topics_tree.set_demo_tree()
+            topic_tree_label_text = IND + "[size=28]Curriculum Topics[/size]"
+            self.ids.topic_tree_label.markup = True
+            self.ids.topic_tree_label.text = topic_tree_label_text
+            self.ids.topic_tree_label.texture_update()
+            self.ids.topic_tree_label.y = pane_size - dp(200)
+
+            self.ids.topics_tree.y = pane_size - dp(400)
+
+            course_tree_label_text = IND + "[size=28]Curriculum Courses[/size]"
+            self.ids.course_tree_label.markup = True
+            self.ids.course_tree_label.text = course_tree_label_text
+            self.ids.course_tree_label.texture_update()
+            self.ids.course_tree_label.y = pane_size - dp(600)
+            
+
+            self.ids.courses_tree.pos = self.ids.course_tree_label.pos
+            self.ids.courses_tree.y = pane_size - dp(800)
+
+            #
+            if not self.populated_sv:
+                self.ids.topics_tree.set_callback(self.set_curriculum_text_description)
+                self.ids.courses_tree.set_callback(self.set_curriculum_text_description)
+                self.ids.courses_tree.set_demo_tree()
+                self.ids.topics_tree.set_demo_tree()
+                Clock.schedule_once(self.set_curriculum_text_description, 0.0)
+                self.populated_sv = True
