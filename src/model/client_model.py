@@ -1,5 +1,5 @@
 from src.db.adapter import DBAdapter
-from src.model.classes import Person
+from src.model.classes import Person, CurriculumTopic
 
 """
 The purpose of this class is to serve as a
@@ -21,6 +21,7 @@ class ClientModel:
         self._topic_map = {}
         self._goal_map = {}
         self._section_map = {}
+        self._cur_topic_temp = CurriculumTopic()
 
     def get_person(self, id):
 
@@ -114,3 +115,18 @@ class ClientModel:
         """Function to set goal"""
         self.adapter.set_goal(new_goal)
         self._curricula_map[new_goal.id] = new_goal
+
+    def set_temp_cur_topic(self, cur):
+        """Function to set the auxilary object that will define our curriculum topic """
+
+        tmp = CurriculumTopic()
+
+        tmp.curriculum_name = cur.name
+        tmp.topic_id = cur.topic_id
+        self._cur_topic_temp = tmp
+
+    def get_temp_cur_topic(self):
+        """Function to get the auxilary object that will define our curriculum topic """
+        return self._cur_topic_temp
+
+

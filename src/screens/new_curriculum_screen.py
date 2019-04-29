@@ -89,23 +89,25 @@ class NewCurriculumScreenRoot(Widget):
 
         courses_exist = False
         cs = None
+        courses = None
         if new_curriculum.req_course_names is not None and new_curriculum.opt_course_names is not None:
             courses = new_curriculum.req_course_names + new_curriculum.opt_course_names
         elif new_curriculum.req_course_names is not None:
             courses = new_curriculum.req_course_names
         elif new_curriculum.opt_course_names is not None:
             courses = new_curriculum.opt_course_names
-        for c in courses:
-            cs = self.app.client_model.get_course(c)
-            if cs.name is not None:
-                courses_exist = True
-                cs = None
-            if not courses_exist:
-                logging.info("NewCurriculumScreenRoot: Invalid course")
-                dialogue = MessageDialogue(title="Database error", message="One of the courses does not exist in the db")
-                dialogue.open()
-                can_submit = False
-            courses_exists = False
+        if courses is not None:
+            for c in courses:
+                cs = self.app.client_model.get_course(c)
+                if cs.name is not None:
+                    courses_exist = True
+                    cs = None
+                if not courses_exist:
+                    logging.info("NewCurriculumScreenRoot: Invalid course")
+                    dialogue = MessageDialogue(title="Database error", message="One of the courses does not exist in the db")
+                    dialogue.open()
+                    can_submit = False
+                courses_exists = False
 
         person_id_exists = False
         p = None
@@ -138,11 +140,16 @@ class NewCurriculumScreenRoot(Widget):
         elif can_submit:
             # describe the topic further
             print('nyc')
-            #self.app.client_model.set_curriculum(new_curriculum)
-            #dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
-            #dialogue.open()
-            #self.app.screen_manager.transition.direction = 'up'
-            #self.app.screen_manager.current = 'main' # todo, need to further describe
-                                                      # curriculum topic before we can finish
+            #self.app.client_model.set
+
+            # todo: idea is to loop through the topics list and for each topic, define it's necessary stuff in the
+            #   CurriculumTopic table
+            for i in new_curriculum.cur_topics:
+                tmp = classes.CurriculumTopic()
+                tmp.topic_id = i
+                tmp.curriculum_name = new_curriculum.name
+                self.app.client_model.set_temp_cur_topic(tmp)
+                self.app.screen_manager.transition.direction = 'up'
+                self.app.screen_manager.current = 'new_curriculum_topic'
 
         print("submit")
