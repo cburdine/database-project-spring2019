@@ -44,11 +44,42 @@ class NewGoalScreenRoot(Widget):
         new_goal.id = None if len(self.ids.goal_id.text) == 0 else self.ids.goal_id.text
         new_goal.description =  None if len(self.ids.description.text) == 0 else self.ids.description.text
 
+        # we need to determine if the id is numeric and if it has not already been entered
+        if new_goal.id is not None:
+            id_is_numeric = False
+            if str.isdigit(new_goal.id):
+                id_is_numeric = True
+
+        already_in_db = None
+        already_in_db = self.app.client_model.get_goal(new_goal)
+
+        curriculum_exists = None
+        curriculum_exists = self.app.client_model.get_curriculum(new_goal.curriculum_name)
+
         if new_goal.curriculum_name is None or new_goal.id is None:
             logging.info("NewGoalScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
             dialogue.open()
+        elif not id_is_numeric:
+            logging.info("NewGoalScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Format error", message="ID must be numeric")
+            dialogue.open()
+        elif already_in_db.id is not None:
+            logging.info("NewGoalScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="Entry error", message="Goal is already defined")
+            dialogue.open()
+        elif curriculum_exists is None:
+            logging.info("NewGoalScreenRoot: some text fields lack input")
+            dialogue = MessageDialogue(title="DB error", message="Curriculum for this goal does not exist")
+            dialogue.open()
+        else:
+            # safe to enter into db
+            self.app.client_model.set_goal(new_goal)
+            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            dialogue.open()
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'main'
 
-        # todo: validating input (holding off for now because this depends on a curriculum's existence)
+
 
         print("submit")

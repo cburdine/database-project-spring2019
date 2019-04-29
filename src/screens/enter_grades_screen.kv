@@ -1,0 +1,43 @@
+#:kivy 1.0
+
+#:import login_screen src.screens.main_screen
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+
+
+EnterGradesScreenRoot:
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(100))
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+    AnchorLayout:
+        center: root.center
+        size: (dp(400), dp(200))
+
+        GridLayout
+            rows: 2
+            cols: 1
+            padding: dp(5)
+            spacing: dp(8)
+
+            Button:
+                text: 'Add New Goal'
+                on_press: root.add_goal_grades_callback()
+
+            Button:
+                text: 'Add New Grades'
+                on_press: root.add_real_grades_callback()
