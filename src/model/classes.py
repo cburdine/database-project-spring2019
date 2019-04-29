@@ -79,8 +79,10 @@ class Topic:
         """
         Overridden str function
         """
-        print(f"name: {self.name}")
-        print(f"id: {self.id}")
+        str = f"name: {self.name}" + \
+              f"\nid: {self.id}"
+
+        return str
 
     def set_name(self, n):
         self.name = n
@@ -101,11 +103,12 @@ class CurriculumTopic:
         """
         Overridden str function
         """
-        print(f"curriculum_name: {self.curriculum_name}")
-        print(f"topic_id: {self.topic_id}")
-        print(f"level: {self.level}")
-        print(f"subject_area: {self.subject_area}")
-        print(f"time_unit: {self.time_unit}")
+        str = f"curriculum_name: {self.curriculum_name}" + \
+              f"\ntopic_id: {self.topic_id}" + \
+              f"\nlevel: {self.level}" + \
+              f"\nsubject_area: {self.subject_area}" + \
+              f"\ntime_unit: {self.time_unit}"
+        return str
 
     def set_curriculum_name(self, n):
         self.curriculum_name = n

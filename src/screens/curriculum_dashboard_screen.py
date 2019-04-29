@@ -40,7 +40,6 @@ class CurriculumDashboardScreenRoot(Widget):
         self.app = None
         self.curriculum_selector = None
 
-
     #Ensure widgets are instantiated before calling this:
     def populate(self):
         rows = self.app.client_model.get_curriculum_names()
@@ -63,6 +62,31 @@ class CurriculumDashboardScreenRoot(Widget):
         if self.curriculum_selector and self.curriculum_selector.get_selected_row():
             Clock.schedule_once(self.set_curriculum_text_description , 0.0)
 
+    def set_courses_tree(self, curriculum):
+        tree_dict = { 'node_id': 'Courses',
+                      'children': [{'node_id': 'Required Courses', 'children': []},
+                                   {'node_id': 'Optional Courses', 'children': []}]
+                    }
+        for c_name in curriculum.req_course_names:
+            tree_dict['children'][0]['children'].append({'node_id': str(c_name), 'children': []})
+
+        for c_name in curriculum.opt_course_names:
+            tree_dict['children'][1]['children'].append({'node_id': str(c_name), 'children': []})
+
+        self.ids.courses_tree.set_tree(tree_dict)
+
+    def set_topics_tree(self, curriculum):
+        tree_dict = { 'node_id': 'Topics',
+                      'children': [{'node_id': 'Required Courses', 'children': []},
+                                   {'node_id': 'Optional Courses', 'children': []}]
+                    }
+        for t in curriculum.cur_topics:
+            desc = {'node_id': str(t), 'children': []}
+            t_name = self.app.client_model.get_topic(t.topic_id).name
+            tree_dict['children'][0]['children'].append({'node_id': t_name, 'children': [desc]})
+
+        self.ids.topics_tree.set_tree(tree_dict)
+
     def set_curriculum_text_description(self, *args):
 
         cur_name = self.curriculum_selector.get_selected_row()
@@ -71,11 +95,15 @@ class CurriculumDashboardScreenRoot(Widget):
             IND = "\n     "
             ENDL = "\n"
 
-            pane_size = dp(1000) #+ self.ids.courses_tree.get_height() + self.ids.topics_tree.get_height()
+            cur = self.app.client_model.get_curriculum(cur_name)
+
+            self.set_courses_tree(cur)
+            self.set_topics_tree(cur)
+
+            pane_size = dp(1000)
             self.ids.sv_description_container.height = pane_size
 
             description = ""
-            cur = self.app.client_model.get_curriculum(cur_name)
             person = self.app.client_model.get_person(cur.id_in_charge)
             description += IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]"
             description += IND + f"Minimum Credit Hours: {cur.min_credit_hours}"
@@ -95,21 +123,19 @@ class CurriculumDashboardScreenRoot(Widget):
 
             self.ids.topics_tree.y = pane_size - dp(400)
 
+
             course_tree_label_text = IND + "[size=28]Curriculum Courses[/size]"
             self.ids.course_tree_label.markup = True
             self.ids.course_tree_label.text = course_tree_label_text
             self.ids.course_tree_label.texture_update()
-            self.ids.course_tree_label.y = pane_size - dp(600)
-            
+            self.ids.course_tree_label.y = pane_size - dp(800)
+
 
             self.ids.courses_tree.pos = self.ids.course_tree_label.pos
-            self.ids.courses_tree.y = pane_size - dp(800)
+            self.ids.courses_tree.y = pane_size - dp(1000)
 
-            #
             if not self.populated_sv:
                 self.ids.topics_tree.set_callback(self.set_curriculum_text_description)
                 self.ids.courses_tree.set_callback(self.set_curriculum_text_description)
-                self.ids.courses_tree.set_demo_tree()
-                self.ids.topics_tree.set_demo_tree()
                 Clock.schedule_once(self.set_curriculum_text_description, 0.0)
                 self.populated_sv = True

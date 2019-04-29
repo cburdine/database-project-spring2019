@@ -66,6 +66,7 @@ CurriculumDashboardScreenRoot:
                 orientation: 'vertical'
                 id: sv_description_container
                 size_hint_y: None
+                height: self.minimum_height
 
                 Label:
                     canvas.before:
@@ -91,6 +92,7 @@ CurriculumDashboardScreenRoot:
 
                 InteractiveTreeWidget:
                     id: topics_tree
+                    height: self.get_height()
 
                 Label:
                     text_size: self.size
@@ -99,7 +101,7 @@ CurriculumDashboardScreenRoot:
 
                 InteractiveTreeWidget:
                     id: courses_tree
-
+                    height: self.get_height()
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'bottom'

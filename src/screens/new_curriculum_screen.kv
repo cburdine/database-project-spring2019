@@ -1,6 +1,7 @@
 #:kivy 1.0
 
 #:import login_screen src.screens.main_screen
+#:import text_input_widgets src.widgets.text_input_widgets
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -11,100 +12,142 @@
 
 NewCurriculumScreenRoot:
 
+
+
+    Label:
+        width: root.width
+        height: root.height
+        size_hint: (None, None)
+        text_size: self.size
+        id: live_description_label
+        text: ''
+
+
     AnchorLayout:
-        center: root.center
-        size: (1000, 1200)
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(100))
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+    StackLayout:
+        orientation: 'lr-bt'
 
         GridLayout
+            pos_hint: (None, None)
+            size_hint: (None, None)
+            size: (root.width, dp(260))
             rows: 8
             cols: 2
-            padding: 100
-            spacing: 75
+            padding: dp(10)
+            spacing: dp(2)
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Curriculum Name:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
             TextInput:
+                on_text: root.update_live_description_callback()
                 id: curriculum_name
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Minimum Credit Hours:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: min_credit_hours
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'ID of Person in Charge:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: id_in_charge
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'IDs of Curriculum Topics'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
+            IntListTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: curriculum_topics
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
+                height: dp(50)
+                width: dp(200)
                 text: 'Required Courses'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
             TextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: required_courses
                 multiline: False
                 text: ''
 
             Label:
+                height: dp(50)
                 size_hint_x: None
-                width: 300
+                width: dp(200)
                 text: 'Optional Courses'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
             TextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: optional_courses
                 multiline: False
                 text: ''
 
             Widget: # empty widget
                 size_hint_x: None
-                width: 80
+                width: dp(80)
 
-            Button:
-                text: 'Back'
-                on_press: root.back_callback()
+            Widget: # empty widget
+                height: dp(50)
 
             Widget: # empty widget
                 size_hint_x: None
-                width: 80
+                width: dp(80)
 
             Button:
+                height: dp(50)
                 text: 'Submit'
                 on_press: root.submit_callback()

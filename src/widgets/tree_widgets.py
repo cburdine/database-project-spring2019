@@ -16,8 +16,6 @@ def populate_tree_view(tree_view, parent, node, node_dict=None):
         populate_tree_view(tree_view, tree_node, child_node, node_dict)
 
 
-
-
 # sample const for the testTree widget:
 TREE_DEMO = {'node_id': '1',
         'children': [{'node_id': '1.1',
@@ -104,7 +102,7 @@ class InteractiveTreeWidget(BoxLayout):
 
     def __init__(self, **kwargs):
         super(InteractiveTreeWidget, self).__init__(**kwargs)
-        self.tree_view = TreeView(hide_root=True, indent_level=6)
+        self.tree_view = TreeView(hide_root=True, indent_level=20)
         self.add_widget(self.tree_view)
         self.node_dict = {}
         self.callback = self.null_callback
@@ -112,7 +110,7 @@ class InteractiveTreeWidget(BoxLayout):
     def set_tree(self, tree_dict):
         self.node_dict = {}
         self.remove_widget(self.tree_view)
-        self.tree_view = TreeView(hide_root=True, indent_level=6)
+        self.tree_view = TreeView(hide_root=True, indent_level=20)
         populate_tree_view(self.tree_view, None, tree_dict, node_dict=self.node_dict)
         self.add_widget(self.tree_view)
 
@@ -125,7 +123,7 @@ class InteractiveTreeWidget(BoxLayout):
     def set_demo_tree(self):
         self.node_dict = {}
         self.remove_widget(self.tree_view)
-        self.tree_view = TreeView(hide_root=True, indent_level=6)
+        self.tree_view = TreeView(hide_root=True, indent_level=20)
         populate_tree_view(self.tree_view, None, TREE_DEMO, self.node_dict)
         self.add_widget(self.tree_view)
 

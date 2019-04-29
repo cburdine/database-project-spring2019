@@ -21,6 +21,9 @@ class NewCurriculumScreen(Screen):
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 
+    def on_enter(self, *args):
+        self.root_widget.populate()
+
 
 class NewCurriculumScreenRoot(Widget):
 
@@ -31,9 +34,30 @@ class NewCurriculumScreenRoot(Widget):
     def link_to_app(self, app_ref):
         self.app = app_ref
 
+    def populate(self):
+        self.update_live_description_callback()
+
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
+
+    def update_live_description_callback(self):
+        self.ids.live_description_label.halign = 'left'
+        self.ids.live_description_label.valign = 'top'
+        name = "<Curriculum Name>" if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
+        min_credit_hours = "<minimum credit hours>" if len(self.ids.min_credit_hours.text) == 0 else self.ids.min_credit_hours.text
+        id_in_charge = "<person in charge>" if len(self.ids.id_in_charge.text) == 0 else self.ids.id_in_charge.text
+        cur_topics = "<curriculum topics>" if len(self.ids.curriculum_topics.text) == 0 else self.ids.curriculum_topics.text
+        person_name = "<person in charge name>"
+
+        description = ""
+        IND = "\n           "
+        description += IND + f"[color=ffffff][size=40]Name: {name}[/size][/color]"
+        description += IND + f"Minimum Credit Hours: {min_credit_hours}"
+        description += IND + f"Person in charge: {person_name} (id:{id})"
+        self.ids.live_description_label.markup = True
+        self.ids.live_description_label.text = description
+        self.ids.live_description_label.texture_update()
 
     def submit_callback(self):
 
