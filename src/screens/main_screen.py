@@ -55,8 +55,8 @@ class MainScreenRoot(Widget):
 
     def enter_grades_callback(self):
         print('Enter Grades')
-        #self.app.screen_manager.transition.direction = 'left'
-        #self.app.screen_manager.current = 'enter_grades' todo
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'enter_grades'
 
 
     def logout_callback(self):
