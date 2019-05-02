@@ -58,6 +58,11 @@ class AddNewScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'left'
         self.app.screen_manager.current = 'new_goal'
 
+    def add_course_goal_callback(self):
+        print('Add Course Goal')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'new_course_goal'
+
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'main'

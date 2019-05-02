@@ -129,4 +129,8 @@ class ClientModel:
         """Function to get the auxilary object that will define our curriculum topic """
         return self._cur_topic_temp
 
+    def set_course_goal(self, goal_id, course_name):
+        """Function to set a course goal in the database"""
+        self.adapter.set_course_goal(goal_id, course_name)
+
 

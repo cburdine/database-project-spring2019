@@ -34,7 +34,7 @@ class NewCurriculumTopicScreenRoot(Widget):
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
-        self.app.screen_manager.current = 'new_curriculum'
+        self.app.screen_manager.current = 'main'
 
     def submit_callback(self):
         print("submit")

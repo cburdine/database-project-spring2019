@@ -346,3 +346,10 @@ class DBAdapter:
             """INSERT INTO Goal (id, curriculum_name, description) VALUES (%s, %s, %s)""",
             (new_goal.id, new_goal.curriculum_name, new_goal.description))
         self.db_connection.commit()
+
+    def set_course_goal(self, goal_id, course_name):
+        """Function to write course goal to the db"""
+        self.db_cursor.execute(
+            """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)""",
+            (goal_id, course_name))
+        self.db_connection.commit()

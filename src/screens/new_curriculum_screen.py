@@ -166,8 +166,8 @@ class NewCurriculumScreenRoot(Widget):
             print('nyc')
             #self.app.client_model.set
 
-            # todo: idea is to loop through the topics list and for each topic, define it's necessary stuff in the
-            #   CurriculumTopic table
+            # todo: new plan --> make new entry screen for each table (Curriculum Topics,
+            #  Curriculum, Curriculum Listings, etc.)
             for i in new_curriculum.cur_topics:
                 tmp = classes.CurriculumTopic()
                 tmp.topic_id = i
