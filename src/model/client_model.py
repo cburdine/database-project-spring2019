@@ -133,4 +133,16 @@ class ClientModel:
         """Function to set a course goal in the database"""
         self.adapter.set_course_goal(goal_id, course_name)
 
+    def set_course_topic(self, topic_id, course_name):
+        """Function to set course topic"""
+        self.adapter.set_course_topic(topic_id,course_name)
+
+    def set_curriculum_course(self, curriculum_name, course_name, required):
+        """Function to set curriculum course in the db"""
+        self.adapter.set_curriculum_course(curriculum_name, course_name, required)
+
+    def set_curriculum_topic(self, curriculum_name, topic_id, level, subject_area, time_unit):
+        """Function to set curriculum topic"""
+        self.adapter.set_curriculum_topic(curriculum_name, topic_id, level, subject_area, time_unit)
+
 

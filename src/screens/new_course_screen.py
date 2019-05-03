@@ -60,6 +60,8 @@ class NewCourseScreenRoot(Widget):
         already_in_db = None
         already_in_db = self.app.client_model.get_course(new_course.name)
 
+        # todo: check for duplicate submission
+
         if new_course.name is None or new_course.subject_code is None or\
                 new_course.credit_hours is None or new_course.description is None :
             logging.info("NewCourseScreenRoot: some text fields lack input")
