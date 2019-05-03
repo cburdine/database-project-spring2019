@@ -59,7 +59,7 @@ class NewCurriculumScreenRoot(Widget):
         description.append(IND + f"[color=ffffff][size=20]Topics:[/size][/color]: ")
 
         for t in cur_topics:
-            description.append(IND + t.name)
+            description.append(IND + "STUFF")
 
 
         self.ids.live_description_label.markup = True
