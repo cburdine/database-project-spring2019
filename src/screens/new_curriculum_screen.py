@@ -51,18 +51,19 @@ class NewCurriculumScreenRoot(Widget):
                                            else self.ids.curriculum_topics.text.split(',')
         person_name = "<person in charge name>"
 
-        description = ""
+        description = []
         IND = "\n           "
-        description += IND + f"[color=ffffff][size=40]Name: {name}[/size][/color]"
-        description += IND + f"Minimum Credit Hours: {min_credit_hours}"
-        description += IND + f"Person in charge: {person_name} (id:{id})"
-        description += IND + f"[color=ffffff][size=20]Topics:[/size][/color]: "
-        for t in cur_topics:
+        description.append(IND + f"[color=ffffff][size=40]Name: {name}[/size][/color]")
+        description.append(IND + f"Minimum Credit Hours: {min_credit_hours}")
+        description.append(IND + f"Person in charge: {person_name} (id:{id})")
+        description.append(IND + f"[color=ffffff][size=20]Topics:[/size][/color]: ")
 
+        for t in cur_topics:
+            description.append(IND + t.name)
 
 
         self.ids.live_description_label.markup = True
-        self.ids.live_description_label.text = description
+        self.ids.live_description_label.text = ''.join(description)
         self.ids.live_description_label.texture_update()
 
     def submit_callback(self):
