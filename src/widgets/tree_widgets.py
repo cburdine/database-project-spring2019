@@ -1,6 +1,7 @@
 from kivy.uix.treeview import TreeView, TreeViewLabel, TreeViewNode
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
+from kivy.metrics import dp
 
 def populate_tree_view(tree_view, parent, node, node_dict=None):
     if parent is None:
@@ -89,10 +90,11 @@ class RowSelectorWidget(BoxLayout):
         else:
             return None
 
-    def get_height(self):
+    def get_height(self, expected_node_height= 1.0):
+        HEIGHT_FACTOR = 1.1575
         height = 0
-        for node in self.tree_view.iterate_open_nodes(self.tree_view.root):
-            height += node.height
+        for node in self.tree_view.iterate_all_nodes():
+            height += dp(node.height*expected_node_height*HEIGHT_FACTOR)
         return height
 
     def get_num_Rows(self):

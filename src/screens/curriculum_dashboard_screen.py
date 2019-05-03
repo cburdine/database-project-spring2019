@@ -46,6 +46,14 @@ class CurriculumDashboardScreenRoot(Widget):
         self.curriculum_selector = self.ids.curriculum_selector
         self.curriculum_selector.setRows(rows)
         self.curriculum_selector.set_callback(self.set_curriculum_text_description)
+        self.ids.sv_left.scroll_type = ['content', 'bars']
+        self.ids.sv_left.bar_margin = dp(5)
+        self.ids.sv_left.bar_width = dp(10)
+
+        self.ids.sv_page.scroll_type = ['content','bars']
+        self.ids.sv_page.bar_margin = dp(5)
+        self.ids.sv_page.bar_width = dp(10)
+
         self.populated_sv = False
 
         #manually adjust height of selector box to fit unwrapped text:
@@ -62,30 +70,17 @@ class CurriculumDashboardScreenRoot(Widget):
         if self.curriculum_selector and self.curriculum_selector.get_selected_row():
             Clock.schedule_once(self.set_curriculum_text_description , 0.0)
 
-    def set_courses_tree(self, curriculum):
-        tree_dict = { 'node_id': 'Courses',
-                      'children': [{'node_id': 'Required Courses', 'children': []},
-                                   {'node_id': 'Optional Courses', 'children': []}]
-                    }
-        for c_name in curriculum.req_course_names:
-            tree_dict['children'][0]['children'].append({'node_id': str(c_name), 'children': []})
+    def set_courses_trees(self, curriculum):
+        print(curriculum.opt_course_names)
+        self.ids.req_courses_tree.setRows(curriculum.req_course_names)
+        self.ids.opt_courses_tree.setRows(curriculum.opt_course_names)
 
-        for c_name in curriculum.opt_course_names:
-            tree_dict['children'][1]['children'].append({'node_id': str(c_name), 'children': []})
-
-        self.ids.courses_tree.set_tree(tree_dict)
+        self.ids.sv_req_courses.height = self.ids.req_courses_tree.get_height()
+        self.ids.sv_opt_courses.height = self.ids.opt_courses_tree.get_height()
 
     def set_topics_tree(self, curriculum):
-        tree_dict = { 'node_id': 'Topics',
-                      'children': [{'node_id': 'Required Courses', 'children': []},
-                                   {'node_id': 'Optional Courses', 'children': []}]
-                    }
-        for t in curriculum.cur_topics:
-            desc = {'node_id': str(t), 'children': []}
-            t_name = self.app.client_model.get_topic(t.topic_id).name
-            tree_dict['children'][0]['children'].append({'node_id': t_name, 'children': [desc]})
-
-        self.ids.topics_tree.set_tree(tree_dict)
+        self.ids.topics_tree.setRows(map(lambda t: str(t), curriculum.cur_topics))
+        self.ids.sv_topics.height = self.ids.topics_tree.get_height()
 
     def set_curriculum_text_description(self, *args):
 
@@ -97,10 +92,10 @@ class CurriculumDashboardScreenRoot(Widget):
 
             cur = self.app.client_model.get_curriculum(cur_name)
 
-            self.set_courses_tree(cur)
+            self.set_courses_trees(cur)
             self.set_topics_tree(cur)
 
-            pane_size = dp(1000)
+            pane_size = dp(1100)
             self.ids.sv_description_container.height = pane_size
 
             description = ""
@@ -119,23 +114,13 @@ class CurriculumDashboardScreenRoot(Widget):
             self.ids.topic_tree_label.markup = True
             self.ids.topic_tree_label.text = topic_tree_label_text
             self.ids.topic_tree_label.texture_update()
-            self.ids.topic_tree_label.y = pane_size - dp(200)
 
-            self.ids.topics_tree.y = pane_size - dp(400)
+            req_courses_tree_label_text = IND + "[size=28]Required Courses[/size]"
+            self.ids.req_courses_tree_label.markup = True
+            self.ids.req_courses_tree_label.text = req_courses_tree_label_text
+            self.ids.req_courses_tree_label.texture_update()
 
-
-            course_tree_label_text = IND + "[size=28]Curriculum Courses[/size]"
-            self.ids.course_tree_label.markup = True
-            self.ids.course_tree_label.text = course_tree_label_text
-            self.ids.course_tree_label.texture_update()
-            self.ids.course_tree_label.y = pane_size - dp(800)
-
-
-            self.ids.courses_tree.pos = self.ids.course_tree_label.pos
-            self.ids.courses_tree.y = pane_size - dp(1000)
-
-            if not self.populated_sv:
-                self.ids.topics_tree.set_callback(self.set_curriculum_text_description)
-                self.ids.courses_tree.set_callback(self.set_curriculum_text_description)
-                Clock.schedule_once(self.set_curriculum_text_description, 0.0)
-                self.populated_sv = True
+            opt_courses_tree_label_text = IND + "[size=28]Elective Courses[/size]"
+            self.ids.opt_courses_tree_label.markup = True
+            self.ids.opt_courses_tree_label.text = opt_courses_tree_label_text
+            self.ids.opt_courses_tree_label.texture_update()

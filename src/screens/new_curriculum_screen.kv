@@ -55,6 +55,7 @@ NewCurriculumScreenRoot:
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             TextInput:
                 on_text: root.update_live_description_callback()
                 id: curriculum_name
@@ -69,6 +70,7 @@ NewCurriculumScreenRoot:
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             IntTextInput:
                 on_text: root.update_live_description_callback()
                 height: dp(50)
@@ -84,13 +86,13 @@ NewCurriculumScreenRoot:
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             IntTextInput:
                 on_text: root.update_live_description_callback()
                 height: dp(50)
                 id: id_in_charge
                 multiline: False
                 text: ''
-
             Label:
                 size_hint_x: None
                 width: dp(200)

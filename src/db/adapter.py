@@ -137,7 +137,7 @@ class DBAdapter:
             if (c[2]):  # if required course
                 cur.req_course_names.append(c[1])
             else:
-                cur.opt_course_names.append(c[2])
+                cur.opt_course_names.append(c[1])
         return cur
 
     def validate_new_curriculum_topics(self, curriculum_topics):

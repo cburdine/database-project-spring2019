@@ -47,7 +47,8 @@ class NewCurriculumScreenRoot(Widget):
         name = "<Curriculum Name>" if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
         min_credit_hours = "<minimum credit hours>" if len(self.ids.min_credit_hours.text) == 0 else self.ids.min_credit_hours.text
         id_in_charge = "<person in charge>" if len(self.ids.id_in_charge.text) == 0 else self.ids.id_in_charge.text
-        cur_topics = "<curriculum topics>" if len(self.ids.curriculum_topics.text) == 0 else self.ids.curriculum_topics.text
+        cur_topics = "<curriculum topics>" if len(self.ids.curriculum_topics.text) == 0 \
+                                           else self.ids.curriculum_topics.text.split(',')
         person_name = "<person in charge name>"
 
         description = ""
@@ -55,6 +56,11 @@ class NewCurriculumScreenRoot(Widget):
         description += IND + f"[color=ffffff][size=40]Name: {name}[/size][/color]"
         description += IND + f"Minimum Credit Hours: {min_credit_hours}"
         description += IND + f"Person in charge: {person_name} (id:{id})"
+        description += IND + f"[color=ffffff][size=20]Topics:[/size][/color]: "
+        for t in cur_topics:
+
+
+
         self.ids.live_description_label.markup = True
         self.ids.live_description_label.text = description
         self.ids.live_description_label.texture_update()
