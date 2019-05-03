@@ -351,5 +351,26 @@ class DBAdapter:
         """Function to write course goal to the db"""
         self.db_cursor.execute(
             """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)""",
-            (goal_id, course_name))
+            (course_name, goal_id))
+        self.db_connection.commit()
+
+    def set_course_topic(self, topic_id,course_name):
+        """Function to write course topic to the db"""
+        self.db_cursor.execute(
+            """INSERT INTO CourseTopics (course_name, goal_id) VALUES (%s, %s)""",
+            (course_name, topic_id))
+        self.db_connection.commit()
+
+    def set_curriculum_course(self, curriculum_name, course_name, required):
+        """Function to write curriculum course to the db"""
+        self.db_cursor.execute(
+            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
+            (curriculum_name,course_name, required))
+        self.db_connection.commit()
+
+    def set_curriculum_topic(self, curriculum_name, topic_id, level, subject_area, time_unit):
+        """Function to write curriculum topic to the db"""
+        self.db_cursor.execute(
+            """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",
+            (curriculum_name, topic_id, level, subject_area, time_unit))
         self.db_connection.commit()
