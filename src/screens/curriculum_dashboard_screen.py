@@ -46,11 +46,11 @@ class CurriculumDashboardScreenRoot(Widget):
         self.curriculum_selector.setRows(rows)
         self.curriculum_selector.set_callback(self.set_curriculum_text_description)
         self.ids.sv_left.scroll_type = ['content', 'bars']
-        self.ids.sv_left.bar_margin = dp(5)
+        self.ids.sv_left.bar_margin = dp(2)
         self.ids.sv_left.bar_width = dp(10)
 
-        self.ids.sv_page.scroll_type = ['content','bars']
-        self.ids.sv_page.bar_margin = dp(5)
+        self.ids.sv_page.scroll_type = ['content', 'bars']
+        self.ids.sv_page.bar_margin = dp(2)
         self.ids.sv_page.bar_width = dp(10)
 
         self.populated_sv = False
