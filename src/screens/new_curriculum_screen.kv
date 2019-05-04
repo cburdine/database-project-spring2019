@@ -12,8 +12,6 @@
 
 NewCurriculumScreenRoot:
 
-
-
     Label:
         width: root.width
         height: root.height
@@ -38,7 +36,7 @@ NewCurriculumScreenRoot:
     StackLayout:
         orientation: 'lr-bt'
 
-        GridLayout
+        GridLayout:
             pos_hint: (None, None)
             size_hint: (None, None)
             size: (root.width, dp(260))
@@ -97,7 +95,7 @@ NewCurriculumScreenRoot:
                 size_hint_x: None
                 width: dp(200)
                 height: dp(50)
-                text: 'IDs of Curriculum Topics'
+                text: 'IDs of Curriculum Topics:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'

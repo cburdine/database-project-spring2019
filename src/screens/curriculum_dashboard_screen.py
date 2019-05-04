@@ -15,7 +15,6 @@ kivy Screen object, which is managed by a ScreenManager in the app.py App class.
 class CurriculumDashboardScreen(Screen):
 
     screen_name = 'curriculum_dashboard'
-
     view_kv_filepath = 'screens/curriculum_dashboard_screen.kv'
 
     def __init__(self, root_app=None):
@@ -71,7 +70,6 @@ class CurriculumDashboardScreenRoot(Widget):
             Clock.schedule_once(self.set_curriculum_text_description , 0.0)
 
     def set_courses_trees(self, curriculum):
-        print(curriculum.opt_course_names)
         self.ids.req_courses_tree.setRows(curriculum.req_course_names)
         self.ids.opt_courses_tree.setRows(curriculum.opt_course_names)
 
@@ -98,16 +96,16 @@ class CurriculumDashboardScreenRoot(Widget):
             pane_size = dp(1100)
             self.ids.sv_description_container.height = pane_size
 
-            description = ""
+            description = []
             person = self.app.client_model.get_person(cur.id_in_charge)
-            description += IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]"
-            description += IND + f"Minimum Credit Hours: {cur.min_credit_hours}"
-            description += IND + f"Person in charge: {person.name} (id:{person.id})"
+            description.append(IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]")
+            description.append(IND + f"Minimum Credit Hours: {cur.min_credit_hours}")
+            description.append(IND + f"Person in charge: {person.name} (id:{person.id})")
 
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
             self.ids.description_field.markup = True
-            self.ids.description_field.text = description
+            self.ids.description_field.text = "".join(description)
             self.ids.description_field.texture_update()
 
             topic_tree_label_text = IND + "[size=28]Curriculum Topics[/size]"

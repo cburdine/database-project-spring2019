@@ -43,6 +43,22 @@ class NewTopicScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def update_live_description_callback(self):
+
+        topic_name = "<Topic Name>" if len(self.ids.topic_name.text) == 0 else self.ids.topic_name.text
+        topic_id = "<Topic ID>" if len(self.ids.topic_id.text) == 0 else int(self.ids.topic_id.text)
+
+        IND = "\n           "
+        description_label = []
+        description_label.append(IND + f"[color=ffffff][size=40]Name: {topic_name}[/size][/color]")
+        description_label.append(IND + f"ID Number: {topic_id}")
+
+        self.ids.live_description_label.halign = 'left'
+        self.ids.live_description_label.valign = 'top'
+        self.ids.live_description_label.markup = True
+        self.ids.live_description_label.text = ''.join(description_label)
+        self.ids.live_description_label.texture_update()
+
     def submit_callback(self):
         new_topic = classes.Topic()
 

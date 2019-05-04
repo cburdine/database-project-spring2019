@@ -42,10 +42,9 @@ class NewCurriculumScreenRoot(Widget):
         self.app.screen_manager.current = 'add_new_screen'
 
     def update_live_description_callback(self):
-        self.ids.live_description_label.halign = 'left'
-        self.ids.live_description_label.valign = 'top'
+
         name = "<Curriculum Name>" if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
-        min_credit_hours = "<minimum credit hours>" if len(self.ids.min_credit_hours.text) == 0 else self.ids.min_credit_hours.text
+        min_credit_hours = "<minimum credit hours>" if len(self.ids.min_credit_hours.text) == 0 else int(self.ids.min_credit_hours.text)
         id_in_charge = "<person in charge>" if len(self.ids.id_in_charge.text) == 0 else self.ids.id_in_charge.text
         cur_topics = "<curriculum topics>" if len(self.ids.curriculum_topics.text) == 0 \
                                            else self.ids.curriculum_topics.text.split(',')
@@ -56,12 +55,42 @@ class NewCurriculumScreenRoot(Widget):
         description.append(IND + f"[color=ffffff][size=40]Name: {name}[/size][/color]")
         description.append(IND + f"Minimum Credit Hours: {min_credit_hours}")
         description.append(IND + f"Person in charge: {person_name} (id:{id})")
-        description.append(IND + f"[color=ffffff][size=20]Topics:[/size][/color]: ")
+        description.append(IND +IND + f"[color=ffffff][size=20]Topics:[/size][/color]" + IND)
+        topic_names = self.ids.curriculum_topics.text.split(',')
 
-        for t in cur_topics:
-            description.append(IND + "STUFF")
+        many = False
+        for t in topic_names:
+            if len(t) > 0:
+                if many:
+                    description.append(', ')
+                else:
+                    many = True
+                description.append(t.strip())
 
+        description.append(IND + IND + f"[color=ffffff][size=20]Required Courses:[/size][/color]" + IND)
+        req_course_names = self.ids.required_courses.text.split(',')
+        many = False
+        for t in req_course_names:
+            if len(t) > 0:
+                if many:
+                    description.append(', ')
+                else:
+                    many = True
+                description.append(t.strip())
 
+        description.append(IND + IND + f"[color=ffffff][size=20]Elective Courses:[/size][/color]" + IND)
+        opt_course_names = self.ids.optional_courses.text.split(',')
+        many = False
+        for t in opt_course_names:
+            if len(t) > 0:
+                if many:
+                    description.append(', ')
+                else:
+                    many = True
+                description.append(t.strip())
+
+        self.ids.live_description_label.halign = 'left'
+        self.ids.live_description_label.valign = 'top'
         self.ids.live_description_label.markup = True
         self.ids.live_description_label.text = ''.join(description)
         self.ids.live_description_label.texture_update()

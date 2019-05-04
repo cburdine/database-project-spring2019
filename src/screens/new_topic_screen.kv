@@ -1,6 +1,7 @@
 #:kivy 1.0
 
 #:import login_screen src.screens.main_screen
+#:import text_input_widgets src.widgets.text_input_widgets
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -11,36 +12,64 @@
 
 NewTopicScreenRoot:
 
+    Label:
+        width: root.width
+        height: root.height
+        size_hint: (None, None)
+        text_size: self.size
+        id: live_description_label
+        text: ''
+
     AnchorLayout:
-        center: root.center
-        size: (1000, 1200)
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(100))
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+    StackLayout:
+        orientation: 'lr-bt'
 
         GridLayout
+            pos_hint: (None, None)
+            size_hint: (None, None)
+            size: (root.width, dp(130))
             rows: 4
             cols: 2
-            padding: 100
-            spacing: 75
+            padding: dp(10)
+            spacing: dp(2)
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Topic ID:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
                 id: topic_id
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Topic Name:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             TextInput:
+                on_text: root.update_live_description_callback()
                 id: topic_name
                 multiline: False
                 text: ''
@@ -49,9 +78,8 @@ NewTopicScreenRoot:
                 size_hint_x: None
                 width: 80
 
-            Button:
-                text: 'Back'
-                on_press: root.back_callback()
+            Widget: # empty widget
+                size_hint_x: None
 
             Widget: # empty widget
                 size_hint_x: None
