@@ -32,6 +32,7 @@ class NewCurriculumScreenRoot(Widget):
         self.curriculum = classes.Curriculum()
         self.req_courses = []
         self.opt_courses = []
+        self.cur_topics = []
 
     def link_to_app(self, app_ref):
         self.app = app_ref
@@ -43,6 +44,53 @@ class NewCurriculumScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def add_course_callback(self):
+        course_name = self.ids.course_name.text
+        course_type = self.ids.course_type.text
+        db_course = self.app.client_model.get_course(course_name)
+
+        if len(course_name) == 0 or not self.app.client_model.get_course(course_name=course_name):
+            logging.info("NewCurriculumScreenRoot: could not find course " + str(course_name))
+            dialogue = MessageDialogue(title="Database Error",
+                                       message="The Course does not exist in the\ndatabase")
+            dialogue.open()
+
+        elif course_type is 'Required':
+            self.req_courses.append(course_name)
+        else:
+            self.opt_courses.append(course_name)
+
+
+    def add_topic_callback(self):
+        topic_id_txt = self.ids.curriculum_topic_id.text
+        topic_id = None
+        if len(topic_id_txt) > 0:
+            topic_id = int(topic_id_txt)
+        topic_level = int(self.ids.curriculum_topic_level.text)
+
+        topic_subj_area = None
+        topic_subj_area_txt = self.ids.curriculum_topic_subj_area.text
+        if len(topic_subj_area_txt) > 0:
+            topic_subj_area = topic_subj_area_txt
+
+        curriculum_topic_units = None
+        curriculum_topic_units_txt = self.ids.curriculum_topic_units.text
+        if len(topic_subj_area_txt) > 0:
+             curriculum_topic_units = int(float(curriculum_topic_units_txt) * 10.0)
+
+        if topic_id == None or topic_subj_area == None or curriculum_topic_units == None:
+            logging.info("NewCurriculumScreenRoot: could not find topic with id " + str(topic_id))
+            dialogue = MessageDialogue(title="Database Error",
+                                       message="The Topic with id " + str(topic_id) + " does not exist in the\ndatabase")
+            dialogue.open()
+        else:
+            cTopic = classes.CurriculumTopic()
+            cTopic.topic_id = topic_id
+            cTopic.level = topic_level
+            cTopic.curriculum_name = None
+            cTopic.subject_area = topic_subj_area
+            cTopic.time_unit = curriculum_topic_units
+            self.cur_topics.append(cTopic)
 
 
     def update_live_description_callback(self):
@@ -60,37 +108,6 @@ class NewCurriculumScreenRoot(Widget):
         description.append(IND + f"Minimum Credit Hours: {min_credit_hours}")
         description.append(IND + f"Person in charge: {person_name} (id:{id})")
         topic_names = []
-
-        many = False
-        for t in topic_names:
-            if len(t) > 0:
-                if many:
-                    description.append(', ')
-                else:
-                    many = True
-                description.append(t.strip())
-
-        description.append(IND + IND + f"[color=ffffff][size=20]Required Courses:[/size][/color]" + IND)
-        req_course_names = []
-        many = False
-        for t in req_course_names:
-            if len(t) > 0:
-                if many:
-                    description.append(', ')
-                else:
-                    many = True
-                description.append(t.strip())
-
-        description.append(IND + IND + f"[color=ffffff][size=20]Elective Courses:[/size][/color]" + IND)
-        opt_course_names = []
-        many = False
-        for t in opt_course_names:
-            if len(t) > 0:
-                if many:
-                    description.append(', ')
-                else:
-                    many = True
-                description.append(t.strip())
 
         self.ids.live_description_label.halign = 'left'
         self.ids.live_description_label.valign = 'top'

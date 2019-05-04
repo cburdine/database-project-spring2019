@@ -44,7 +44,29 @@ NewCurriculumScreenRoot:
                 Label:
                     text_size: self.size
                     id: live_description_label
+                    height: dp(100)
+                    size_hint_y: dp(200)
                     text: ''
+
+                Label:
+                    markup: True
+                    text: '[size=30]Topics:[/size]'
+                    text_size: self.size
+                    size_hint: (1.0, None)
+                    height: dp(80)
+                Label:
+                    markup: True
+                    text: '[size=30]Required Courses:[/size]'
+                    text_size: self.size
+                    size_hint: (1.0, None)
+                    height: dp(80)
+                Label:
+                    markup: True
+                    text: '[size=30]Elective Courses:[/size]'
+                    text_size: self.size
+                    size_hint: (1.0, None)
+                    height: dp(80)
+
 
 
     AnchorLayout:
@@ -125,6 +147,7 @@ NewCurriculumScreenRoot:
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             BoxLayout:
                 orientation: 'horizontal'
                 Button:
@@ -164,6 +187,9 @@ NewCurriculumScreenRoot:
                     size_hint_x: None
                 TextInput:
                     height: dp(50)
+                    id: curriculum_topic_subj_area
+                    multiline: False
+                    text: ''
                 Label:
                     text: 'Units:'
                     height: dp(50)
@@ -171,7 +197,7 @@ NewCurriculumScreenRoot:
                     size_hint_x: None
                 FloatTextInput:
                     height: dp(50)
-                    id: curriculum_topic_subj_area
+                    id: curriculum_topic_units
                     multiline: False
                     text: ''
 
@@ -206,7 +232,7 @@ NewCurriculumScreenRoot:
                     height: dp(30)
                     width: dp(80)
                     size_hint_x: None
-                    id: curriculum_topic_level
+                    id: course_type
                     text: 'Optional'
                     values: ('Required', 'Optional')
 
