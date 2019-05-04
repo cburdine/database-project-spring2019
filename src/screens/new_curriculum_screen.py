@@ -102,16 +102,19 @@ class NewCurriculumScreenRoot(Widget):
         # getting input from ui
         new_curriculum.name = None if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
         new_curriculum.min_credit_hours = None if len(self.ids.min_credit_hours.text) == 0 else self.ids.min_credit_hours.text
-        new_curriculum.id_in_charge = None if len(self.ids.id_in_charge.text) == 0 else self.ids.id_in_charge.text
-        new_curriculum.cur_topics = None if len(self.ids.curriculum_topics.text) == 0 else self.ids.curriculum_topics.text
-        if new_curriculum.cur_topics is not None:
-            new_curriculum.cur_topics = new_curriculum.cur_topics.split(', ')
-        new_curriculum.req_course_names = None if len(self.ids.required_courses.text) == 0 else self.ids.required_courses.text
-        if new_curriculum.req_course_names is not None:
-            new_curriculum.req_course_names = new_curriculum.req_course_names.split(', ')
-        new_curriculum.opt_course_names = None if len(self.ids.optional_courses.text) == 0 else self.ids.optional_courses.text
-        if new_curriculum.opt_course_names is not None:
-            new_curriculum.opt_course_names = new_curriculum.opt_course_names.split(', ')
+        new_curriculum.id_in_charge = None if len(self.ids.id_in_charge.text) == 0 else int(self.ids.id_in_charge.text)
+
+        new_curriculum.cur_topics = [] if len(self.ids.curriculum_topics.text) == 0 else self.ids.curriculum_topics.text
+        if new_curriculum.cur_topics and new_curriculum.cur_topics is not []:
+            new_curriculum.cur_topics = [s.strip() for s in new_curriculum.cur_topics.split(',')]
+
+        new_curriculum.req_course_names = [] if len(self.ids.required_courses.text) == 0 else self.ids.required_courses.text
+        if new_curriculum.req_course_names and new_curriculum.req_course_names is not []:
+            new_curriculum.req_course_names = [s.strip() for s in new_curriculum.req_course_names.split(',')]
+
+        new_curriculum.opt_course_names = [] if len(self.ids.optional_courses.text) == 0 else self.ids.optional_courses.text
+        if new_curriculum.opt_course_names and new_curriculum.opt_course_names is not []:
+            new_curriculum.opt_course_names = [s.strip() for s in new_curriculum.opt_course_names.split(',')]
 
         # to validate input
         #       need to make sure min_credit_hours and id_in_charge are numbers
@@ -119,97 +122,52 @@ class NewCurriculumScreenRoot(Widget):
         #       need to make sure topics are in topics table
         #       need to make sure courses are in courses table
 
-        can_submit = True
-
-        if new_curriculum.min_credit_hours is not None:
-            min_credit_hours_is_numeric = False
-            if str.isdigit(new_curriculum.min_credit_hours):
-                min_credit_hours_is_numeric = True
-
-        if new_curriculum.id_in_charge is not None:
-            id_in_charge_is_numeric = False
-            if str.isdigit(new_curriculum.id_in_charge):
-                id_in_charge_is_numeric = True
-
-        topic_exists = False
-        tp = None
-        if new_curriculum.cur_topics is not None:
-            for ct in new_curriculum.cur_topics:
-                if str.isdigit(ct):
-                    tp = self.app.client_model.get_topic(ct)
-                    if tp.name is not None:
-                        topic_exists = True
-                        tp = None
-                if not topic_exists:
-                    logging.info("NewCurriculumScreenRoot: Invalid topic")
-                    dialogue = MessageDialogue(title="Database error", message="One of the topics does not exist in the db")
-                    dialogue.open()
-                    can_submit = False
-                topic_exists = False
-
-        courses_exist = False
-        cs = None
-        courses = None
-        if new_curriculum.req_course_names is not None and new_curriculum.opt_course_names is not None:
-            courses = new_curriculum.req_course_names + new_curriculum.opt_course_names
-        elif new_curriculum.req_course_names is not None:
-            courses = new_curriculum.req_course_names
-        elif new_curriculum.opt_course_names is not None:
-            courses = new_curriculum.opt_course_names
-        if courses is not None:
-            for c in courses:
-                cs = self.app.client_model.get_course(c)
-                if cs.name is not None:
-                    courses_exist = True
-                    cs = None
-                if not courses_exist:
-                    logging.info("NewCurriculumScreenRoot: Invalid course")
-                    dialogue = MessageDialogue(title="Database error", message="One of the courses does not exist in the db")
-                    dialogue.open()
-                    can_submit = False
-                courses_exists = False
-
-        person_id_exists = False
-        p = None
-        p = self.app.client_model.get_person(new_curriculum.id_in_charge)
-        if p.id is not None:
-            person_id_exists = True
-        if not person_id_exists:
-            logging.info("NewCurriculumScreenRoot: Invalid person")
-            dialogue = MessageDialogue(title="Database error", message="The person id does not exist in the db")
-            dialogue.open()
-            can_submit = False
-
         if new_curriculum.name is None or new_curriculum.id_in_charge is None \
                 or new_curriculum.min_credit_hours is None or new_curriculum.cur_topics is None\
                 or new_curriculum.req_course_names is None:
             logging.info("NewCurriculumScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue = MessageDialogue(title="Format error", message="A curriculum Name, id in charge,\nand minimum credit hours are required.")
             dialogue.open()
-            can_submit = False
-        elif not min_credit_hours_is_numeric:
-            logging.info("NewCurriculumScreenRoot: minimum credit hours must be numeric")
-            dialogue = MessageDialogue(title="Format error", message="minimum credit hours must be numeric")
-            dialogue.open()
-            can_submit = False
-        elif not id_in_charge_is_numeric:
-            logging.info("NewCurriculumScreenRoot: id in charge must be numeric")
-            dialogue = MessageDialogue(title="Format error", message="id of person in charge must be numeric")
-            dialogue.open()
-            can_submit = False
-        elif can_submit:
-            # describe the topic further
-            print('nyc')
-            #self.app.client_model.set
+            return
 
-            # todo: new plan --> make new entry screen for each table (Curriculum Topics,
-            #  Curriculum, Curriculum Listings, etc.)
-            for i in new_curriculum.cur_topics:
-                tmp = classes.CurriculumTopic()
-                tmp.topic_id = i
-                tmp.curriculum_name = new_curriculum.name
-                self.app.client_model.set_temp_cur_topic(tmp)
-                self.app.screen_manager.transition.direction = 'up'
-                self.app.screen_manager.current = 'new_curriculum_topic'
+        if new_curriculum.cur_topics is not []:
+            for ct in new_curriculum.cur_topics:
+                tp = self.app.client_model.get_topic(ct)
+                if tp.name is None:
+                    logging.info("NewCurriculumScreenRoot: Invalid topic")
+                    dialogue = MessageDialogue(title="Database error", message="One of the topics does not exist in the\n database.")
+                    dialogue.open()
+                    return
+
+        courses = new_curriculum.req_course_names + new_curriculum.opt_course_names
+        for c in courses:
+            cs = self.app.client_model.get_course(c)
+            if cs.name is None:
+                logging.info("NewCurriculumScreenRoot: Invalid course: " + str(c))
+                dialogue = MessageDialogue(title="Database error",
+                                           message="One of the courses does not exist\nin the database.")
+                dialogue.open()
+                return
+
+
+        p = self.app.client_model.get_person(new_curriculum.id_in_charge)
+
+        if not p:
+            logging.info("NewCurriculumScreenRoot: Invalid person")
+            dialogue = MessageDialogue(title="Database error", message="The person id does not exist in the db")
+            dialogue.open()
+            return
+
+        # todo: new plan --> make new entry screen for each table (Curriculum Topics,
+        #  Curriculum, Curriculum Listings, etc.)
+        for i in new_curriculum.cur_topics:
+            tmp = classes.CurriculumTopic()
+            tmp.topic_id = i
+            tmp.curriculum_name = new_curriculum.name
+            #self.app.client_model.se
+
+        self.app.client_model.set_temp_cur_topic(tmp)
+        self.app.screen_manager.transition.direction = 'up'
+        self.app.screen_manager.current = 'new_curriculum_topic'
 
         print("submit")

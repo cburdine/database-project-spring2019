@@ -83,6 +83,7 @@ class DBAdapter:
 
         except:
             logging.warning("DBAdapter: Error- cannot retrieve person: " + str(id))
+            return None
 
         return ret
 

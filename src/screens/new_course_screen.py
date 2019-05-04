@@ -36,6 +36,27 @@ class NewCourseScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def update_live_description_callback(self):
+
+        course_name = "<Topic Name>" if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
+        subj_code = "" if len(self.ids.subject_code.text) == 0 else f"({self.ids.subject_code.text})"
+        credit_hours = "<Credit Hours>" if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
+        description = "<Course Description>" if len(self.ids.description.text) == 0 else self.ids.description.text
+
+        IND = "\n           "
+        description = description.replace('\n', IND)
+        description_label = []
+        description_label.append(IND + f"[color=ffffff][size=40]Course: {subj_code} {course_name} [/size][/color]")
+        description_label.append(IND + f"Credit Hours: {credit_hours}\n")
+        description_label.append(IND + f"[color=ffffff][size=20]Description:[/size][/color]")
+        description_label.append(IND + description)
+
+        self.ids.live_description_label.halign = 'left'
+        self.ids.live_description_label.valign = 'top'
+        self.ids.live_description_label.markup = True
+        self.ids.live_description_label.text = ''.join(description_label)
+        self.ids.live_description_label.texture_update()
+
     def submit_callback(self):
         new_course = classes.Course()
 

@@ -25,10 +25,6 @@ class ClientModel:
 
     def get_person(self, id):
 
-        #if id not in self._person_map.keys():
-            #self._person_map[id] = self.adapter.get_person(id)
-        #return self._person_map[id]
-
         if id in self._person_map.keys():
             return self._person_map[id]
         else:
