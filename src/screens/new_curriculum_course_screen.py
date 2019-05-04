@@ -61,9 +61,6 @@ class NewCurriculumCourseScreenRoot(Widget):
         if c.name is not None:
             course_exists = True
 
-
-        # todo: check for duplicates
-
         if curriculum_name is None or course_name is None or required is None:
             logging.info("NewCurriculumCourseScreenRoot: Fields lack input")
             dialogue = MessageDialogue(title="Format error", message="All fields must contain input")

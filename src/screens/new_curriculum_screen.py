@@ -30,6 +30,7 @@ class NewCurriculumScreenRoot(Widget):
     def __init__(self):
         Widget.__init__(self)
         self.curriculum = classes.Curriculum()
+        self.req_courses
 
     def link_to_app(self, app_ref):
         self.app = app_ref
@@ -41,13 +42,15 @@ class NewCurriculumScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+
+
     def update_live_description_callback(self):
 
         name = "<Curriculum Name>" if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
         min_credit_hours = "<minimum credit hours>" if len(self.ids.min_credit_hours.text) == 0 else int(self.ids.min_credit_hours.text)
         id_in_charge = "<person in charge>" if len(self.ids.id_in_charge.text) == 0 else self.ids.id_in_charge.text
-        cur_topics = "<curriculum topics>" if len(self.ids.curriculum_topics.text) == 0 \
-                                           else self.ids.curriculum_topics.text.split(',')
+        cur_topics = "<curriculum topics>" #if len(self.ids.curriculum_topics.text) == 0 \
+                                           #else self.ids.curriculum_topics.text.split(',')
         person_name = "<person in charge name>"
 
         description = []
@@ -55,8 +58,7 @@ class NewCurriculumScreenRoot(Widget):
         description.append(IND + f"[color=ffffff][size=40]Name: {name}[/size][/color]")
         description.append(IND + f"Minimum Credit Hours: {min_credit_hours}")
         description.append(IND + f"Person in charge: {person_name} (id:{id})")
-        description.append(IND +IND + f"[color=ffffff][size=20]Topics:[/size][/color]" + IND)
-        topic_names = self.ids.curriculum_topics.text.split(',')
+        topic_names = []
 
         many = False
         for t in topic_names:
@@ -68,7 +70,7 @@ class NewCurriculumScreenRoot(Widget):
                 description.append(t.strip())
 
         description.append(IND + IND + f"[color=ffffff][size=20]Required Courses:[/size][/color]" + IND)
-        req_course_names = self.ids.required_courses.text.split(',')
+        req_course_names = []
         many = False
         for t in req_course_names:
             if len(t) > 0:
@@ -79,7 +81,7 @@ class NewCurriculumScreenRoot(Widget):
                 description.append(t.strip())
 
         description.append(IND + IND + f"[color=ffffff][size=20]Elective Courses:[/size][/color]" + IND)
-        opt_course_names = self.ids.optional_courses.text.split(',')
+        opt_course_names = []
         many = False
         for t in opt_course_names:
             if len(t) > 0:

@@ -12,13 +12,39 @@
 
 NewCurriculumScreenRoot:
 
-    Label:
+
+    BoxLayout:
+        orientation: 'vertical'
+        pos: (dp(0), dp(230))
         width: root.width
-        height: root.height
+        height: root.height - dp(230)
         size_hint: (None, None)
-        text_size: self.size
-        id: live_description_label
-        text: ''
+
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0.37, 0.37, 0.37
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text: 'New Curriculum'
+            size_hint: (1.0, None)
+            height: dp(40)
+
+        ScrollView:
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: root.height
+
+                Label:
+                    text_size: self.size
+                    id: live_description_label
+                    text: ''
 
 
     AnchorLayout:
@@ -39,8 +65,8 @@ NewCurriculumScreenRoot:
         GridLayout:
             pos_hint: (None, None)
             size_hint: (None, None)
-            size: (root.width, dp(260))
-            rows: 8
+            size: (root.width, dp(228))
+            rows: 7
             cols: 2
             padding: dp(10)
             spacing: dp(2)
@@ -95,46 +121,94 @@ NewCurriculumScreenRoot:
                 size_hint_x: None
                 width: dp(200)
                 height: dp(50)
-                text: 'IDs of Curriculum Topics:'
+                text: 'Add Curriculum Topic:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            IntListTextInput:
-                on_text: root.update_live_description_callback()
-                height: dp(50)
-                id: curriculum_topics
-                multiline: False
-                text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    height: dp(50)
+                    width: dp(30)
+                    text: '+'
+                    size_hint_x: None
+                    on_press: root.add_topic_callback()
+
+                Label:
+                    text: 'ID:'
+                    height: dp(50)
+                    width: dp(30)
+                    size_hint_x: None
+                IntListTextInput:
+                    on_text: root.update_live_description_callback()
+                    height: dp(50)
+                    id: curriculum_topic_id
+                    multiline: False
+                    text: ''
+                Label:
+                    text: 'Level:'
+                    height: dp(50)
+                    width: dp(50)
+                    size_hint_x: None
+                Spinner:
+                    height: dp(30)
+                    width: dp(30)
+                    size_hint_x: None
+                    id: curriculum_topic_level
+                    text: '1'
+                    values: ('1', '2', '3')
+                Label:
+                    text: 'Subject Area:'
+                    height: dp(40)
+                    width: dp(100)
+                    size_hint_x: None
+                TextInput:
+                    height: dp(50)
+                Label:
+                    text: 'Units:'
+                    height: dp(50)
+                    width: dp(50)
+                    size_hint_x: None
+                FloatTextInput:
+                    height: dp(50)
+                    id: curriculum_topic_subj_area
+                    multiline: False
+                    text: ''
 
             Label:
                 size_hint_x: None
-                height: dp(50)
                 width: dp(200)
-                text: 'Required Courses'
+                height: dp(50)
+                text: 'Add Curriculum Course:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
-                on_text: root.update_live_description_callback()
-                height: dp(50)
-                id: required_courses
-                multiline: False
-                text: ''
 
-            Label:
-                height: dp(50)
-                size_hint_x: None
-                width: dp(200)
-                text: 'Optional Courses'
-                text_size: self.size
-                halign: 'right'
-                valign: 'middle'
-            TextInput:
-                on_text: root.update_live_description_callback()
-                height: dp(50)
-                id: optional_courses
-                multiline: False
-                text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    height: dp(50)
+                    width: dp(30)
+                    text: '+'
+                    size_hint_x: None
+                    on_press: root.add_course_callback()
+                Label:
+                    size_hint_x: None
+                    height: dp(50)
+                    width: dp(100)
+                    text: 'Course Name:'
+                TextInput:
+                    height: dp(50)
+                    id: course_name
+                    multiline: False
+                    text: ''
+                Spinner:
+                    height: dp(30)
+                    width: dp(80)
+                    size_hint_x: None
+                    id: curriculum_topic_level
+                    text: 'Optional'
+                    values: ('Required', 'Optional')
 
             Widget: # empty widget
                 size_hint_x: None

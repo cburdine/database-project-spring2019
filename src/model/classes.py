@@ -139,12 +139,14 @@ class Section:
         """
         Overridden str function
         """
-        print(f"course_name: {self.course_name}")
-        print(f"semester: {self.semester}")
-        print(f"unit_id: {self.unit_id}")
-        print(f"num_students: {self.num_students}")
-        print(f"comment1: {self.comment1}")
-        print(f"comment2: {self.comment2}")
+        str = []
+        str.append(f"course_name: {self.course_name}\n")
+        str.append(f"semester: {self.semester}\n")
+        str.append(f"unit_id: {self.unit_id}\n")
+        str.append(f"num_students: {self.num_students}\n")
+        str.append(f"comment1: {self.comment1}\n")
+        str.append(f"comment2: {self.comment2}\n")
+        return ''.join(str)
 
     def set_course_name(self, n):
         self.course_name = n
