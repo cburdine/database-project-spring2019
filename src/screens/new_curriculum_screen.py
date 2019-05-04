@@ -30,7 +30,8 @@ class NewCurriculumScreenRoot(Widget):
     def __init__(self):
         Widget.__init__(self)
         self.curriculum = classes.Curriculum()
-        self.req_courses
+        self.req_courses = []
+        self.opt_courses = []
 
     def link_to_app(self, app_ref):
         self.app = app_ref
