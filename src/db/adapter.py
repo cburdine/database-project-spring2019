@@ -221,9 +221,15 @@ class DBAdapter:
 
         return ret
 
-    def set_topic(self, new_topic):
+    def set_topic(self, new_topic, updating=False):
         """Function to add a new topic to the database"""
-        self.db_cursor.execute("""INSERT INTO Topic (id, name) VALUES (%s, %s)""", (new_topic.id, new_topic.name))
+
+        TOPIC_QUERY = """UPDATE Topic SET name = %s WHERE id = %s""" if updating \
+            else """INSERT INTO Topic (name, id) VALUES (%s, %s)"""
+
+
+
+        self.db_cursor.execute(TOPIC_QUERY, (new_topic.name, new_topic.id))
         self.db_connection.commit()
 
     def set_person(self, new_person):
@@ -251,9 +257,12 @@ class DBAdapter:
 
         return ret
 
-    def set_course(self, new_course):
+    def set_course(self, new_course, updating=False):
         """Fucntion to set the course in the db"""
-        self.db_cursor.execute("""INSERT INTO Course (name, subject_code, credit_hours, description) VALUES (%s, %s, %s, %s)""", (new_course.name, new_course.subject_code, new_course.credit_hours, new_course.description))
+        COURSE_QUERY = """UPDATE Course SET subject_code = %s, credit_hours = %s, description = %s WHERE name = %s""" if updating \
+            else """INSERT INTO Course (subject_code, credit_hours, description, name) VALUES (%s, %s, %s, %s)"""
+
+        self.db_cursor.execute(COURSE_QUERY, (new_course.name, new_course.subject_code, new_course.credit_hours, new_course.description))
         self.db_connection.commit()
 
     def get_section(self, new_section):
@@ -284,35 +293,66 @@ class DBAdapter:
 
     def set_section(self, new_section):
         """Function for adding a section to the db"""
-        self.db_cursor.execute(
-            """INSERT INTO Section (course_name, semester, unit_id, num_students, comment1, comment2) VALUES (%s, %s, %s, %s, %s, %s)""",
-            (new_section.course_name, new_section.semester, new_section.unit_id, new_section.num_students, new_section.comment1, new_section.comment2))
+        SECTION_QUERY = """UPDATE Section SET num_students = %s, comment1 = %s, comment2 = %s WHERE course_name = %s, semester = %s, unit_id = %s""" if updating \
+            else """INSERT INTO Section (course_name, semester, unit_id, num_students, comment1, comment2) VALUES (%s, %s, %s, %s, %s, %s)"""
+
+        self.db_cursor.execute(SECTION_QUERY,
+            (new_section.num_students, new_section.comment1, new_section.comment2, new_section.course_name, new_section.semester, new_section.unit_id))
         self.db_connection.commit()
 
-    def set_curriculum(self, new_curriculum):
+    def set_curriculum(self, new_curriculum, updating=False):
         """Function for adding curriculum to the db"""
-        #Add Curriculum to database:
-        self.db_cursor.execute("""INSERT INTO Curriculum (name, min_credit_hours, id_in_charge) VALUES (%s, %s, %s)""",
-                               (new_curriculum.name, new_curriculum.min_credit_hours, new_curriculum.id_in_charge))
-        self.db_connection.commit()
+        if not updating:
+            #Add Curriculum to database:
+            self.db_cursor.execute("""INSERT INTO Curriculum (name, min_credit_hours, id_in_charge) VALUES (%s, %s, %s)""",
+                                   (new_curriculum.name, new_curriculum.min_credit_hours, new_curriculum.id_in_charge))
+            self.db_connection.commit()
 
-        #Add required courses:
-        arg_list = list(map(lambda r: (new_curriculum.name, r, True), new_curriculum.req_course_names))
-        self.db_cursor.executemany(
-            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",arg_list)
-        self.db_connection.commit()
+            #Add required courses:
+            arg_list = list(map(lambda r: (new_curriculum.name, r, True), new_curriculum.req_course_names))
+            self.db_cursor.executemany(
+                """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",arg_list)
+            self.db_connection.commit()
 
-        #Add optional courses:
-        arg_list = list(map(lambda r: (new_curriculum.name, r, False), new_curriculum.opt_course_names))
-        self.db_cursor.executemany(
-            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",arg_list)
-        self.db_connection.commit()
+            #Add optional courses:
+            arg_list = list(map(lambda r: (new_curriculum.name, r, False), new_curriculum.opt_course_names))
+            self.db_cursor.executemany(
+                """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",arg_list)
+            self.db_connection.commit()
 
-        #Add curriculum topics:
-        arg_list = list(map(lambda ct: (new_curriculum.name, ct.topic_id, ct.level, ct.subject_area, ct.time_unit), new_curriculum.cur_topics))
-        self.db_cursor.executemany(
-            """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",arg_list)
-        self.db_connection.commit()
+            #Add curriculum topics:
+            arg_list = list(map(lambda ct: (new_curriculum.name, ct.topic_id, ct.level, ct.subject_area, ct.time_unit), new_curriculum.cur_topics))
+            self.db_cursor.executemany(
+                """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",arg_list)
+            self.db_connection.commit()
+        else:
+            # Update Curriculum to database:
+            self.db_cursor.execute(
+                """UPDATE Curriculum SET min_credit_hours = %s, id_in_charge = %s WHERE name = %s""",
+                (new_curriculum.min_credit_hours, new_curriculum.id_in_charge, new_curriculum.name))
+            self.db_connection.commit()
+
+            # update optional courses:
+            arg_list = list(map(lambda r: (False, new_curriculum.name, r), new_curriculum.opt_course_names))
+            self.db_cursor.executemany(
+                """UPDATE CurriculumListings SET required = %s WHERE curriculum_name = %s AND course_name = %s""",
+                arg_list)
+            self.db_connection.commit()
+
+            # update required courses:
+            arg_list = list(map(lambda r: (True, new_curriculum.name, r), new_curriculum.req_course_names))
+            self.db_cursor.executemany(
+                """UPDATE CurriculumListings SET required = %s WHERE curriculum_name = %s AND course_name = %s""",
+                arg_list)
+            self.db_connection.commit()
+
+            # update curriculum topics:
+            arg_list = list(map(lambda ct: (ct.level, ct.subject_area, ct.time_unit, new_curriculum.name, ct.topic_id),
+                                new_curriculum.cur_topics))
+            self.db_cursor.executemany(
+                """UPDATE CurriculumTopics SET level = %s, subject_area = %s, time_unit = %s WHERE curriculum_name = %s AND topic_id = %s""",
+                arg_list)
+            self.db_connection.commit()
 
     def get_goal(self, new_goal):
         """Function to retrieve goal from the db"""
@@ -339,14 +379,22 @@ class DBAdapter:
         return ret
 
 
-    def set_goal(self, new_goal):
+    def set_goal(self, new_goal, updating=False):
         """Function to write goal to the db"""
-        self.db_cursor.execute(
-            """INSERT INTO Goal (id, curriculum_name, description) VALUES (%s, %s, %s)""",
-            (new_goal.id, new_goal.curriculum_name, new_goal.description))
+        GOAL_QUERY = """UPDATE Goal SET description = %s WHERE id = %s AND curriculum_name = %s""" if updating \
+            else """INSERT INTO Goal (id, curriculum_name, description) VALUES (%s, %s, %s)"""
+
+        if not updating:
+            self.db_cursor.execute(
+                GOAL_QUERY,
+                (new_goal.id, new_goal.curriculum_name, new_goal.description))
+        else:
+            self.db_cursor.execute(
+                GOAL_QUERY,
+                (new_goal.description, new_goal.id, new_goal.curriculum_name))
         self.db_connection.commit()
 
-    def set_course_goal(self, goal_id, course_name):
+    def set_course_goal(self, goal_id, course_name, updating=False):
         """Function to write course goal to the db"""
         self.db_cursor.execute(
             """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)""",
@@ -381,18 +429,34 @@ class DBAdapter:
 
         return ret
 
-    def set_curriculum_course(self, curriculum_name, course_name, required):
+    def set_curriculum_course(self, curriculum_name, course_name, required, updating=True):
         """Function to write curriculum course to the db"""
-        self.db_cursor.execute(
-            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
-            (curriculum_name,course_name, required))
+        CURRICULUM_COURSE_QUERY = """UPDATE CurriculumListings SET required = %s WHERE curriculum_name = %s AND course_name = %s""" if updating \
+            else """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)"""
+
+        if not updating:
+            self.db_cursor.execute(
+                CURRICULUM_COURSE_QUERY,
+                (curriculum_name, course_name, required))
+        else:
+            self.db_cursor.execute(
+                CURRICULUM_COURSE_QUERY,
+                (required, curriculum_name, course_name))
         self.db_connection.commit()
 
-    def set_curriculum_topic(self, curriculum_topic):
+    def set_curriculum_topic(self, curriculum_topic, updating=False):
         """Function to write curriculum topic to the db"""
-        self.db_cursor.execute(
-            """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",
-            (curriculum_topic.curriculum_name, curriculum_topic.topic_id, curriculum_topic.level, curriculum_topic.subject_area, curriculum_topic.time_unit))
+        CURRICULUM_TOPIC_QUERY = """UPDATE CurriculumListings SET level = %s, subject_area = %s, time_unit = %s WHERE curriculum_name = %s AND topic_id = %s""" if updating \
+            else """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)"""
+
+        if not updating:
+            self.db_cursor.execute(
+                CURRICULUM_TOPIC_QUERY,
+                (curriculum_topic.curriculum_name, curriculum_topic.topic_id, curriculum_topic.level, curriculum_topic.subject_area, curriculum_topic.time_unit))
+        else:
+            self.db_cursor.execute(
+                CURRICULUM_TOPIC_QUERY,
+                (curriculum_topic.level, curriculum_topic.subject_area, curriculum_topic.time_unit, curriculum_topic.curriculum_name, curriculum_topic.topic_id))
         self.db_connection.commit()
 
     def get_curriculum_topic(self, curriculum_name, curriculum_topic):
@@ -415,5 +479,30 @@ class DBAdapter:
 
         except:
             logging.warning("DBAdapter: Error- cannot retrieve curriculum topic: " + str(id))
+
+        return ret
+
+    def curriculum_goal_list(self, curriculum_name):
+        """Function to retrieve a list of curriculum goals from the db"""
+        ret = None
+        try:
+            self.db_cursor.execute(
+                """SELECT id, description FROM Goal WHERE curriculum_name = %s""",
+                (curriculum_name))
+            goals = self.db_cursor.fetchall()
+
+            if goals:
+                ret = []
+                go = Goal()
+                go.curriculum_name = curriculum_name
+                for g in goals:
+                    go.description = g[1]
+                    go.id = g[0]
+                    ret.append(g)
+            else:
+                ret = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve curriculum goal list: " + str(id))
 
         return ret
