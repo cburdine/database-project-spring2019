@@ -53,11 +53,40 @@ class NewCurriculumScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def remove_req_course_callback(self):
+        rem_req_course = self.ids.req_courses_list.get_selected_row()
+        if rem_req_course is None:
+            dialogue = MessageDialogue(title="Row Error",message="No row is selected.")
+            dialogue.open()
+        else:
+            self.req_courses.remove(rem_req_course)
+            self.ids.req_courses_list.remove_selected_row()
+            self.ids.sv_req_courses_list.height = self.ids.req_courses_list.get_height()
+
+    def remove_opt_course_callback(self):
+        rem_opt_course = self.ids.opt_courses_list.get_selected_row()
+        if rem_opt_course is None:
+            dialogue = MessageDialogue(title="Row Error", message="No row is selected.")
+            dialogue.open()
+        else:
+            self.opt_courses.remove(rem_opt_course)
+            self.ids.opt_courses_list.remove_selected_row()
+            self.ids.sv_opt_courses_list.height = self.ids.opt_courses_list.get_height()
+
+    def remove_topic_callback(self):
+        rem_topic = self.ids.topics_list.get_selected_row()
+        if rem_topic is None:
+            dialogue = MessageDialogue(title="Row Error", message="No row is selected.")
+            dialogue.open()
+        else:
+            del self.cur_topics[rem_topic.id]
+            self.ids.topics_list.remove_selected_row()
+            self.ids.sv_opt_courses_list.height = self.ids.opt_courses_list.get_height(expected_node_height=3.0)
+
     def add_course_callback(self):
         course_name = self.ids.course_name.text
         course_type = self.ids.course_type.text
-        db_course = self.app.client_model.get_course(course_name)
-        
+
         if len(course_name) == 0 or not self.app.client_model.get_course(course_name=course_name):
             logging.info("NewCurriculumScreenRoot: could not find course " + str(course_name))
             dialogue = MessageDialogue(title="Database Error",
@@ -73,11 +102,15 @@ class NewCurriculumScreenRoot(Widget):
             self.req_courses.add(course_name)
             self.ids.req_courses_list.addRow(course_name)
             self.ids.sv_req_courses_list.height = self.ids.req_courses_list.get_height()
+            self.ids.course_name.text = ''
+            self.ids.course_type.text = 'Required'
 
         else:
             self.opt_courses.add(course_name)
             self.ids.opt_courses_list.addRow(course_name)
             self.ids.sv_opt_courses_list.height = self.ids.opt_courses_list.get_height(expected_node_height=3.0)
+            self.ids.course_name.text = ''
+            self.ids.course_type.text = 'Required'
 
     def add_topic_callback(self):
         topic_id_txt = self.ids.curriculum_topic_id.text
@@ -116,12 +149,15 @@ class NewCurriculumScreenRoot(Widget):
             cTopic.curriculum_name = None
             cTopic.subject_area = topic_subj_area
             cTopic.time_unit = curriculum_topic_units
-            print("TOPIC: " + str(topic))
             cTopic._linked_topic_name = topic.name
             self.cur_topics[topic.id] = cTopic
 
             self.ids.topics_list.addRow(str(cTopic))
             self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
+            self.ids.curriculum_topic_id.text = ''
+            self.ids.curriculum_topic_level.text = '1'
+            self.ids.curriculum_topic_subj_area.text = ''
+            self.ids.curriculum_topic_units.text = ''
 
 
     def update_live_description_callback(self):

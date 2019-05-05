@@ -81,8 +81,7 @@ class Topic:
         """
         Overridden str function
         """
-        str = f"name: {self.name}" + \
-              f"\nid: {self.id}"
+        str = f"{self.name} (ID: {self.id})"
 
         return str
 
@@ -103,7 +102,7 @@ class CurriculumTopic:
         ret = []
         if self._linked_topic_name != None:
             ret.append(str(self._linked_topic_name) +
-                       " (" + str(self.topic_id) + ") ")
+                       " (ID: " + str(self.topic_id) + ") ")
         else:
             ret.append(f"Topic #{str(self.topic_id)}")
         ret.append(f"\nSubject: {self.subject_area} (Level {self.level})")
@@ -329,15 +328,12 @@ class Goal:
         """
         Overridden str function
         """
-        print(f"id: {self.id}")
-        print(f"curriculum_name: {self.curriculum_name}")
-        print(f"description: {self.description}")
+        ret = []
+        ret.append(f"Goal #{self.id}\n")
+        ret.append(f"Curriculum: {self.curriculum_name}\n")
+        ret.append(f"{self.description}")
+        return ''.join(ret)
 
-    def set_id(self, n):
-        self.id = n
+    def __hash__(self):
+        return hash(self.id, self.curriculum_name)
 
-    def set_curriculum_name(self, n):
-        self.curriculum_name = n
-
-    def set_description(self, n):
-        self.description = n

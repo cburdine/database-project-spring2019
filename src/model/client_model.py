@@ -97,7 +97,6 @@ class ClientModel:
         """Function to add new course to the database"""
         self.adapter.set_course(new_course)
         self._course_map[new_course.name] = new_course
-        # print(self._course_map)
 
     def get_section(self, new_section):
         if new_section.unit_id in self._section_map.keys():

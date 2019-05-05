@@ -38,39 +38,88 @@ class NewCourseScreenRoot(Widget):
     def populate(self):
         self.update_live_description_callback()
 
-        self.ids.topics_list.setDemoRows(40)
+        self.ids.topics_list.setRows(self.course_topics.values())
         self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
 
-        self.ids.goals_list.setDemoRows(40)
+        self.ids.goals_list.setRows(self.course_goals.values())
         self.ids.sv_goals_list.height = self.ids.goals_list.get_height()
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def remove_goal_callback(self):
+        rem_goal = self.ids.goals_list.get_selected_row()
+        if rem_goal is None:
+            dialogue = MessageDialogue(title="Row Error",message="No row is selected.")
+            dialogue.open()
+        else:
+            del self.course_goals[rem_goal.id]
+            self.ids.goals_list.remove_selected_row()
+            self.ids.sv_goals_list.height = self.ids.goals_list.get_height()
+
+    def remove_topic_callback(self):
+        rem_topic = self.ids.topics_list.get_selected_row()
+        if rem_topic is None:
+            dialogue = MessageDialogue(title="Row Error",message="No row is selected.")
+            dialogue.open()
+        else:
+            del self.course_topics[rem_topic.id]
+            self.ids.topics_list.remove_selected_row()
+            self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
+
     def add_topic_callback(self):
         topic_id_txt = self.ids.course_topic_id.text
         topic = None
         if len(topic_id_txt) > 0:
             topic = self.app.client_model.get_topic(int(topic_id_txt))
+        else:
+            topic_id_txt = None
 
-        if topic is None or topic_subj_area == None or curriculum_topic_units == None:
-            logging.info("NewCurriculumScreenRoot: could not find topic with id " + str(topic_id_txt))
+        if topic is None:
+            logging.info("NewCourseScreenRoot: could not find topic with id " + str(topic_id_txt))
             dialogue = MessageDialogue(title="Database Error",
                                        message="The Topic with id " + str(
-                                           topic_id_txt) + "\ndoes not exist in the database")
+                                           topic_id_txt) + "\ndoes not exist in the database.")
             dialogue.open()
 
-        elif topic.id in self.cur_topics.keys():
-            logging.info("NewCurriculumScreenRoot: topic with id " + str(topic.id) + " already added.")
+        elif topic.id in self.course_topics.keys():
+            logging.info("NewCourseScreenRoot: topic with id " + str(topic.id) + " already added.")
             dialogue = MessageDialogue(title="Topic Error",
                                        message="The Topic with id " + str(topic.id) +
                                                "\nhas already been added.")
             dialogue.open()
         else:
+            self.course_topics[topic.id] = topic
+            self.ids.topics_list.addRow(topic)
+            self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
+            self.ids.course_topic_id.text = ''
 
     def add_goal_callback(self):
-        pass
+        goal_id_txt = self.ids.course_goal_id.text
+        if len(goal_id_txt) > 0:
+            goal_text = self.app.client_model.adapter.fetch_goal_context_description(int(goal_id_txt))
+        else:
+            goal_text = None
+
+        if goal_text is None:
+            logging.info("NewCourseScreenRoot: Could not find goal with id " + str(goal_id_txt))
+            dialogue = MessageDialogue(title="Database Error",
+                                       message="The Goal with id " + str(goal_id_txt) +
+                                               "\ndoes not exist in the database.")
+            dialogue.open()
+        elif int(goal_id_txt) in self.course_topics.keys():
+            logging.info("NewCourseScreenRoot: goal with id " + str(goal_id_txt) + " already added.")
+            dialogue = MessageDialogue(title="Goal Error",
+                                       message="The Goal with id " + str(goal_id_txt) +
+                                               "\nhas already been added.")
+            dialogue.open()
+        else:
+            self.course_goals[int(goal_id_txt)] = goal_text
+            self.ids.goals_list.addRow(goal_text)
+            self.ids.sv_goals_list.height = self.ids.goals_list.get_height(expected_node_height=2.0)
+            self.ids.course_goal_id.text = ''
+
 
     def update_live_description_callback(self):
 
@@ -100,45 +149,29 @@ class NewCourseScreenRoot(Widget):
         # getting input from ui
         new_course.name = None if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
         new_course.subject_code = None if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
-        new_course.credit_hours = None if len(self.ids.credit_hours.text) == 0 else self.ids.credit_hours.text
+        new_course.credit_hours = None if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
         new_course.description = None if len(self.ids.description.text) == 0 else self.ids.description.text
+        new_course.topics = self.course_topics.keys()
+        new_course.goals = self.course_goals.keys()
 
         # to validate
         #       name must not already be in db
         #       subject code and credit hours must be number
 
-        if new_course.subject_code is not None and new_course.credit_hours is not None:
-            subject_code_is_numeric = False
-            credit_hours_is_numeric = False
-            if str.isdigit(new_course.subject_code):
-                subject_code_is_numeric = True
-            if str.isdigit(new_course.credit_hours):
-                credit_hours_is_numeric = True
 
-        already_in_db = None
-        already_in_db = self.app.client_model.get_course(new_course.name)
+        db_course = self.app.client_model.get_course(new_course.name)
 
         if new_course.name is None or new_course.subject_code is None or\
                 new_course.credit_hours is None or new_course.description is None :
             logging.info("NewCourseScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
             dialogue.open()
-        elif not subject_code_is_numeric:
-            logging.info("NewCourseScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="subject code must be a number")
-            dialogue.open()
-        elif not credit_hours_is_numeric:
-            logging.info("NewCourseScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="credit hours must be a number")
-            dialogue.open()
-        elif already_in_db.name is not None:
+        elif db_course is not None:
             logging.info("NewCourseScreenRoot: trying to create somehting that's already there")
-            dialogue = MessageDialogue(title="DB error", message="entry already in the database")
+            dialogue = MessageDialogue(title="Database Error", message="Course is already in the database.")
             dialogue.open()
         else:
             # can safely enter course into the db
             self.app.client_model.set_course(new_course)
-            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
-            dialogue.open()
-            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.transition.direction = 'left'
             self.app.screen_manager.current = 'main'

@@ -256,6 +256,12 @@ class DBAdapter:
         self.db_cursor.execute("""INSERT INTO Course (name, subject_code, credit_hours, description) VALUES (%s, %s, %s, %s)""", (new_course.name, new_course.subject_code, new_course.credit_hours, new_course.description))
         self.db_connection.commit()
 
+        # Add course topics and course goals:
+        for ct_id in new_course.topics:
+            self.set_course_topic(ct_id, new_course.name)
+        for cg_id in new_course.goals:
+            self.set_course_goal(cg_id, new_course.name)
+
     def get_section(self, new_section):
         """Function to retrieve section from the db"""
 
@@ -314,6 +320,28 @@ class DBAdapter:
             """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",arg_list)
         self.db_connection.commit()
 
+    def fetch_goal_context_description(self, goalId):
+        """Retrieves all descriptions of a Goal, potentially across
+           the context of multiple curricula and returns a description"""
+        GET_ALL_CONTEXTS = """SELECT curriculum_name, description FROM Goal WHERE id = %s """
+
+        try:
+            self.db_cursor.execute(GET_ALL_CONTEXTS,(goalId,))
+            descriptions = self.db_cursor.fetchall()
+            if len(descriptions) is 1:
+                return None
+
+            ret_str = []
+            ret_str.append(f"Goal #{goalId}\n")
+            ret_str.append(f"From {descriptions[0][0]}: {descriptions[0][1]}")
+            if len(descriptions) > 1:
+                ret_str.append(" (and more)")
+            return ''.join(ret_str)
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve goal contexts from id: " + str(goalId))
+            return None
+
     def get_goal(self, new_goal):
         """Function to retrieve goal from the db"""
 
@@ -334,7 +362,7 @@ class DBAdapter:
                 ret = None
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve goal: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve goal: " + str(new_goal.id))
 
         return ret
 

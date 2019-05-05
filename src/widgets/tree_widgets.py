@@ -90,6 +90,13 @@ class RowSelectorWidget(BoxLayout):
         else:
             return None
 
+    def remove_selected_row(self):
+        sel_node = self.tree_view.selected_node
+        if sel_node is not None:
+            self.row_values[sel_node] = None
+            del self.row_values[sel_node]
+            self.tree_view.remove_node(sel_node)
+
     def get_height(self, expected_node_height= 1.0):
         HEIGHT_FACTOR = 1.1575
         height = 0

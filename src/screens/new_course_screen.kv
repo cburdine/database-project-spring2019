@@ -67,6 +67,7 @@ NewCourseScreenRoot:
                         width: dp(200)
                         height: dp(30)
                         text: 'Remove selected topic'
+                        on_press: root.remove_topic_callback()
 
                 ScrollView:
                     size_hint: (None, None)
@@ -103,6 +104,7 @@ NewCourseScreenRoot:
                         width: dp(200)
                         height: dp(30)
                         text: 'Remove selected goal'
+                        on_press: root.remove_goal_callback()
 
                 ScrollView:
                     size_hint: (None, None)

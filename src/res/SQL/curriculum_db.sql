@@ -41,7 +41,7 @@ INSERT INTO `Curriculum` (`name`, `min_credit_hours`,`id_in_charge`) VALUES
 DROP TABLE IF EXISTS `Course`;
 CREATE TABLE IF NOT EXISTS `Course` (
 	`name` varchar(25) NOT NULL,
-    `subject_code` varchar(4) NOT NULL,
+    `subject_code` varchar(25) NOT NULL,
     `credit_hours` int NOT NULL,
     `description` varchar(1023),
     PRIMARY KEY (`name`)
