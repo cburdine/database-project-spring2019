@@ -714,3 +714,8 @@ class DBAdapter:
             logging.warning("DBAdapter: Error- cannot retrieve sections: " + str(id))
 
         return ret
+
+    def get_sections_of_a_course(self, course):
+        """Function to retrieve a list of sections based off of a course"""
+        # TODO
+        pass
