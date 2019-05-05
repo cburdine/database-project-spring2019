@@ -9,8 +9,6 @@ from src.db import adapter
 import logging
 from src.widgets.dialogues import MessageDialogue
 
-
-
 class NewSectionScreen(Screen):
     screen_name = 'new_section'
 
@@ -21,7 +19,6 @@ class NewSectionScreen(Screen):
         self.root_widget = Builder.load_file(self.view_kv_filepath)
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
-
 
 class NewSectionScreenRoot(Widget):
 

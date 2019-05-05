@@ -1,0 +1,169 @@
+#:kivy 1.0
+
+#:import login_screen src.screens.main_screen
+#:import tree_widgets src.widgets.tree_widgets
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+
+
+CurriculumDashboardScreenRoot:
+    on_size: root.resize_callback()
+
+    BoxLayout:
+        id: boxlayoutframe
+        orientation: 'horizontal'
+        size: root.size
+
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+            id: sv_container
+
+            Label:
+                canvas.before:
+                    Color:
+                        rgb: 0.37, 0.37, 0.37
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                text: 'Curriculum'
+                size_hint: (1.0, None)
+                height: dp(40)
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                id: sv_left
+                canvas.before:
+                    Color:
+                        rgb: 0.05, 0.05, 0.05
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                StackLayout:
+                    id: sv_container
+                    orientation: 'lr-tb'
+                    size_hint_y: None
+                    height: dp(2000)
+
+                    RowSelectorWidget:
+                        pos: root.x, root.y
+                        size_hint_x: 1.0
+                        size_hint_y: 1.0
+                        id: curriculum_selector
+        ScrollView:
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                id: sv_description_container
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    canvas.before:
+                        Color:
+                            rgb: 0.37, 0.37, 0.37
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    text: 'Curriculum Description'
+                    background_color: (1,0,0,1)
+                    size_hint_y: None
+                    height: dp(40)
+
+                Label:
+                    text_size: self.size
+                    id: description_field
+                    text: ''
+
+                Label:
+                    text_size: self.size
+                    id: topic_tree_label
+                    text: ''
+
+                ScrollView:
+                    height: dp(200)
+                    size_hint_y: None
+                    do_scroll_x: False
+                    do_scroll_y: True
+
+                    StackLayout:
+                        id: sv_topics
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        height: dp(400)
+
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: topics_tree
+
+                Label:
+                    text_size: self.size
+                    id: req_courses_tree_label
+                    text: ''
+
+                ScrollView:
+                    height: dp(200)
+                    size_hint_y: None
+                    do_scroll_x: False
+                    do_scroll_y: True
+
+                    StackLayout:
+                        id: sv_req_courses
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        height: dp(400)
+
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: req_courses_tree
+
+                Label:
+                    text_size: self.size
+                    id: opt_courses_tree_label
+                    text: ''
+
+                ScrollView:
+                    height: dp(200)
+                    size_hint_y: None
+                    do_scroll_x: False
+                    do_scroll_y: True
+
+                    StackLayout:
+                        id: sv_opt_courses
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        height: dp(400)
+
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: opt_courses_tree
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(40))
+        padding: dp(10)
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
