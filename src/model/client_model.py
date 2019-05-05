@@ -306,3 +306,119 @@ class ClientModel:
 
         return goal_valid
 
+
+    def get_section_grades(self, section):
+        """Auxilary function to get_section_statistics to get the grades for each section"""
+        ret = self.adapter.get_section_grades(section)
+
+
+    def get_solo_section_statistics(self, section):
+        """Note: this takes a section object"""
+
+        number_of_students_enrolled = section.num_students
+
+        grades = self.get_section_grades(section) # grades is a dictionary
+
+        total_grade_count = 0  # sum of each grade count
+        total_grades = 0  # sum of actual grades we have recorded (for averaging purposed
+        for i in grades.keys:
+            if i == 'a+':
+                total_grade_count += grades[i] * 7
+                total_grades += grades[i]
+            elif i == 'a':
+                total_grade_count += grades[i] * 6.5
+                total_grades += grades[i]
+            elif i == 'a-':
+                total_grade_count += grades[i] * 6
+                total_grades += grades[i]
+            elif i == 'b+':
+                total_grade_count += grades[i] * 5.5
+                total_grades += grades[i]
+            elif i == 'b':
+                total_grade_count += grades[i] * 5
+                total_grades += grades[i]
+            elif i == 'b-':
+                total_grade_count += grades[i] * 4.5
+                total_grades += grades[i]
+            elif i == 'c+':
+                total_grade_count += grades[i] * 4
+                total_grades += grades[i]
+            elif i == 'c':
+                total_grade_count += grades[i] * 3.5
+                total_grades += grades[i]
+            elif i == 'c-':
+                total_grade_count += grades[i] * 3
+                total_grades += grades[i]
+            elif i == 'd+':
+                total_grade_count += grades[i] * 2.5
+                total_grades += grades[i]
+            elif i == 'd':
+                total_grade_count += grades[i] * 2
+                total_grades += grades[i]
+            elif i == 'd-':
+                total_grade_count += grades[i]*1.5
+                total_grades += grades[i]
+            elif i == 'f':
+                total_grade_count += grades[i]*1
+                total_grades += grades[i]
+            elif i == 'i':
+                pass
+            elif i == 'w':
+                pass
+
+        numerical_grade_avg = total_grade_count/total_grades
+        if numerical_grade_avg == 7:
+            actual_grade_avg = 'a+'
+        elif numerical_grade_avg == 6.5:
+            actual_grade_avg = 'a'
+        elif numerical_grade_avg == 6:
+            actual_grade_avg = 'a-'
+        elif numerical_grade_avg == 5.5:
+            actual_grade_avg = 'b+'
+        elif numerical_grade_avg == 5:
+            actual_grade_avg = 'b'
+        elif numerical_grade_avg == 4.5:
+            actual_grade_avg = 'b-'
+        elif numerical_grade_avg == 4:
+            actual_grade_avg = 'c+'
+        elif numerical_grade_avg == 3.5:
+            actual_grade_avg = 'c'
+        elif numerical_grade_avg == 3:
+            actual_grade_avg = 'c-'
+        elif numerical_grade_avg == 2.5:
+            actual_grade_avg = 'd+'
+        elif numerical_grade_avg == 2:
+            actual_grade_avg = 'd'
+        elif numerical_grade_avg == 1.5:
+            actual_grade_avg = 'd-'
+        elif numerical_grade_avg == 1:
+            actual_grade_avg = 'f'
+        elif numerical_grade_avg < 7 and numerical_grade_avg > 6:
+            actual_grade_avg = 'a'
+        elif numerical_grade_avg < 5.5 and numerical_grade_avg > 4.5:
+            actual_grade_avg = 'b'
+        elif numerical_grade_avg < 4 and numerical_grade_avg > 3:
+            actual_grade_avg = 'c'
+        elif numerical_grade_avg < 2.5 and numerical_grade_avg > 1.5:
+            actual_grade_avg = 'd'
+        elif numerical_grade_avg < 1.5:
+            actual_grade_avg = 'f'
+        else:
+            actual_grade_avg = None
+
+
+        return [number_of_students_enrolled, grades, actual_grade_avg]
+
+
+    def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester):
+        sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester)
+
+        for s in sections_list:
+            current_section_info = self.get_solo_section_statistics(s)
+
+            # todo: do things
+
+
+
+
+
