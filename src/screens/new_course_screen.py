@@ -175,5 +175,9 @@ class NewCourseScreenRoot(Widget):
             self.app.client_model.set_course(new_course)
             dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
             dialogue.open()
+            self.ids.course_name.text = ''
+            self.ids.subject_code.text = ''
+            self.ids.credit_hours.text = ''
+            self.ids.comment_1.text = ''
             self.app.screen_manager.transition.direction = 'left'
             self.app.screen_manager.current = 'main'

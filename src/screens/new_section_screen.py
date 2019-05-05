@@ -115,5 +115,11 @@ class NewSectionScreenRoot(Widget):
         else:
             # can safely add it to the database
             self.app.client_model.set_section(new_section)
+            self.ids.course_name.text = ''
+            self.ids.year.text = ''
+            self.ids.section_id.text = ''
+            self.ids.num_students.text = ''
+            self.ids.comment_1.text = ''
+            self.ids.comment_2.text = ''
             self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
