@@ -108,7 +108,7 @@ class NewCourseScreenRoot(Widget):
                                        message="The Goal with id " + str(goal_id_txt) +
                                                "\ndoes not exist in the database.")
             dialogue.open()
-        elif int(goal_id_txt) in self.course_topics.keys():
+        elif int(goal_id_txt) in self.course_goals.keys():
             logging.info("NewCourseScreenRoot: goal with id " + str(goal_id_txt) + " already added.")
             dialogue = MessageDialogue(title="Goal Error",
                                        message="The Goal with id " + str(goal_id_txt) +

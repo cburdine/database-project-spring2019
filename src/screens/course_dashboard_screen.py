@@ -71,7 +71,7 @@ class CourseDashboardScreenRoot(Widget):
             Clock.schedule_once(self.set_course_text_description, 0.0)
 
     def set_topics_tree(self, course):
-        self.ids.topics_tree.setRows(course.goals)
+        self.ids.topics_tree.setRows(course.topics)
         self.ids.sv_topics.height = self.ids.topics_tree.get_height()
 
     def set_goals_tree(self, course):
@@ -91,7 +91,7 @@ class CourseDashboardScreenRoot(Widget):
 
             print(course.topics)
             for c in course.topics:
-                c_topic = self.app.client_model.get_topic(c)
+                c_topic = self.app.client_model.get_topic(id=c)
 
                 """
                 if c_topic is not None:
