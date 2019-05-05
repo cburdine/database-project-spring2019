@@ -280,12 +280,12 @@ class DBAdapter:
             self.db_cursor.execute(GET_TOPIC_IDS, (name,))
             t_ids = self.db_cursor.fetchall()
             for id in t_ids:
-                ret.topics.append(id)
+                ret.topics.append(id[0])
 
             self.db_cursor.execute(GET_GOAL_IDS, (name,))
             g_ids = self.db_cursor.fetchall()
             for id in g_ids:
-                ret.goals.append(id)
+                ret.goals.append(id[0])
 
         except:
             logging.warning("DBAdapter: Error- cannot retrieve course: " + str(name))

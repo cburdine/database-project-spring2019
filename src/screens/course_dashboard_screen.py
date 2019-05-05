@@ -92,7 +92,7 @@ class CourseDashboardScreenRoot(Widget):
             print(course.topics)
             for c in course.topics:
                 c_topic = self.app.client_model.get_topic(c)
-                print(c_topic)
+
                 """
                 if c_topic is not None:
                     c._linked_topic_name = c_topic.name
