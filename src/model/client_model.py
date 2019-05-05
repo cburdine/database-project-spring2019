@@ -1,5 +1,5 @@
 from src.db.adapter import DBAdapter
-from src.model.classes import Person, CurriculumTopic, Curriculum
+from src.model.classes import Person, CurriculumTopic, Curriculum, Goal
 import logging
 from src.widgets.dialogues import MessageDialogue
 
@@ -73,14 +73,14 @@ class ClientModel:
                 self._topic_map[id] = t
                 return t
 
-    def set_topic(self, new_topic):
+    def set_topic(self, new_topic, updating=False):
         """Function to add new topic to the db"""
-        self.adapter.set_topic(new_topic)
+        self.adapter.set_topic(new_topic, updating)
         self._topic_map[new_topic.id] = new_topic # updating our topic map
 
-    def set_person(self, new_person):
+    def set_person(self, new_person, updating=False):
         """Function to add new person to the db"""
-        self.adapter.set_person(new_person)
+        self.adapter.set_person(new_person, updating)
         self._person_map[new_person.id] = new_person # updating our person map
 
     def get_course(self, course_name):
@@ -93,9 +93,9 @@ class ClientModel:
                 self._course_map[course_name] = c
                 return c
 
-    def set_course(self, new_course):
+    def set_course(self, new_course, updating=False):
         """Function to add new course to the database"""
-        self.adapter.set_course(new_course)
+        self.adapter.set_course(new_course, updating)
         self._course_map[new_course.name] = new_course
 
     def get_section(self, new_section):
@@ -104,14 +104,14 @@ class ClientModel:
         else:
             return self.adapter.get_section(new_section)
 
-    def set_section(self, new_section):
+    def set_section(self, new_section, updating=False):
         """Function that adds new section to the database"""
-        self.adapter.set_section(new_section)
+        self.adapter.set_section(new_section, updating)
         self._section_map[new_section.unit_id] = new_section
 
-    def set_curriculum(self, new_curriculum):
+    def set_curriculum(self, new_curriculum, updating=False):
         """Function to set new curriculum"""
-        self.adapter.set_curriculum(new_curriculum)
+        self.adapter.set_curriculum(new_curriculum, updating)
         self._curricula_map[new_curriculum.name] = new_curriculum
         if new_curriculum.name not in self._curricula_map.values():
             self._curricula_map[new_curriculum.name] = None
@@ -123,9 +123,9 @@ class ClientModel:
         else:
             return self.adapter.get_goal(new_goal)
 
-    def set_goal(self, new_goal):
+    def set_goal(self, new_goal, updating=False):
         """Function to set goal"""
-        self.adapter.set_goal(new_goal)
+        self.adapter.set_goal(new_goal, updating)
         self._curricula_map[new_goal.id] = new_goal
 
     def set_course_goal(self, goal_id, course_name):
@@ -140,13 +140,13 @@ class ClientModel:
         """Function to get the course topic"""
         return self.adapter.get_course_topic(topic_id, course_name)
 
-    def set_curriculum_course(self, curriculum_name, course_name, required):
+    def set_curriculum_course(self, curriculum_name, course_name, required, updating=False):
         """Function to set curriculum course in the db"""
-        self.adapter.set_curriculum_course(curriculum_name, course_name, required)
+        self.adapter.set_curriculum_course(curriculum_name, course_name, required, updating)
 
-    def set_curriculum_topic(self, curriculum_topic):
+    def set_curriculum_topic(self, curriculum_topic, updating=False):
         """Function to set curriculum topic"""
-        self.adapter.set_curriculum_topic(curriculum_topic)
+        self.adapter.set_curriculum_topic(curriculum_topic, updating)
 
     def get_curriculum_topic(self, curriculum_name, curriculum_topic_id):
         """Function to retrieve curriculum topic from the db"""
@@ -274,3 +274,35 @@ class ClientModel:
                 return 'Unsatisfactory'
             elif not all_1_covered_by_required:
                 return 'Substandard'
+
+    def curriculum_goal_list(self, curriculum_name):
+        """Aux function to get a list of goals for the curriculum based off its name"""
+        self.adapter.curriculum_goal_list(curriculum_name)
+
+    def is_goal_valid(self, curriculum_name, required_credit_hours):
+        goal_valid = True
+        curricul = self.get_curriculum(curriculum_name)
+
+        goals_for_curriculum = self.curriculum_goal_list(curriculum_name)
+
+        credit_hours_associated_with_goal = {}
+        for g in goals_for_curriculum:
+
+            # find all the courses where that is the course goal
+
+            credit_hours_associated_with_goal[g.id] = 0
+            for rc in curricul.req_course_names:
+                required_course = self.get_course(rc)
+                credit_hours_associated_with_goal[g.id] += required_course.credit_hours
+
+            for oc in curricul.opt_course_names:
+                optional_course = self.get_course(oc)
+                credit_hours_associated_with_goal[g.id] += optional_course.credit_hours
+
+
+            if credit_hours_associated_with_goal[g.id] < required_credit_hours:
+                goal_valid = False
+
+
+        return goal_valid
+
