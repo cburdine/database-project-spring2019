@@ -303,13 +303,18 @@ class DBAdapter:
 
         return ret
 
-    def set_section(self, new_section):
+    def set_section(self, new_section, updating=False):
         """Function for adding a section to the db"""
-        SECTION_QUERY = """UPDATE Section SET num_students = %s, comment1 = %s, comment2 = %s WHERE course_name = %s, semester = %s, unit_id = %s""" if updating \
-            else """INSERT INTO Section (course_name, semester, unit_id, num_students, comment1, comment2) VALUES (%s, %s, %s, %s, %s, %s)"""
+        SECTION_QUERY = """UPDATE Section SET num_students = %s, comment1 = %s, comment2 = %s WHERE course_name = %s, semester = %s, section_id = %s, year = %s""" if updating \
+            else """INSERT INTO Section (course_name, semester, section_id, num_students, comment1, comment2, year) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
 
-        self.db_cursor.execute(SECTION_QUERY,
-            (new_section.num_students, new_section.comment1, new_section.comment2, new_section.course_name, new_section.semester, new_section.unit_id))
+        if updating:
+            self.db_cursor.execute(SECTION_QUERY,
+                (new_section.num_students, new_section.comment1, new_section.comment2, new_section.course_name, new_section.semester, new_section.section_id, new_section.year))
+        else:
+            self.db_cursor.execute(SECTION_QUERY,
+                                   (new_section.course_name, new_section.semester, new_section.section_id,
+                                    new_section.num_students, new_section.comment1, new_section.comment2, new_section.year))
         self.db_connection.commit()
 
     def set_curriculum(self, new_curriculum, updating=False):

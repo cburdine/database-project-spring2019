@@ -180,10 +180,26 @@ NewSectionScreenRoot:
                 halign: 'right'
                 valign: 'middle'
 
-            IntTextInput:
+            TextInput:
                 on_text: root.update_live_description_callback()
                 height: dp(50)
                 id: semester
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Year:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
+                id: year
                 multiline: False
                 text: ''
 
