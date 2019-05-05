@@ -92,6 +92,8 @@ class NewTopicScreenRoot(Widget):
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_topic(new_topic)
+            self.ids.topic_name.text = ''
+            self.ids.topic_id.text = ''
             self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
 

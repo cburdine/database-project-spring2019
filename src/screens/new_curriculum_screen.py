@@ -267,7 +267,9 @@ class NewCurriculumScreenRoot(Widget):
             return
 
         self.app.client_model.set_curriculum(new_curriculum)
-
+        self.ids.curriculum_name.text = ''
+        self.ids.min_credit_hours.text = ''
+        self.ids.id_in_charge.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
         dialogue = MessageDialogue(title="success", message="successfully created the curriculum")

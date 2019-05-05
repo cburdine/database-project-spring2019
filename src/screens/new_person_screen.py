@@ -87,6 +87,8 @@ class NewPersonScreenRoot(Widget):
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_person(new_person)
+            self.ids.person_name.text = ''
+            self.ids.person_id.text = ''
             self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
 

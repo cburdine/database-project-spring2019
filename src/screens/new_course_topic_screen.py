@@ -89,5 +89,7 @@ class NewCourseTopicScreenRoot(Widget):
             self.app.client_model.set_course_topic(topic_id, course_name)
             dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
             dialogue.open()
+            self.ids.topic_id.text = ''
+            self.ids.course_name.text = ''
             self.app.screen_manager.transition.direction = 'up'
             self.app.screen_manager.current = 'main'

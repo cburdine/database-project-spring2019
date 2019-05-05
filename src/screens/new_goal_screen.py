@@ -83,5 +83,8 @@ class NewGoalScreenRoot(Widget):
         else:
             # safe to enter into db
             self.app.client_model.set_goal(new_goal)
+            self.ids.curriculum_name.text = ''
+            self.ids.goal_id.text = ''
+            self.ids.goal_description.text = ''
             self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'

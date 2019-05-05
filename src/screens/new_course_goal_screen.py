@@ -79,6 +79,8 @@ class NewCourseGoalScreenRoot(Widget):
             self.app.client_model.set_course_goal(goal_id, course_name)
             dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
             dialogue.open()
+            self.ids.goal_id.text = ''
+            self.ids.course_name.text = ''
             self.app.screen_manager.transition.direction = 'up'
             self.app.screen_manager.current = 'main'
 
