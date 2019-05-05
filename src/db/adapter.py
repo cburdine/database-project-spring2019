@@ -1,7 +1,7 @@
 import mysql.connector
 import logging
 
-from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic, Section, Goal
+from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic, Section, Goal, SectionGrades, SectionGoalGrades
 
 import threading
 from kivy.clock import Clock
@@ -541,33 +541,68 @@ class DBAdapter:
 
         return ret
 
-    def get_section_grades(self, section):
-        """Function to retrieve the section grades from the db and return them as a list"""
-        SECTION_GRADES = """SELECT count_ap, count_a count_am, count_bp, count_b count_bm, count_cp, count_c count_cm, count_dp, count_d, count_dm, count_f,count_i, count_w FROM SectionGrades WHERE course = %s AND semester = %s AND year = % AND section_id = %s"""
+    def get_section_grades(self, section, section_goal=False):
+        """Function to retrieve the section grades from the db and return them as a list
+        (this works for SectionGrades table and SectionGoalGrades table)"""
+        if not section_goal:
+            SECTION_GRADES = """SELECT count_ap, count_a count_am, count_bp, count_b count_bm, count_cp, count_c count_cm, count_dp, count_d, count_dm, count_f,count_i, count_w FROM SectionGrades WHERE course = %s AND semester = %s AND year = % AND section_id = %s"""
+        else:
+            SECTION_GRADES = """SELECT count_ap, count_a count_am, count_bp, count_b count_bm, count_cp, count_c count_cm, count_dp, count_d, count_dm, count_f FROM SectionGoalGrades WHERE course = %s AND semester = %s AND year = % AND section_id = %s AND goal_id = %s"""
 
         ret = None
         try:
-            self.db_cursor.execute(
-                SECTION_GRADES,
-                (section.course_name, section.semester, section.year, section.section_id))
-            grades = self.db_cursor.fetchall()
-            ret = {}
-            if grades:
-                ret['a+'] = grades[0][0]
-                ret['a'] = grades[0][1]
-                ret['a-'] = grades[0][2]
-                ret['b+'] = grades[0][3]
-                ret['b'] = grades[0][4]
-                ret['b-'] = grades[0][5]
-                ret['c+'] = grades[0][6]
-                ret['c'] = grades[0][7]
-                ret['c-'] = grades[0][8]
-                ret['d+'] = grades[0][9]
-                ret['d'] = grades[0][10]
-                ret['d-'] = grades[0][11]
-                ret['f'] = grades[0][12]
-                ret['i'] = grades[0][13]
-                ret['w'] = grades[0][14]
+            if not section_goal:
+                self.db_cursor.execute(
+                    SECTION_GRADES,
+                    (section.course_name, section.semester, section.year, section.section_id))
+            else:
+                self.db_cursor.execute(
+                    SECTION_GRADES,
+                    (section.course_name, section.semester, section.year, section.section_id, section.goal_id))
+            section_grades = self.db_cursor.fetchall()
+            if not section_goal:
+                ret = SectionGrades
+            else:
+                ret = SectionGoalGrades
+            if section_grades and not section_goal:
+                ret.count_ap= section_grades[0][0]
+                ret.count_a = section_grades[0][1]
+                ret.count_am = section_grades[0][2]
+                ret.count_bp = section_grades[0][3]
+                ret.count_b = section_grades[0][4]
+                ret.count_bm = section_grades[0][5]
+                ret.count_cp = section_grades[0][6]
+                ret.count_c = section_grades[0][7]
+                ret.count_cm = section_grades[0][8]
+                ret.count_dp = section_grades[0][9]
+                ret.count_d = section_grades[0][10]
+                ret.count_dm = section_grades[0][11]
+                ret.count_f = section_grades[0][12]
+                ret.count_i = section_grades[0][13]
+                ret.count_w = section_grades[0][14]
+                ret.course = section.course_name
+                ret.semester = section.semester
+                ret.year = section.year
+                ret.section_id = section.section_id
+            elif section_grades and section_goal:
+                ret.count_ap = section_grades[0][0]
+                ret.count_a = section_grades[0][1]
+                ret.count_am = section_grades[0][2]
+                ret.count_bp = section_grades[0][3]
+                ret.count_b = section_grades[0][4]
+                ret.count_bm = section_grades[0][5]
+                ret.count_cp = section_grades[0][6]
+                ret.count_c = section_grades[0][7]
+                ret.count_cm = section_grades[0][8]
+                ret.count_dp = section_grades[0][9]
+                ret.count_d = section_grades[0][10]
+                ret.count_dm = section_grades[0][11]
+                ret.count_f = section_grades[0][12]
+                ret.course = section.course_name
+                ret.semester = section.semester
+                ret.year = section.year
+                ret.section_id = section.section_id
+                ret.goal_id = section.goal_id
             else:
                 ret = None
 
@@ -576,7 +611,7 @@ class DBAdapter:
 
         return ret
 
-    def get_sections(self, start_year, start_semester, end_year, end_semester):
+    def get_sections(self, start_year, start_semester, end_year, end_semester, section_goal=False):
         """Function to retrieve a list of sections based on the given criteria"""
         SECTION_GRADES = """SELECT course_name, section_id, num_students, comment1, comment2 FROM Section WHERE semester = %s AND year = %s"""
 
