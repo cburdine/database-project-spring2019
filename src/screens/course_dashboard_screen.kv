@@ -82,10 +82,21 @@ CourseDashboardScreenRoot:
                     size_hint_y: None
                     height: dp(40)
 
-                Label:
-                    text_size: self.size
-                    id: description_field
-                    text: ''
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_x: None
+                    width: root.ids.sv_description_container.width - dp(20)
+
+                    Label:
+                        text_size: self.size
+                        id: description_field
+                        text: ''
+                    Button:
+                        size_hint: (None, None)
+                        width: dp(60)
+                        height: dp(40)
+                        text: 'Edit'
+                        on_press: root.edit_course_callback()
 
                 Label:
                     text_size: self.size

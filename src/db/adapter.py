@@ -553,26 +553,23 @@ class DBAdapter:
 
     def curriculum_goal_list(self, curriculum_name):
         """Function to retrieve a list of curriculum goals from the db"""
-        ret = None
+        ret = []
         try:
             self.db_cursor.execute(
                 """SELECT id, description FROM Goal WHERE curriculum_name = %s""",
-                (curriculum_name))
+                (curriculum_name,))
             goals = self.db_cursor.fetchall()
 
             if goals:
-                ret = []
                 go = Goal()
                 go.curriculum_name = curriculum_name
                 for g in goals:
                     go.description = g[1]
                     go.id = g[0]
-                    ret.append(g)
-            else:
-                ret = None
+                    ret.append(go)
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve curriculum goal list: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve curriculum goal list: " + str(curriculum_name))
 
         return ret
 

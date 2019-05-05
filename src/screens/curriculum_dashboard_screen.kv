@@ -82,14 +82,27 @@ CurriculumDashboardScreenRoot:
                     size_hint_y: None
                     height: dp(40)
 
-                Label:
-                    text_size: self.size
-                    id: description_field
-                    text: ''
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_x: None
+                    width: root.ids.sv_description_container.width - dp(20)
+
+                    Label:
+                        text_size: self.size
+                        id: description_field
+                        text: ''
+                    Button:
+                        size_hint: (None, None)
+                        width: dp(60)
+                        height: dp(40)
+                        text: 'Edit'
+                        on_press: root.edit_curriculum_callback()
 
                 Label:
                     text_size: self.size
                     id: topic_tree_label
+                    size_hint_y: None
+                    height: dp(50)
                     text: ''
 
                 ScrollView:
@@ -121,6 +134,8 @@ CurriculumDashboardScreenRoot:
                 Label:
                     text_size: self.size
                     id: req_courses_tree_label
+                    size_hint_y: None
+                    height: dp(50)
                     text: ''
 
                 ScrollView:
@@ -152,6 +167,8 @@ CurriculumDashboardScreenRoot:
                 Label:
                     text_size: self.size
                     id: opt_courses_tree_label
+                    size_hint_y: None
+                    height: dp(50)
                     text: ''
 
                 ScrollView:

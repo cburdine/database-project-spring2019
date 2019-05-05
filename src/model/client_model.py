@@ -172,7 +172,7 @@ class ClientModel:
 
             for i in curriculum_obj.cur_topics:
                 q = self.get_curriculum_topic(curriculum_obj.name, i)
-                c_name = i[0]
+                c_name = i.name
                 curriculum_topic = i[1]
                 level = i[2]
                 subject_area = i[3]
@@ -267,16 +267,16 @@ class ClientModel:
             elif not all_1_covered_by_required:
                 return 'Substandard'
 
-    def curriculum_goal_list(self, curriculum_name):
+    def get_curriculum_goal_list(self, curriculum_name):
         """Aux function to get a list of goals for the curriculum based off its name"""
-        self.adapter.curriculum_goal_list(curriculum_name)
+        return self.adapter.curriculum_goal_list(curriculum_name)
 
     def is_goal_valid(self, curriculum_name, required_credit_hours):
         goal_valid = True
         curricul = self.get_curriculum(curriculum_name)
 
-        goals_for_curriculum = self.curriculum_goal_list(curriculum_name)
-
+        goals_for_curriculum = self.get_curriculum_goal_list(curriculum_name)
+        print(goals_for_curriculum)
         credit_hours_associated_with_goal = {}
         for g in goals_for_curriculum:
 

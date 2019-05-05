@@ -97,15 +97,23 @@ class CurriculumDashboardScreenRoot(Widget):
             self.set_courses_trees(cur)
             self.set_topics_tree(cur)
 
-            pane_size = dp(1100)
+            pane_size = dp(1000)
             self.ids.sv_description_container.height = pane_size
 
             description = []
             person = self.app.client_model.get_person(cur.id_in_charge)
+            goal_valid_text = "[color=ff0101]No[/color]"
+            if self.app.client_model.is_goal_valid(cur.name, cur.min_credit_hours):
+                goal_valid_text = "[color=01ff01]Yes[/color]"
+
+            eval = self.app.client_model.evaluate_curriculum(curriculum_name=cur.name)
+            topic_eval_text = f"[color=ffffff]{eval}[/color]"
+
             description.append(IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]")
             description.append(IND + f"Minimum Credit Hours: {cur.min_credit_hours}")
             description.append(IND + f"Person in charge: {person.name} (id:{person.id})")
-
+            description.append(IND + f"Goal Valid: {goal_valid_text}")
+            description.append(IND + f"Topic Evaluation: {topic_eval_text}")
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
             self.ids.description_field.markup = True
@@ -126,3 +134,6 @@ class CurriculumDashboardScreenRoot(Widget):
             self.ids.opt_courses_tree_label.markup = True
             self.ids.opt_courses_tree_label.text = opt_courses_tree_label_text
             self.ids.opt_courses_tree_label.texture_update()
+
+    def edit_curriculum_callback(self):
+        print('Edit Curriculum')

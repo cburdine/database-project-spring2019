@@ -126,3 +126,5 @@ class CourseDashboardScreenRoot(Widget):
             self.ids.goal_tree_label.text = goal_tree_label_text
             self.ids.goal_tree_label.texture_update()
 
+    def edit_course_callback(self):
+        print('Edit Course')
