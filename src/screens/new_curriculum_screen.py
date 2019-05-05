@@ -57,8 +57,7 @@ class NewCurriculumScreenRoot(Widget):
         course_name = self.ids.course_name.text
         course_type = self.ids.course_type.text
         db_course = self.app.client_model.get_course(course_name)
-
-        print(self.app.client_model.get_course(course_name=course_name))
+        
         if len(course_name) == 0 or not self.app.client_model.get_course(course_name=course_name):
             logging.info("NewCurriculumScreenRoot: could not find course " + str(course_name))
             dialogue = MessageDialogue(title="Database Error",

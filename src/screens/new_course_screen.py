@@ -22,36 +22,71 @@ class NewCourseScreen(Screen):
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 
+    def on_enter(self, *args):
+        self.root_widget.populate()
 
 class NewCourseScreenRoot(Widget):
 
     def __init__(self):
         Widget.__init__(self)
-        self.curriculum = classes.Curriculum()
+        self.course_topics = {}  # indexed by topic id
+        self.course_goals = {}  # indexed by goal id
 
     def link_to_app(self, app_ref):
         self.app = app_ref
+
+    def populate(self):
+        self.update_live_description_callback()
+
+        self.ids.topics_list.setDemoRows(40)
+        self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
+
+        self.ids.goals_list.setDemoRows(40)
+        self.ids.sv_goals_list.height = self.ids.goals_list.get_height()
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def add_topic_callback(self):
+        topic_id_txt = self.ids.course_topic_id.text
+        topic = None
+        if len(topic_id_txt) > 0:
+            topic = self.app.client_model.get_topic(int(topic_id_txt))
+
+        if topic is None or topic_subj_area == None or curriculum_topic_units == None:
+            logging.info("NewCurriculumScreenRoot: could not find topic with id " + str(topic_id_txt))
+            dialogue = MessageDialogue(title="Database Error",
+                                       message="The Topic with id " + str(
+                                           topic_id_txt) + "\ndoes not exist in the database")
+            dialogue.open()
+
+        elif topic.id in self.cur_topics.keys():
+            logging.info("NewCurriculumScreenRoot: topic with id " + str(topic.id) + " already added.")
+            dialogue = MessageDialogue(title="Topic Error",
+                                       message="The Topic with id " + str(topic.id) +
+                                               "\nhas already been added.")
+            dialogue.open()
+        else:
+
+    def add_goal_callback(self):
+        pass
+
     def update_live_description_callback(self):
 
-        course_name = "<Topic Name>" if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
+        IND = "\n           "
+        course_name = "<Course Name>" if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
         subj_code = "" if len(self.ids.subject_code.text) == 0 else f"({self.ids.subject_code.text})"
         credit_hours = "<Credit Hours>" if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
-        description = "<Course Description>" if len(self.ids.description.text) == 0 else self.ids.description.text
+        comment_1 = "" if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text.replace('\n', IND)
         course_topic_id = "<Topic_ID>"if len(self.ids.course_topic_id.text) == 0 else self.ids.course_topic_id.text
         course_goal_id = "<Goal_ID>" if len(self.ids.course_goal_id.text) == 0 else self.ids.course_goal_id.text
 
-        IND = "\n           "
-        description = description.replace('\n', IND)
         description_label = []
         description_label.append(IND + f"[color=ffffff][size=40]Course: {subj_code} {course_name} [/size][/color]")
         description_label.append(IND + f"Credit Hours: {credit_hours}\n")
         description_label.append(IND + f"[color=ffffff][size=20]Description:[/size][/color]")
-        description_label.append(IND + description)
+        description_label.append(IND + comment_1)
 
         self.ids.live_description_label.halign = 'left'
         self.ids.live_description_label.valign = 'top'

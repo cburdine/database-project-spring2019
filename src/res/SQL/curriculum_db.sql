@@ -118,11 +118,12 @@ DROP TABLE IF EXISTS `Section`;
 CREATE TABLE IF NOT EXISTS `Section` (
 	`course_name` varchar(25) NOT NULL,
     `semester` char NOT NULL,
+    `year` int NOT NULL,
     `section_id` int NOT NULL,
     `num_students` int NOT NULL,
     `comment1` varchar(255),
     `comment2` varchar(255),
-    PRIMARY KEY (`course_name`,`semester`,`section_id`),
+    PRIMARY KEY (`course_name`,`semester`,`year`,`section_id`),
     FOREIGN KEY (`course_name`) REFERENCES Course(`name`)
 	/* Add foreign key constraints*/
     
@@ -133,6 +134,7 @@ DROP TABLE IF EXISTS `SectionGrades`;
 CREATE TABLE IF NOT EXISTS `SectionGrades` (
 	`course` varchar(25) NOT NULL,
     `semester` char NOT NULL,
+    `year` int NOT NULL,
     `section_id` int NOT NULL,
     
     `count_ap` int NOT NULL,
@@ -154,7 +156,8 @@ CREATE TABLE IF NOT EXISTS `SectionGrades` (
     `count_i` int NOT NULL,
     `count_w` int NOT NULL,
     
-    PRIMARY KEY (`course`,`semester`,`section_id`)
+    PRIMARY KEY (`course`,`semester`,`year`,`section_id`),
+    FOREIGN KEY (`course`,`semester`,`year`,`section_id`) REFERENCES Section(`course_name`,`semester`,`year`,`section_id`)
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -162,8 +165,9 @@ CREATE TABLE IF NOT EXISTS `SectionGrades` (
 -- initialize `SectionGoalGrades` table
 DROP TABLE IF EXISTS `SectionGoalGrades`;
 CREATE TABLE IF NOT EXISTS `SectionGoalGrades` (
-	`course` int NOT NULL,
+	`course` varchar(25) NOT NULL,
     `semester` char NOT NULL,
+    `year` int NOT NULL,
     `section_id` int NOT NULL,
     `goal_id` int NOT NULL,
     
@@ -183,7 +187,8 @@ CREATE TABLE IF NOT EXISTS `SectionGoalGrades` (
     `count_d` int NOT NULL,
     `count_dm` int NOT NULL,
     
-    PRIMARY KEY (`course`,`semester`,`section_id`,`goal_id`)
+    PRIMARY KEY (`course`,`semester`,`year`,`section_id`,`goal_id`),
+    FOREIGN KEY (`course`,`semester`,`year`,`section_id`) REFERENCES Section(`course_name`,`semester`,`year`,`section_id`)
 	/* Add foreign key constraints*/
     
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

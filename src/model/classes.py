@@ -38,6 +38,8 @@ class Course:
         self.subject_code = None
         self.credit_hours = None
         self.description = None
+        self.topics = []
+        self.goals = []
 
     def __str__(self):
         """

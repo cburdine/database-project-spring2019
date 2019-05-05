@@ -33,8 +33,6 @@ class NewCurriculumCourseScreenRoot(Widget):
     def link_to_app(self, app_ref):
         self.app = app_ref
 
-
-
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'main'

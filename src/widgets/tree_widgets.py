@@ -49,7 +49,7 @@ class RowSelectorWidget(BoxLayout):
         super(RowSelectorWidget, self).__init__(**kwargs)
         self.tree_view = TreeView(hide_root=True,indent_level=4)
         self.add_widget(self.tree_view)
-        self.row_names = {}
+        self.row_values = {}
         self.callback = self.null_callback
 
     def null_callback(self):
@@ -67,26 +67,26 @@ class RowSelectorWidget(BoxLayout):
         for i in range(numRows):
             self.addRow('Row ' + str(i))
 
-    def addRow(self, row_text):
-        node = TreeViewLabel(text=str(row_text))
+    def addRow(self, row_val):
+        node = TreeViewLabel(text=str(row_val))
         self.tree_view.add_node(node)
-        self.row_names[node] = str(row_text)
+        self.row_values[node] = row_val
 
     def clearRows(self):
-        self.row_names = {}
+        self.row_values = {}
         self.remove_widget(self.tree_view)
         self.tree_view = TreeView(hide_root=True, indent_level=4)
         self.add_widget(self.tree_view)
 
-    def setRows(self, row_text_list):
+    def setRows(self, row_list):
         self.clearRows()
-        for r in row_text_list:
+        for r in row_list:
             self.addRow(r)
 
     def get_selected_row(self):
         sel_node = self.tree_view.selected_node
-        if sel_node and sel_node in self.row_names:
-            return self.row_names[sel_node]
+        if sel_node and sel_node in self.row_values:
+            return self.row_values[sel_node]
         else:
             return None
 
@@ -98,7 +98,7 @@ class RowSelectorWidget(BoxLayout):
         return height
 
     def get_num_Rows(self):
-        return len(self.row_names)
+        return len(self.row_values)
 
 class InteractiveTreeWidget(BoxLayout):
 
