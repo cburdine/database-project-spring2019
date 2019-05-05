@@ -260,9 +260,11 @@ class DBAdapter:
 
     def get_course(self, name):
         """Function to retrieve course from the database"""
-        COURSE = """SELECT COUNT(*) FROM Topic WHERE id = %s"""
+        GET_TOPIC_IDS = """SELECT topic_id FROM CourseTopics WHERE course_name = %s"""
+        GET_GOAL_IDS = """SELECT goal_id FROM CourseGoals WHERE course_name = %s"""
 
         ret = None
+
         try:
             self.db_cursor.execute("""SELECT subject_code, credit_hours, description FROM Course WHERE name = %s""", (name,))
             c = self.db_cursor.fetchall()
@@ -271,9 +273,22 @@ class DBAdapter:
             ret.credit_hours = c[0][1]
             ret.description = c[0][2]
             ret.name = name
+            ret.goals = []
+            ret.topics = []
+
+
+            self.db_cursor.execute(GET_TOPIC_IDS, (name,))
+            t_ids = self.db_cursor.fetchall()
+            for id in t_ids:
+                ret.topics.append(id)
+
+            self.db_cursor.execute(GET_GOAL_IDS, (name,))
+            g_ids = self.db_cursor.fetchall()
+            for id in g_ids:
+                ret.goals.append(id)
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve course: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve course: " + str(name))
             return None
 
         return ret
@@ -458,7 +473,7 @@ class DBAdapter:
     def set_course_topic(self, topic_id,course_name):
         """Function to write course topic to the db"""
         self.db_cursor.execute(
-            """INSERT INTO CourseTopics (course_name, goal_id) VALUES (%s, %s)""",
+            """INSERT INTO CourseTopics (course_name, topic_id) VALUES (%s, %s)""",
             (course_name, topic_id))
         self.db_connection.commit()
 

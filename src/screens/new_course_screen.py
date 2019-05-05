@@ -125,14 +125,15 @@ class NewCourseScreenRoot(Widget):
 
         IND = "\n           "
         course_name = "<Course Name>" if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
-        subj_code = "" if len(self.ids.subject_code.text) == 0 else f"({self.ids.subject_code.text})"
+        subj_code = "<Subject Code>" if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
         credit_hours = "<Credit Hours>" if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
         comment_1 = "" if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text.replace('\n', IND)
         course_topic_id = "<Topic_ID>"if len(self.ids.course_topic_id.text) == 0 else self.ids.course_topic_id.text
         course_goal_id = "<Goal_ID>" if len(self.ids.course_goal_id.text) == 0 else self.ids.course_goal_id.text
 
         description_label = []
-        description_label.append(IND + f"[color=ffffff][size=40]Course: {subj_code} {course_name} [/size][/color]")
+        description_label.append(IND + f"[color=ffffff][size=40]Course: {course_name} [/size][/color]")
+        description_label.append(IND + f"Subject Code: {subj_code}")
         description_label.append(IND + f"Credit Hours: {credit_hours}\n")
         description_label.append(IND + f"[color=ffffff][size=20]Description:[/size][/color]")
         description_label.append(IND + comment_1)
@@ -179,5 +180,5 @@ class NewCourseScreenRoot(Widget):
             self.ids.subject_code.text = ''
             self.ids.credit_hours.text = ''
             self.ids.comment_1.text = ''
-            self.app.screen_manager.transition.direction = 'left'
+            self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'

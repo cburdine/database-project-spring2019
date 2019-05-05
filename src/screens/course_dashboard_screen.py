@@ -43,8 +43,6 @@ class CourseDashboardScreenRoot(Widget):
     def populate(self):
         rows = self.app.client_model.adapter.get_course_names()
 
-        #sort rows here...
-
         self.course_selector = self.ids.course_selector
         self.course_selector.setRows(rows)
         self.course_selector.set_callback(self.set_course_text_description)
@@ -83,34 +81,40 @@ class CourseDashboardScreenRoot(Widget):
 
     def set_course_text_description(self, *args):
 
-        cur_name = self.course_selector.get_selected_row()
-        if cur_name != None:
+        course_name = self.course_selector.get_selected_row()
+        if course_name != None:
             #A str Builder object might be better to use later on:
             IND = "\n     "
             ENDL = "\n"
-            """
-            cur = self.app.client_model.get_curriculum(cur_name)
-            for c in cur.cur_topics:
-                c_topic = self.app.client_model.get_topic(c.topic_id)
+
+            course = self.app.client_model.get_course(course_name)
+
+            print(course.topics)
+            for c in course.topics:
+                c_topic = self.app.client_model.get_topic(c)
+                print(c_topic)
+                """
                 if c_topic is not None:
                     c._linked_topic_name = c_topic.name
+                """
 
-            self.set_courses_trees(cur)
-            self.set_topics_tree(cur)
+            self.set_goals_tree(course)
+            self.set_topics_tree(course)
 
-            pane_size = dp(1100)
+            pane_size = dp(700)
             self.ids.sv_description_container.height = pane_size
 
             description = []
-            person = self.app.client_model.get_person(cur.id_in_charge)
-            description.append(IND + f"[color=ffffff][size=40]{cur.name}[/size][/color]")
-            description.append(IND + f"Minimum Credit Hours: {cur.min_credit_hours}")
-            description.append(IND + f"Person in charge: {person.name} (id:{person.id})")
-            """
+            description.append(IND + f"[color=ffffff][size=40]{course.name}[/size][/color]")
+            description.append(IND + f"Subject Code: {course.subject_code}")
+            description.append(IND + f"Credit Hours: {course.credit_hours}")
+            description.append(IND + IND + f"[color=ffffff][size=24]Description:[/size][/color]")
+            description.append(IND + str(course.description))
+
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
             self.ids.description_field.markup = True
-            self.ids.description_field.text = "DESCRIPTION"
+            self.ids.description_field.text = ''.join(description)
             self.ids.description_field.texture_update()
 
             topic_tree_label_text = IND + "[size=28]Course Topics[/size]"

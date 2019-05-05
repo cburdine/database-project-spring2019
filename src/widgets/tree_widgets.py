@@ -85,7 +85,7 @@ class RowSelectorWidget(BoxLayout):
 
     def get_selected_row(self):
         sel_node = self.tree_view.selected_node
-        if sel_node and sel_node in self.row_values:
+        if sel_node and sel_node in self.row_values.keys():
             return self.row_values[sel_node]
         else:
             return None

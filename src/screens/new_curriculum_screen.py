@@ -79,7 +79,7 @@ class NewCurriculumScreenRoot(Widget):
             dialogue = MessageDialogue(title="Row Error", message="No row is selected.")
             dialogue.open()
         else:
-            del self.cur_topics[rem_topic.id]
+            del self.cur_topics[rem_topic]
             self.ids.topics_list.remove_selected_row()
             self.ids.sv_opt_courses_list.height = self.ids.opt_courses_list.get_height(expected_node_height=3.0)
 
