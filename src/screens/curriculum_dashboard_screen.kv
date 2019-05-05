@@ -93,10 +93,18 @@ CurriculumDashboardScreenRoot:
                     text: ''
 
                 ScrollView:
+                    size_hint_x: None
+                    width: root.ids.sv_description_container.width - dp(20)
                     height: dp(200)
                     size_hint_y: None
                     do_scroll_x: False
                     do_scroll_y: True
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
                     StackLayout:
                         id: sv_topics
@@ -116,10 +124,18 @@ CurriculumDashboardScreenRoot:
                     text: ''
 
                 ScrollView:
+                    size_hint_x: None
+                    width: root.ids.sv_description_container.width - dp(20)
                     height: dp(200)
                     size_hint_y: None
                     do_scroll_x: False
                     do_scroll_y: True
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
                     StackLayout:
                         id: sv_req_courses
@@ -139,10 +155,18 @@ CurriculumDashboardScreenRoot:
                     text: ''
 
                 ScrollView:
+                    size_hint_x: None
+                    width: root.ids.sv_description_container.width - dp(20)
                     height: dp(200)
                     size_hint_y: None
                     do_scroll_x: False
                     do_scroll_y: True
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
                     StackLayout:
                         id: sv_opt_courses
