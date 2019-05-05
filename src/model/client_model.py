@@ -53,7 +53,7 @@ class ClientModel:
                 self._curricula_map[name] = self.adapter.get_curriculum(name)
             return self._curricula_map[name]
         else:
-            return None
+            return self.adapter.get_curriculum(name)
 
     def update_curriculum(self, name):
         if name not in self._curricula_map.keys():
@@ -406,19 +406,105 @@ class ClientModel:
         else:
             actual_grade_avg = None
 
-
         return [number_of_students_enrolled, grades, actual_grade_avg]
-
 
     def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester):
         sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester)
+        total_students_enrolled_across_periods = 0
+        avg_grade_total_across_periods = []
+        all_grades = {}
+        sec_count = 0
+        total_grade_count = 0
 
         for s in sections_list:
+            sec_count+=1
             current_section_info = self.get_solo_section_statistics(s)
 
-            # todo: do things
+            total_students_enrolled_across_periods += current_section_info[0]
+            avg_grade_total_across_periods += current_section_info[1]
+            for j in current_section_info[2].items():
+                if all_grades[j[0]]:
+                    all_grades[j[0]] = j[1]
+                else:
+                    all_grades[j[0]] += j[1]
 
 
+
+        for i in avg_grade_total_across_periods:
+            if i == 'a+':
+                total_grade_count += 7
+            elif i == 'a':
+                total_grade_count += 6.5
+            elif i == 'a-':
+                total_grade_count += 6
+            elif i == 'b+':
+                total_grade_count += 5.5
+            elif i == 'b':
+                total_grade_count += 5
+            elif i == 'b-':
+                total_grade_count += 4.5
+            elif i == 'c+':
+                total_grade_count += 4
+            elif i == 'c':
+                total_grade_count += 3.5
+            elif i == 'c-':
+                total_grade_count += 3
+            elif i == 'd+':
+                total_grade_count += 2.5
+            elif i == 'd':
+                total_grade_count += 2
+            elif i == 'd-':
+                total_grade_count += 1.5
+            elif i == 'f':
+                total_grade_count += 1
+            elif i == 'i':
+                pass
+            elif i == 'w':
+                pass
+
+        avg_grade_across_periods = total_grade_count/sec_count
+
+        numerical_grade_avg = total_grade_count / sec_count
+        if numerical_grade_avg == 7:
+            avg_grade_across_periods = 'a+'
+        elif numerical_grade_avg == 6.5:
+            avg_grade_across_periods = 'a'
+        elif numerical_grade_avg == 6:
+            avg_grade_across_periods = 'a-'
+        elif numerical_grade_avg == 5.5:
+            avg_grade_across_periods = 'b+'
+        elif numerical_grade_avg == 5:
+            avg_grade_across_periods = 'b'
+        elif numerical_grade_avg == 4.5:
+            avg_grade_across_periods = 'b-'
+        elif numerical_grade_avg == 4:
+            avg_grade_across_periods = 'c+'
+        elif numerical_grade_avg == 3.5:
+            avg_grade_across_periods = 'c'
+        elif numerical_grade_avg == 3:
+            avg_grade_across_periods = 'c-'
+        elif numerical_grade_avg == 2.5:
+            avg_grade_across_periods = 'd+'
+        elif numerical_grade_avg == 2:
+            avg_grade_across_periods = 'd'
+        elif numerical_grade_avg == 1.5:
+            avg_grade_across_periods = 'd-'
+        elif numerical_grade_avg == 1:
+            avg_grade_across_periods = 'f'
+        elif numerical_grade_avg < 7 and numerical_grade_avg > 6:
+            avg_grade_across_periods = 'a'
+        elif numerical_grade_avg < 5.5 and numerical_grade_avg > 4.5:
+            avg_grade_across_periods = 'b'
+        elif numerical_grade_avg < 4 and numerical_grade_avg > 3:
+            avg_grade_across_periods = 'c'
+        elif numerical_grade_avg < 2.5 and numerical_grade_avg > 1.5:
+            avg_grade_across_periods = 'd'
+        elif numerical_grade_avg < 1.5:
+            avg_grade_across_periods = 'f'
+        else:
+            avg_grade_across_periods = None
+
+        return [total_students_enrolled_across_periods, all_grades, avg_grade_across_periods]
 
 
 

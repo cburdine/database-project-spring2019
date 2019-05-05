@@ -192,7 +192,7 @@ class NewCurriculumScreenRoot(Widget):
         new_curriculum = classes.Curriculum()
 
         # getting input from ui
-        new_curriculum.name = self.ids.curriculum_name.text
+        new_curriculum.name = None if len(self.ids.curriculum_name.text) == 0 else self.ids.curriculum_name.text
         new_curriculum.min_credit_hours = None if len(self.ids.min_credit_hours.text) == 0 else self.ids.min_credit_hours.text
         new_curriculum.id_in_charge = None if len(self.ids.id_in_charge.text) == 0 else int(self.ids.id_in_charge.text)
 
@@ -258,9 +258,19 @@ class NewCurriculumScreenRoot(Widget):
         for t in new_curriculum.cur_topics:
             t.curriculum_name = new_curriculum.name
 
+        # finally, need to check duplicate submisson...right?
+        already_in_db = self.app.client_model.get_curriculum(new_curriculum.name)
+        if already_in_db:
+            logging.info("NewCurriculumScreenRoot: Duplicate Sumbission")
+            dialogue = MessageDialogue(title="Database error", message="A curriculum with this name already exists in the db")
+            dialogue.open()
+            return
+
         self.app.client_model.set_curriculum(new_curriculum)
 
         self.app.screen_manager.transition.direction = 'right'
-        self.app.screen_manager.current = 'new_curriculum_topic'
+        self.app.screen_manager.current = 'add_new_screen'
+        dialogue = MessageDialogue(title="success", message="successfully created the curriculum")
+        dialogue.open()
 
         print("submit")

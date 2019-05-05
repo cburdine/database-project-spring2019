@@ -67,7 +67,7 @@ class NewGoalScreenRoot(Widget):
             logging.info("NewGoalScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="ID must be numeric")
             dialogue.open()
-        elif already_in_db.id is not None:
+        elif already_in_db is not None:
             logging.info("NewGoalScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Entry error", message="Goal is already defined")
             dialogue.open()

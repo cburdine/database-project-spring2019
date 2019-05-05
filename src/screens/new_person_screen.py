@@ -55,7 +55,7 @@ class NewPersonScreenRoot(Widget):
         new_person = classes.Person()
 
         # getting input from ui
-        new_person.name =  None if len(self.ids.name.text) == 0 else self.ids.name.text
+        new_person.name =  None if len(self.ids.person_name.text) == 0 else self.ids.person_name.text
         new_person.id = None if len(self.ids.person_id.text) == 0 else self.ids.person_id.text
 
         # we need to determine if the id is numeric and if it has not already been entered
@@ -76,7 +76,7 @@ class NewPersonScreenRoot(Widget):
             logging.info("NewPersonScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="id must be numeric")
             dialogue.open()
-        elif already_in_db.name is not None:
+        elif already_in_db is not None:
             logging.info("NewPersonScreenRoot: trying to create somehting that's already there")
             dialogue = MessageDialogue(title="DB error", message="entry already in the database")
             dialogue.open()
