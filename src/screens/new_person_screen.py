@@ -37,7 +37,19 @@ class NewPersonScreenRoot(Widget):
         self.app.screen_manager.current = 'add_new_screen'
 
     def update_live_description_callback(self):
-        pass
+        person_name = "<New Person>" if len(self.ids.person_name.text) == 0 else self.ids.person_name.text
+        person_id = "<ID>" if len(self.id.person_id) == 0 else self.ids.person_id.text
+
+        IND = "\n           "
+        description_label = []
+        description_label.append(IND + f"[color=ffffff][size=40]Name: {person_name}[/size][/color]")
+        description_label.append(IND + f"ID Number: {person_id}")
+
+        self.ids.live_description_label.halign = 'left'
+        self.ids.live_description_label.valign = 'top'
+        self.ids.live_description_label.markup = True
+        self.ids.live_description_label.text = ''.join(description_label)
+        self.ids.live_description_label.texture_update()
 
     def submit_callback(self):
         new_person = classes.Person()

@@ -78,23 +78,21 @@ class NewTopicScreenRoot(Widget):
         # validating input before writing to db and updating client model
         if new_topic.name is None or new_topic.id is None:
             logging.info("NewTopicScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input.")
             dialogue.open()
         elif not id_is_numeric:
             logging.info("NewTopicScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="ID must be numeric")
+            dialogue = MessageDialogue(title="Format error", message="ID must be numeric.")
             dialogue.open()
-        elif already_in_db.name is not None:
+        elif already_in_db is not None:
             logging.info("NewTopicScreenRoot: trying to create somehting that's already there")
-            dialogue = MessageDialogue(title="DB error", message="entry already in the database")
+            dialogue = MessageDialogue(title="DB error", message="Entry already exists in the\ndatabase")
             dialogue.open()
         else:
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_topic(new_topic)
-            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
-            dialogue.open()
-            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
 
         print("submit")

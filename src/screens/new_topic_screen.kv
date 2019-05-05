@@ -12,13 +12,30 @@
 
 NewTopicScreenRoot:
 
-    Label:
+    StackLayout:
+        orientation: 'lr-tb'
         width: root.width
         height: root.height
         size_hint: (None, None)
-        text_size: self.size
-        id: live_description_label
-        text: ''
+
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0.37, 0.37, 0.37
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text: 'New Topic'
+            size_hint: (1.0, None)
+            height: dp(40)
+
+        Label:
+            width: root.width
+            height: root.height
+            size_hint: (None, None)
+            text_size: self.size
+            id: live_description_label
+            text: ''
 
     AnchorLayout:
         anchor_x: 'left'

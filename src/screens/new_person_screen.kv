@@ -13,11 +13,10 @@
 NewPersonScreenRoot:
 
 
-    BoxLayout:
-        orientation: 'vertical'
-        pos: (dp(0), dp(230))
+    StackLayout:
+        orientation: 'lr-tb'
         width: root.width
-        height: root.height - dp(230)
+        height: root.height
         size_hint: (None, None)
 
         Label:
@@ -27,9 +26,16 @@ NewPersonScreenRoot:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            text: 'New Curriculum'
+            text: 'New Person'
             size_hint: (1.0, None)
             height: dp(40)
+        Label:
+            width: root.width
+            height: root.height
+            size_hint: (None, None)
+            text_size: self.size
+            id: live_description_label
+            text: ''
 
     AnchorLayout:
         anchor_x: 'left'
