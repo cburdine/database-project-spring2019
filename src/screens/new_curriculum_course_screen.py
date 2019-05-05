@@ -23,6 +23,7 @@ class NewCurriculumCourseScreen(Screen):
         self.add_widget(self.root_widget)
 
 
+
 class NewCurriculumCourseScreenRoot(Widget):
 
     def __init__(self):
@@ -31,6 +32,8 @@ class NewCurriculumCourseScreenRoot(Widget):
 
     def link_to_app(self, app_ref):
         self.app = app_ref
+
+
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'

@@ -68,12 +68,15 @@ NewCurriculumScreenRoot:
                         Rectangle:
                             pos: self.pos
                             size: self.size
-
-                    RowSelectorWidget:
-                        pos: root.x, root.y
-                        size_hint_x: 1.0
-                        size_hint_y: 1.0
-                        id: topics_list
+                    StackLayout:
+                        id: sv_topics_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: topics_list
                 Label:
                     markup: True
                     text: '           [size=30]Required Courses:[/size]'
@@ -91,12 +94,15 @@ NewCurriculumScreenRoot:
                         Rectangle:
                             pos: self.pos
                             size: self.size
-
-                    RowSelectorWidget:
-                        pos: root.x, root.y
-                        size_hint_x: 1.0
-                        size_hint_y: 1.0
-                        id: topics_list
+                    StackLayout:
+                        id: sv_req_courses_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: req_courses_list
                 Label:
                     markup: True
                     text: '           [size=30]Elective Courses:[/size]'
@@ -114,11 +120,16 @@ NewCurriculumScreenRoot:
                         Rectangle:
                             pos: self.pos
                             size: self.size
-                    RowSelectorWidget:
-                        pos: root.x, root.y
-                        size_hint_x: 1.0
-                        size_hint_y: 1.0
-                        id: topics_list
+                    StackLayout:
+                        id: sv_opt_courses_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: opt_courses_list
 
 
     AnchorLayout:
@@ -214,7 +225,7 @@ NewCurriculumScreenRoot:
                     height: dp(50)
                     width: dp(30)
                     size_hint_x: None
-                IntListTextInput:
+                IntTextInput:
                     on_text: root.update_live_description_callback()
                     height: dp(50)
                     id: curriculum_topic_id

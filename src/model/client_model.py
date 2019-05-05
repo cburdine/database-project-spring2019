@@ -28,7 +28,12 @@ class ClientModel:
         if id in self._person_map.keys():
             return self._person_map[id]
         else:
-            return self.adapter.get_person(id)
+            p = self.adapter.get_person(id)
+            if p == None:
+                return None
+            else:
+                self._person_map[id] = p
+                return p
 
     def get_curriculum_names(self):
 
@@ -59,7 +64,12 @@ class ClientModel:
         if id in self._topic_map.keys():
             return self._topic_map[id]
         else:
-            return self.adapter.get_topic(id)
+            t = self.adapter.get_topic(id)
+            if t is None:
+                return None
+            else:
+                self._topic_map[id] = t
+                return t
 
     def set_topic(self, new_topic):
         """Function to add new topic to the db"""
@@ -76,7 +86,10 @@ class ClientModel:
         if course_name in self._course_map.keys():
             return self._course_map[course_name]
         else:
-            return self.adapter.get_course(course_name)
+            c = self.adapter.get_course(course_name)
+            if c != None:
+                self._course_map[course_name] = c
+                return c
 
     def set_course(self, new_course):
         """Function to add new course to the database"""
@@ -112,19 +125,6 @@ class ClientModel:
         self.adapter.set_goal(new_goal)
         self._curricula_map[new_goal.id] = new_goal
 
-    def set_temp_cur_topic(self, cur):
-        """Function to set the auxilary object that will define our curriculum topic """
-
-        tmp = CurriculumTopic()
-
-        tmp.curriculum_name = cur.name
-        tmp.topic_id = cur.topic_id
-        self._cur_topic_temp = tmp
-
-    def get_temp_cur_topic(self):
-        """Function to get the auxilary object that will define our curriculum topic """
-        return self._cur_topic_temp
-
     def set_course_goal(self, goal_id, course_name):
         """Function to set a course goal in the database"""
         self.adapter.set_course_goal(goal_id, course_name)
@@ -137,8 +137,8 @@ class ClientModel:
         """Function to set curriculum course in the db"""
         self.adapter.set_curriculum_course(curriculum_name, course_name, required)
 
-    def set_curriculum_topic(self, curriculum_name, topic_id, level, subject_area, time_unit):
+    def set_curriculum_topic(self, curriculum_topic):
         """Function to set curriculum topic"""
-        self.adapter.set_curriculum_topic(curriculum_name, topic_id, level, subject_area, time_unit)
+        self.adapter.set_curriculum_topic(curriculum_topic)
 
 

@@ -216,7 +216,8 @@ class DBAdapter:
             ret.id = id
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve person: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve topic with id " + str(id))
+            return None
 
         return ret
 
@@ -245,7 +246,8 @@ class DBAdapter:
             ret.name = name
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve person: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve course: " + str(id))
+            return None
 
         return ret
 
@@ -294,25 +296,28 @@ class DBAdapter:
 
     def set_curriculum(self, new_curriculum):
         """Function for adding curriculum to the db"""
-        # addnig into curriculum table
+        #Add Curriculum to database:
         self.db_cursor.execute("""INSERT INTO Curriculum (name, min_credit_hours, id_in_charge) VALUES (%s, %s, %s)""",
                                (new_curriculum.name, new_curriculum.min_credit_hours, new_curriculum.id_in_charge))
         self.db_connection.commit()
-        # adding into curriculum listings table
-        # todo make sure these two have no errors
-        self.db_cursor.execute("""INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
-                               (new_curriculum.name, new_curriculum.req_course_names, 1))
-        self.db_connection.commit()
-        self.db_cursor.execute(
-            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
-            (new_curriculum.name, new_curriculum.opt_course_names, 0))
-        self.db_connection.commit()
-        # adding into curriculum topics table
-        self.db_cursor.execute(
-            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",
-            (new_curriculum.name, new_curriculum.opt_course_names, 0))
+
+        #Add required courses:
+        arg_list = list(map(lambda r: (new_curriculum.name, r, True), new_curriculum.req_course_names))
+        self.db_cursor.executemany(
+            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",arg_list)
         self.db_connection.commit()
 
+        #Add optional courses:
+        arg_list = list(map(lambda r: (new_curriculum.name, r, False), new_curriculum.opt_course_names))
+        self.db_cursor.executemany(
+            """INSERT INTO CurriculumListings (curriculum_name, course_name, required) VALUES (%s, %s, %s)""",arg_list)
+        self.db_connection.commit()
+
+        #Add curriculum topics:
+        arg_list = list(map(lambda ct: (new_curriculum.name, ct.topic_id, ct.level, ct.subject_area, ct.time_unit), new_curriculum.req_course_names))
+        self.db_cursor.execute(
+            """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",arg_list)
+        self.db_connection.commit()
 
     def get_goal(self, new_goal):
         """Function to retrieve goal from the db"""
@@ -369,9 +374,9 @@ class DBAdapter:
             (curriculum_name,course_name, required))
         self.db_connection.commit()
 
-    def set_curriculum_topic(self, curriculum_name, topic_id, level, subject_area, time_unit):
+    def set_curriculum_topic(self, curriculum_topic):
         """Function to write curriculum topic to the db"""
         self.db_cursor.execute(
             """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",
-            (curriculum_name, topic_id, level, subject_area, time_unit))
+            (curriculum_topic.curriculum_name, curriculum_topic.topic_id, curriculum_topic.level, curriculum_topic.subject_area, curriculum_topic.time_unit))
         self.db_connection.commit()

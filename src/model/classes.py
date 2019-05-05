@@ -84,12 +84,6 @@ class Topic:
 
         return str
 
-    def set_name(self, n):
-        self.name = n
-
-    def set_id(self, mch):
-        self.id = mch
-
 
 class CurriculumTopic:
     def __init__(self):
@@ -98,33 +92,24 @@ class CurriculumTopic:
         self.level = None
         self.subject_area = None
         self.time_unit = None
+        self._linked_topic_name = None
 
     def __str__(self):
         """
         Overridden str function
         """
-        str = f"curriculum_name: {self.curriculum_name}" + \
-              f"\ntopic_id: {self.topic_id}" + \
-              f"\nlevel: {self.level}" + \
-              f"\nsubject_area: {self.subject_area}" + \
-              f"\ntime_unit: {self.time_unit}"
-        return str
+        ret = []
+        if self._linked_topic_name != None:
+            ret.append(str(self._linked_topic_name) +
+                       " (" + str(self.topic_id) + ") ")
+        else:
+            ret.append(f"Topic #{str(self.topic_id)}")
+        ret.append(f"\nSubject: {self.subject_area} (Level {self.level})")
+        ret.append(f"\nTime Units: {self.time_unit/10.0}")
+        return ''.join(ret)
 
-    def set_curriculum_name(self, n):
-        self.curriculum_name = n
-
-    def set_topic_id(self, n):
-        self.topic_id = n
-
-    def set_level(self, n):
-        self.level = n
-
-    def set_subject_area(self, n):
-        self.subject_area = n
-
-    def set_time_unit(self, n):
-        self.time_unit = n
-
+    def link_topic_name(self, topic_name):
+        self._topic_linked_name = topic_name
 
 class Section:
     def __init__(self):
@@ -147,24 +132,6 @@ class Section:
         str.append(f"comment1: {self.comment1}\n")
         str.append(f"comment2: {self.comment2}\n")
         return ''.join(str)
-
-    def set_course_name(self, n):
-        self.course_name = n
-
-    def set_semester(self, n):
-        self.semester = n
-
-    def set_unit_id(self, n):
-        self.unit_id = n
-
-    def set_num_students(self, n):
-        self.num_students = n
-
-    def set_comment1(self, n):
-        self.comment1 = n
-
-    def set_comment2(self, n):
-        self.comment2 = n
 
 class SectionGrades:
 
