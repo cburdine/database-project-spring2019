@@ -15,9 +15,9 @@ NewSectionScreenRoot:
 
     BoxLayout:
         orientation: 'vertical'
-        pos: (dp(0), dp(230))
+        pos: (dp(0), dp(270))
         width: root.width
-        height: root.height - dp(230)
+        height: root.height - dp(270)
         size_hint: (None, None)
 
         Label:
@@ -42,12 +42,12 @@ NewSectionScreenRoot:
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: None
-                height: dp(320)
+                height: dp(400)
 
                 Label:
                     text_size: self.size
                     id: live_description_label
-                    height: dp(120)
+                    height: dp(200)
                     size_hint_y: None
                     text: ''
 
@@ -72,15 +72,15 @@ NewSectionScreenRoot:
 
                         Label:
                             markup: False
-                            id: comment_1
-                            text: '<COMMENT 1>'
+                            id: comment_1_label
+                            text: ''
                             text_size: self.size
                             height: dp(80)
 
                         Label:
                             markup: False
-                            id: comment_2
-                            text: '<COMMENT 2>'
+                            id: comment_2_label
+                            text: ''
                             text_size: self.size
                             height: dp(80)
 
@@ -103,7 +103,7 @@ NewSectionScreenRoot:
         GridLayout:
             pos_hint: (None, None)
             size_hint: (None, None)
-            size: (root.width, dp(228))
+            size: (root.width, dp(260))
             rows: 10
             cols: 2
             padding: dp(10)
@@ -136,18 +136,20 @@ NewSectionScreenRoot:
                 orientation: 'horizontal'
                 height: dp(50)
 
-                    IntTextInput:
-                        on_text: root.update_live_description_callback()
-                        height: dp(50)
-                        id: year
-                        multiline: False
-                        text: ''
-                    Spinner:
-                        height: dp(50)
-                        size_hint_x: None
-                        width: dp(100)
-                        values: ('Fall', 'Summer',' )
-                        on_select: root.update_live_description_callback()
+                IntTextInput:
+                    on_text: root.update_live_description_callback()
+                    height: dp(50)
+                    id: year
+                    multiline: False
+                    text: ''
+                Spinner:
+                    id: semester
+                    height: dp(50)
+                    size_hint_x: None
+                    width: dp(100)
+                    text: 'Fall'
+                    values: ('Fall', 'Summer','Spring','Winter')
+                    on_text: root.update_live_description_callback()
 
             Label:
                 size_hint_x: None
@@ -165,7 +167,6 @@ NewSectionScreenRoot:
                 multiline: False
                 text: ''
 
-
             Label:
                 size_hint_x: None
                 width: dp(200)
@@ -181,7 +182,6 @@ NewSectionScreenRoot:
                 id: num_students
                 multiline: False
                 text: ''
-
 
             Label:
                 size_hint_x: None
