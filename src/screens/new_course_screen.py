@@ -42,6 +42,8 @@ class NewCourseScreenRoot(Widget):
         subj_code = "" if len(self.ids.subject_code.text) == 0 else f"({self.ids.subject_code.text})"
         credit_hours = "<Credit Hours>" if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
         description = "<Course Description>" if len(self.ids.description.text) == 0 else self.ids.description.text
+        course_topic_id = "<Topic_ID>"if len(self.ids.course_topic_id.text) == 0 else self.ids.course_topic_id.text
+        course_goal_id = "<Goal_ID>" if len(self.ids.course_goal_id.text) == 0 else self.ids.course_goal_id.text
 
         IND = "\n           "
         description = description.replace('\n', IND)
@@ -80,8 +82,6 @@ class NewCourseScreenRoot(Widget):
 
         already_in_db = None
         already_in_db = self.app.client_model.get_course(new_course.name)
-
-        # todo: check for duplicate submission
 
         if new_course.name is None or new_course.subject_code is None or\
                 new_course.credit_hours is None or new_course.description is None :

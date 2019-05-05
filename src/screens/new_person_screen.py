@@ -36,6 +36,9 @@ class NewPersonScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def update_live_description_callback(self):
+        print('nyc')
+
     def submit_callback(self):
         new_person = classes.Person()
 

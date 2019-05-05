@@ -36,6 +36,9 @@ class NewSectionScreenRoot(Widget):
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 
+    def update_live_description_callback(self):
+        print('nyc')
+
     def submit_callback(self):
 
         new_section = classes.Section()
@@ -43,7 +46,7 @@ class NewSectionScreenRoot(Widget):
         # getting input from ui
         new_section.course_name = None if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
         new_section.semester = None if len(self.ids.semester.text) == 0 else self.ids.semester.text
-        new_section.unit_id = None if len(self.ids.unit_id.text) == 0 else self.ids.unit_id.text
+        new_section.section_id = None if len(self.ids.section_id.text) == 0 else self.ids.section_id.text
         new_section.num_students = None if len(self.ids.num_students.text) == 0 else self.ids.num_students.text
         new_section.comment1 = None if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text
         new_section.comment2 = None if len(self.ids.comment_2.text) == 0 else self.ids.comment_2.text

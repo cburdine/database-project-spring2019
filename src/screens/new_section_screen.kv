@@ -1,6 +1,7 @@
 #:kivy 1.0
 
 #:import login_screen src.screens.main_screen
+#:import text_input_widgets src.widgets.text_input_widgets
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -11,100 +12,258 @@
 
 NewSectionScreenRoot:
 
-    AnchorLayout:
-        center: root.center
-        size: (1000, 1200)
 
-        GridLayout
-            rows: 8
+    BoxLayout:
+        orientation: 'vertical'
+        pos: (dp(0), dp(230))
+        width: root.width
+        height: root.height - dp(230)
+        size_hint: (None, None)
+
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0.37, 0.37, 0.37
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text: 'New Section'
+            size_hint: (1.0, None)
+            height: dp(40)
+
+        ScrollView:
+            scroll_type: ['content', 'bars']
+            bar_margin: dp(2)
+            bar_width: dp(16)
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(720)
+
+                Label:
+                    text_size: self.size
+                    id: live_description_label
+                    height: dp(120)
+                    size_hint_y: None
+                    text: ''
+
+                Label:
+                    markup: True
+                    text: '           [size=30]Topics:[/size]'
+                    text_size: self.size
+                    size_hint: (1.0, None)
+                    height: dp(80)
+
+                ScrollView:
+                    size_hint: (None, None)
+                    height: dp(120)
+                    width: root.width - dp(20)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 1.0
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_topics_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: topics_list
+                Label:
+                    markup: True
+                    text: '           [size=30]Required Courses:[/size]'
+                    text_size: self.size
+                    size_hint: (1.0, None)
+                    height: dp(80)
+
+                ScrollView:
+                    size_hint: (None,None)
+                    height: dp(120)
+                    width: root.width - dp(20)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 1.0
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_req_courses_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: req_courses_list
+                Label:
+                    markup: True
+                    text: '           [size=30]Elective Courses:[/size]'
+                    text_size: self.size
+                    size_hint: (1.0, None)
+                    height: dp(80)
+
+                ScrollView:
+                    size_hint: (None,None)
+                    width: root.width - dp(20)
+                    height: dp(120)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 1.0
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_opt_courses_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: opt_courses_list
+
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(100))
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+    StackLayout:
+        orientation: 'lr-bt'
+
+        GridLayout:
+            pos_hint: (None, None)
+            size_hint: (None, None)
+            size: (root.width, dp(228))
+            rows: 10
             cols: 2
-            padding: 100
-            spacing: 75
+            padding: dp(10)
+            spacing: dp(2)
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Course Name:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             TextInput:
+                on_text: root.update_live_description_callback()
                 id: course_name
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Semester:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: semester
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
-                text: 'Unit ID:'
+                width: dp(200)
+                height: dp(50)
+                text: 'Section ID:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
-                id: unit_id
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
+                id: section_id
                 multiline: False
                 text: ''
 
+
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Amount of Students:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
-            TextInput:
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: num_students
                 multiline: False
                 text: ''
 
+
             Label:
                 size_hint_x: None
-                width: 300
+                width: dp(200)
+                height: dp(50)
                 text: 'Comment 1:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
+
             TextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: comment_1
                 multiline: False
                 text: ''
 
             Label:
                 size_hint_x: None
-                width: 300
-                text: 'Comment 2'
+                width: dp(200)
+                height: dp(50)
+                text: 'Comment 2:'
                 text_size: self.size
                 halign: 'right'
                 valign: 'middle'
             TextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
                 id: comment_2
                 multiline: False
                 text: ''
 
             Widget: # empty widget
                 size_hint_x: None
-                width: 80
+                width: dp(80)
 
-            Button:
-                text: 'Back'
-                on_press: root.back_callback()
+            Widget: # empty widget
+                height: dp(50)
 
             Widget: # empty widget
                 size_hint_x: None
-                width: 80
+                width: dp(80)
 
             Button:
+                height: dp(50)
                 text: 'Submit'
                 on_press: root.submit_callback()

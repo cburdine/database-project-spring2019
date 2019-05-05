@@ -275,15 +275,10 @@ class DBAdapter:
                 ret.semester = new_section.semester
                 ret.unit_id = new_section.unit_id
             else:
-                ret.num_students = None
-                ret.comment1 = None
-                ret.comment2 = None
-                ret.course_name = None
-                ret.semester = None
-                ret.unit_id = None
+                ret = None
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve person: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve section: " + str(id))
 
         return ret
 
@@ -336,9 +331,7 @@ class DBAdapter:
                 ret.id = new_goal.id
                 ret.curriculum_name = new_goal.curriculum_name
             else:
-                ret.description = None
-                ret.id = None
-                ret.curriculum_name = None
+                ret = None
 
         except:
             logging.warning("DBAdapter: Error- cannot retrieve goal: " + str(id))
@@ -367,6 +360,27 @@ class DBAdapter:
             (course_name, topic_id))
         self.db_connection.commit()
 
+    def get_course_topic(self, topic_id, course_name):
+        """Function to get a course topic from the db"""
+        ret = None
+        try:
+            self.db_cursor.execute(
+                """SELECT course_name, topic_id FROM CourseTopics WHERE course_name = %s AND topic_id = %s""",
+                (course_name, topic_id))
+            ct = self.db_cursor.fetchall()
+            ret = Course()
+            if ct:
+                cname = ct[0][0]
+                ctopic = ct[0][1]
+                ret = [cname, ctopic]
+            else:
+                ret = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve course topic: " + str(id))
+
+        return ret
+
     def set_curriculum_course(self, curriculum_name, course_name, required):
         """Function to write curriculum course to the db"""
         self.db_cursor.execute(
@@ -380,3 +394,26 @@ class DBAdapter:
             """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",
             (curriculum_topic.curriculum_name, curriculum_topic.topic_id, curriculum_topic.level, curriculum_topic.subject_area, curriculum_topic.time_unit))
         self.db_connection.commit()
+
+    def get_curriculum_topic(self, curriculum_name, curriculum_topic):
+        """Function to retrieve curriculum topic from the db"""
+        ret = None
+        try:
+            self.db_cursor.execute(
+                """SELECT course_name, topic_id, level, subject_area, time_unit FROM CurriculumTopics WHERE curriculum_name = %s AND topic_id = %s""",
+                (curriculum_name, curriculum_topic))
+            ct = self.db_cursor.fetchall()
+            if ct:
+                cname = ct[0][0]
+                ctopic = ct[0][1]
+                level = ct[0][2]
+                subject_area = ct[0][3]
+                time_unit = ct[0][4]
+                ret = [cname, ctopic, level, subject_area, time_unit]
+            else:
+                ret = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve curriculum topic: " + str(id))
+
+        return ret

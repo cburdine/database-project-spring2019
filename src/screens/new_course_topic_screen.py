@@ -34,7 +34,10 @@ class NewCourseTopicScreenRoot(Widget):
 
     def back_callback(self):
         self.app.screen_manager.transition.direction = 'right'
-        self.app.screen_manager.current = 'main'
+        self.app.screen_manager.current = 'add_new_screen'
+
+    def update_live_description_callback(self):
+        print("ud live")
 
     def submit_callback(self):
         # getting input from ui
@@ -60,7 +63,10 @@ class NewCourseTopicScreenRoot(Widget):
             else:
                 course_in_db = True
 
-        # todo: check for duplicate submission
+        already_in_db = False
+        ct = self.app.client_model.get_course_topic(topic_id, course_name)
+        if ct is not None:
+            already_in_db = True
 
         # validating input
         if topic_id is None or course_name is None:
@@ -74,6 +80,10 @@ class NewCourseTopicScreenRoot(Widget):
         elif course_in_db is False:
             logging.info("NewCourseGoalScreenRoot: Course not in db")
             dialogue = MessageDialogue(title="db error", message="Course with this name is not in database")
+            dialogue.open()
+        elif already_in_db:
+            logging.info("NewCourseGoalScreenRoot: Duplicate submission")
+            dialogue = MessageDialogue(title="db error", message="Course topic already in the db")
             dialogue.open()
         else:
             self.app.client_model.set_course_topic(topic_id, course_name)

@@ -1,5 +1,7 @@
 from src.db.adapter import DBAdapter
-from src.model.classes import Person, CurriculumTopic
+from src.model.classes import Person, CurriculumTopic, Curriculum
+import logging
+from src.widgets.dialogues import MessageDialogue
 
 """
 The purpose of this class is to serve as a
@@ -135,6 +137,10 @@ class ClientModel:
         """Function to set course topic"""
         self.adapter.set_course_topic(topic_id,course_name)
 
+    def get_course_topic(self, topic_id, course_name):
+        """Function to get the course topic"""
+        return self.adapter.get_course_topic(topic_id, course_name)
+
     def set_curriculum_course(self, curriculum_name, course_name, required):
         """Function to set curriculum course in the db"""
         self.adapter.set_curriculum_course(curriculum_name, course_name, required)
@@ -143,4 +149,129 @@ class ClientModel:
         """Function to set curriculum topic"""
         self.adapter.set_curriculum_topic(curriculum_topic)
 
+    def get_curriculum_topic(self, curriculum_name, curriculum_topic_id):
+        """Function to retrieve curriculum topic from the db"""
+        return self.adapter.get_curriculum_topic(curriculum_name, curriculum_topic_id)
 
+    def evaluate_curriculum(self, curriculum_name, required_percentage = .5):
+        """Function to evaluate the curriculum in terms of coverage by topics and returning a string
+        defining the topic coverage of the curriculum"""
+
+        # making sure the curriculum exists
+        curriculum_obj = Curriculum()
+        curriculum_obj = self.get_curriculum(curriculum_name)
+        if curriculum_obj.name is None:
+            logging.info("ClentModel: Invalid Curriculum")
+            dialogue = MessageDialogue(title="Database error",
+                                       message="The Curriculum does not exist in the db.")
+            dialogue.open()
+        else:
+
+            level_1_topics_covered_by_required_courses = []
+            level_2_topics_covered_by_required_courses = []
+            level_3_topics_covered_by_required_courses = []
+
+            level_1_topics_covered_period = []
+            level_2_topics_covered_period = []
+            level_3_topics_covered_period = []
+
+            level_1_topics = []
+            level_2_topics = []
+            level_3_topics = []
+
+            for i in curriculum_obj.cur_topics:
+                q = self.get_curriculum_topic(curriculum_obj.name, i)
+                c_name = i[0]
+                curriculum_topic = i[1]
+                level = i[2]
+                subject_area = i[3]
+                time_unit = i[4]
+
+                if level == 1:
+                    level_1_topics.append(q)
+                elif level == 2:
+                    level_2_topics.append(q)
+                elif level == 3:
+                    level_3_topics.append(q)
+
+                hours_to_cover = time_unit
+
+                for j in curriculum_obj.req_course_names:
+                    k = self.get_course_topic(i, j)
+                    course_topic = k[1]
+
+                    if curriculum_topic == course_topic:
+                        d = self.get_course(j)
+                        cred_hours = d.credit_hours
+                        hours_to_cover -= cred_hours
+
+                if hours_to_cover <= 0:
+                    if level == 1:
+                        level_1_topics_covered_by_required_courses.append(q)
+                    elif level == 2:
+                        level_2_topics_covered_by_required_courses.append(q)
+                    elif level == 3:
+                        level_3_topics_covered_by_required_courses.append(q)
+                else:
+
+                    for j in curriculum_obj.opt_course_names:
+                        k = self.get_course_topic(i, j)
+                        course_topic = k[1]
+                        if curriculum_topic == course_topic:
+                            d = self.get_course(j)
+                            cred_hours = d.credit_hours
+                            hours_to_cover -= cred_hours
+
+
+                    if hours_to_cover <= 0:
+                        if level == 1:
+                            level_1_topics_covered_period.append(q)
+                        elif level == 2:
+                            level_2_topics_covered_period.append(q)
+                        elif level == 3:
+                            level_3_topics_covered_period.append(q)
+
+
+
+
+
+            if len(level_1_topics_covered_by_required_courses) == len(level_1_topics):
+                all_1_covered_by_required = True
+            else:
+                all_1_covered_by_required = False
+
+            if len(level_2_topics_covered_by_required_courses) == len(level_2_topics):
+                all_2_covered_by_required = True
+            else:
+                all_2_covered_by_required = False
+
+            if level_3_topics_covered_by_required_courses:
+                level_3_covered_by_required = True
+            else:
+                level_3_covered_by_required = False
+
+
+            if len(level_1_topics_covered_period) == len(level_1_topics):
+                all_1_covered = True
+            else:
+                all_1_covered = False
+
+            if len(level_2_topics_covered_period) == len(level_2_topics):
+                all_2_covered = True
+            else:
+                all_2_covered = False
+
+
+
+            if all_1_covered_by_required and all_2_covered_by_required and len(level_3_topics_covered_by_required_courses)/len(level_3_topics) >= required_percentage:
+                return 'Extensive'
+            elif all_1_covered_by_required and all_2_covered_by_required and len(level_3_topics_covered_by_required_courses)/len(level_3_topics) < required_percentage:
+                return 'Inclusive'
+            elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) >= required_percentage and all_1_covered and all_2_covered:
+                return 'Basic-plus'
+            elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) >= required_percentage:
+                return 'Basic'
+            elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) < required_percentage:
+                return 'Unsatisfactory'
+            elif not all_1_covered_by_required:
+                return 'Substandard'
