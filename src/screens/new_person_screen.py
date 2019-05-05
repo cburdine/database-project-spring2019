@@ -38,7 +38,7 @@ class NewPersonScreenRoot(Widget):
 
     def update_live_description_callback(self):
         person_name = "<New Person>" if len(self.ids.person_name.text) == 0 else self.ids.person_name.text
-        person_id = "<ID>" if len(self.id.person_id) == 0 else self.ids.person_id.text
+        person_id = "<ID>" if len(self.ids.person_id.text) == 0 else self.ids.person_id.text
 
         IND = "\n           "
         description_label = []
@@ -72,23 +72,21 @@ class NewPersonScreenRoot(Widget):
             logging.info("NewPersonScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
             dialogue.open()
+
         elif not id_is_numeric:
             logging.info("NewPersonScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="id must be numeric")
             dialogue.open()
+
         elif already_in_db is not None:
             logging.info("NewPersonScreenRoot: trying to create somehting that's already there")
             dialogue = MessageDialogue(title="DB error", message="entry already in the database")
             dialogue.open()
+
         else:
-            print('nyc')
             # we can safely add it to the db
             # note: we have to update our client model as well as add it to the db
             self.app.client_model.set_person(new_person)
-            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
-            dialogue.open()
-            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
 
-
-        print("submit")

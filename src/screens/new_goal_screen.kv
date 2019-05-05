@@ -13,11 +13,10 @@
 NewGoalScreenRoot:
 
 
-    BoxLayout:
-        orientation: 'vertical'
-        pos: (dp(0), dp(230))
+    StackLayout:
+        orientation: 'lr-tb'
         width: root.width
-        height: root.height - dp(230)
+        height: root.height
         size_hint: (None, None)
 
         Label:
@@ -30,6 +29,14 @@ NewGoalScreenRoot:
             text: 'New Goal'
             size_hint: (1.0, None)
             height: dp(40)
+
+        Label:
+            width: root.width
+            height: root.height
+            size_hint: (None, None)
+            text_size: self.size
+            id: live_description_label
+            text: ''
 
     AnchorLayout:
         anchor_x: 'left'
@@ -49,8 +56,8 @@ NewGoalScreenRoot:
         GridLayout:
             pos_hint: (None, None)
             size_hint: (None, None)
-            size: (root.width, dp(228))
-            rows: 7
+            size: (root.width, dp(170))
+            rows: 5
             cols: 2
             padding: dp(10)
             spacing: dp(2)
@@ -98,7 +105,7 @@ NewGoalScreenRoot:
             TextInput:
                 on_text: root.update_live_description_callback()
                 height: dp(50)
-                id: description
+                id: goal_description
                 multiline: False
                 text: ''
 

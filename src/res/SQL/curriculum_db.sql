@@ -186,8 +186,6 @@ CREATE TABLE IF NOT EXISTS `SectionGoalGrades` (
     `count_dp` int NOT NULL,
     `count_d` int NOT NULL,
     `count_dm` int NOT NULL,
-
-    `count_f` int NOT NULL,
     
     PRIMARY KEY (`course`,`semester`,`year`,`section_id`,`goal_id`),
     FOREIGN KEY (`course`,`semester`,`year`,`section_id`) REFERENCES Section(`course_name`,`semester`,`year`,`section_id`)

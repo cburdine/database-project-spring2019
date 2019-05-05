@@ -95,4 +95,3 @@ class NewTopicScreenRoot(Widget):
             self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
 
-        print("submit")
