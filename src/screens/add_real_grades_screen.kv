@@ -1,6 +1,7 @@
 #:kivy 1.0
 
-#:import main_screen src.screens.main_screen
+#:import login_screen src.screens.main_screen
+#:import tree_widgets src.widgets.tree_widgets
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -12,10 +13,140 @@
 
 
 AddRealGradesScreenRoot:
+    on_size: root.resize_callback()
+
+    BoxLayout:
+        id: boxlayoutframe
+        orientation: 'horizontal'
+        size: root.size
+
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+            id: sv_container
+
+            Label:
+                canvas.before:
+                    Color:
+                        rgb: 0.37, 0.37, 0.37
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                text: 'Course'
+                size_hint: (1.0, None)
+                height: dp(40)
+
+            Spinner:
+                id: semester
+                text: 'Fall'
+                values: ('Fall', 'Summer','Spring','Winter')
+                size_hint_y: None
+                height: dp(50)
+                on_text: root.update_live_description_callback()
+
+            Label:
+                size_hint_y: None
+                height: dp(50)
+                text: 'year'
+                text_size: self.size
+                halign: 'center'
+                valign: 'middle'
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                size_hint_y: None
+                height: dp(50)
+                id: year
+                multiline: False
+                text: ''
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                id: sv_left
+                canvas.before:
+                    Color:
+                        rgb: 0.05, 0.05, 0.05
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                StackLayout:
+                    id: sv_container
+                    orientation: 'lr-tb'
+                    size_hint_y: None
+                    height: dp(2000)
+
+                    RowSelectorWidget:
+                        pos: root.x, root.y
+                        size_hint_x: 1.0
+                        size_hint_y: 1.0
+                        id: course_selector
+
+
+        ScrollView:
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                id: sv_description_container
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    canvas.before:
+                        Color:
+                            rgb: 0.37, 0.37, 0.37
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    text: 'Sections'
+                    background_color: (1,0,0,1)
+                    size_hint_y: None
+                    height: dp(40)
+
+                Label:
+                    text_size: self.size
+                    id: description_field
+                    text: ''
+
+                Label:
+                    text_size: self.size
+                    id: section_tree_label
+                    text: 'Sections'
+                    size_hint_y: None
+                    height: dp(40)
+
+                ScrollView:
+                    height: dp(200)
+                    size_hint_y: None
+                    do_scroll_x: False
+                    do_scroll_y: True
+
+                    StackLayout:
+                        id: sv_sections
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        height: dp(400)
+
+                        RowSelectorWidget:
+                            canvas.before:
+                                Color:
+                                    rgb: 1.0, 0.05, 0.05
+                                Rectangle:
+                                    pos: self.pos
+                                    size: self.size
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: sections_tree
+
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'bottom'
-        size: (dp(100), dp(100))
+        size: (dp(100), dp(40))
         padding: dp(10)
 
         Button:
