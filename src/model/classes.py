@@ -141,7 +141,8 @@ class SectionGrades:
     def __init__(self):
         self.course = None
         self.semester = None
-        self.unit_id = None
+        self.year = None
+        self.section_id = None
         self.count_ap = 0
         self.count_a = 0
         self.count_am = 0
@@ -154,6 +155,7 @@ class SectionGrades:
         self.count_dp = 0
         self.count_d = 0
         self.count_dm = 0
+        self.count_f = 0
         self.count_i = 0
         self.count_w = 0
 
@@ -235,7 +237,8 @@ class SectionGoalGrades:
     def __init__(self):
         self.course = None
         self.semester = None
-        self.unit_id = None
+        self.year = None
+        self.section_id = None
         self.goal_id = None
         self.count_ap = 0
         self.count_a = 0
