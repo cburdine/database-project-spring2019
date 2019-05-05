@@ -12,7 +12,7 @@
 
 
 
-CurriculumDashboardScreenRoot:
+CourseDashboardScreenRoot:
     on_size: root.resize_callback()
 
     BoxLayout:
@@ -33,7 +33,7 @@ CurriculumDashboardScreenRoot:
                     Rectangle:
                         pos: self.pos
                         size: self.size
-                text: 'Curriculum'
+                text: 'Course'
                 size_hint: (1.0, None)
                 height: dp(40)
 
@@ -58,7 +58,7 @@ CurriculumDashboardScreenRoot:
                         pos: root.x, root.y
                         size_hint_x: 1.0
                         size_hint_y: 1.0
-                        id: curriculum_selector
+                        id: course_selector
         ScrollView:
             id: sv_page
             do_scroll_x: False
@@ -77,7 +77,7 @@ CurriculumDashboardScreenRoot:
                         Rectangle:
                             pos: self.pos
                             size: self.size
-                    text: 'Curriculum Description'
+                    text: 'Course Description'
                     background_color: (1,0,0,1)
                     size_hint_y: None
                     height: dp(40)
@@ -112,7 +112,7 @@ CurriculumDashboardScreenRoot:
 
                 Label:
                     text_size: self.size
-                    id: req_courses_tree_label
+                    id: goal_tree_label
                     text: ''
 
                 ScrollView:
@@ -122,7 +122,7 @@ CurriculumDashboardScreenRoot:
                     do_scroll_y: True
 
                     StackLayout:
-                        id: sv_req_courses
+                        id: sv_goals
                         orientation: 'lr-tb'
                         size_hint_y: None
                         height: dp(400)
@@ -131,30 +131,7 @@ CurriculumDashboardScreenRoot:
                             pos: root.x, root.y
                             size_hint_x: 1.0
                             size_hint_y: 1.0
-                            id: req_courses_tree
-
-                Label:
-                    text_size: self.size
-                    id: opt_courses_tree_label
-                    text: ''
-
-                ScrollView:
-                    height: dp(200)
-                    size_hint_y: None
-                    do_scroll_x: False
-                    do_scroll_y: True
-
-                    StackLayout:
-                        id: sv_opt_courses
-                        orientation: 'lr-tb'
-                        size_hint_y: None
-                        height: dp(400)
-
-                        RowSelectorWidget:
-                            pos: root.x, root.y
-                            size_hint_x: 1.0
-                            size_hint_y: 1.0
-                            id: opt_courses_tree
+                            id: goals_tree
 
     AnchorLayout:
         anchor_x: 'left'

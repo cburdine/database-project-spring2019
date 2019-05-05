@@ -45,9 +45,9 @@ class CourseDashboardScreenRoot(Widget):
 
         #sort rows here...
 
-        self.course_selector = self.ids.curriculum_selector
+        self.course_selector = self.ids.course_selector
         self.course_selector.setRows(rows)
-        self.course_selector.set_callback(self.set_curriculum_text_description)
+        self.course_selector.set_callback(self.set_course_text_description)
         self.ids.sv_left.scroll_type = ['content', 'bars']
         self.ids.sv_left.bar_margin = dp(2)
         self.ids.sv_left.bar_width = dp(10)
@@ -83,7 +83,7 @@ class CourseDashboardScreenRoot(Widget):
 
     def set_course_text_description(self, *args):
 
-        cur_name = self.curriculum_selector.get_selected_row()
+        cur_name = self.course_selector.get_selected_row()
         if cur_name != None:
             #A str Builder object might be better to use later on:
             IND = "\n     "
