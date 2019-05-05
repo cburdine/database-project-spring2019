@@ -121,9 +121,12 @@ class DBAdapter:
         #    logging.warning("DBAdapter: Error- cannot retrieve Curriculum " + str(name))
         #    return None
         cur = Curriculum()
-        cur.name = attribs[0][0]
-        cur.min_credit_hours = attribs[0][1]
-        cur.id_in_charge = attribs[0][2]
+        if attribs:
+            cur.name = attribs[0][0]
+            cur.min_credit_hours = attribs[0][1]
+            cur.id_in_charge = attribs[0][2]
+        else:
+            return None
 
         for t in topics:
             ct = CurriculumTopic()
@@ -232,9 +235,12 @@ class DBAdapter:
         self.db_cursor.execute(TOPIC_QUERY, (new_topic.name, new_topic.id))
         self.db_connection.commit()
 
-    def set_person(self, new_person):
+    def set_person(self, new_person, updating=False):
         """Function to add a new person to the database"""
-        self.db_cursor.execute("""INSERT INTO Person (id, name) VALUES (%s, %s)""", (new_person.id, new_person.name))
+        PERSON_QUERY = """UPDATE Person SET name = %s WHERE id = %s""" if updating \
+            else """INSERT INTO Person (name, id) VALUES (%s, %s)"""
+
+        self.db_cursor.execute(PERSON_QUERY, (new_person.name, new_person.id))
         self.db_connection.commit()
 
     def get_course(self, name):
@@ -262,7 +268,7 @@ class DBAdapter:
         COURSE_QUERY = """UPDATE Course SET subject_code = %s, credit_hours = %s, description = %s WHERE name = %s""" if updating \
             else """INSERT INTO Course (subject_code, credit_hours, description, name) VALUES (%s, %s, %s, %s)"""
 
-        self.db_cursor.execute(COURSE_QUERY, (new_course.name, new_course.subject_code, new_course.credit_hours, new_course.description))
+        self.db_cursor.execute(COURSE_QUERY, (new_course.subject_code, new_course.credit_hours, new_course.description, new_course.name))
         self.db_connection.commit()
 
         # Add course topics and course goals:

@@ -150,7 +150,7 @@ class NewCourseScreenRoot(Widget):
         new_course.name = None if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
         new_course.subject_code = None if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
         new_course.credit_hours = None if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
-        new_course.description = None if len(self.ids.description.text) == 0 else self.ids.description.text
+        new_course.description = None if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text
         new_course.topics = self.course_topics.keys()
         new_course.goals = self.course_goals.keys()
 
@@ -173,5 +173,7 @@ class NewCourseScreenRoot(Widget):
         else:
             # can safely enter course into the db
             self.app.client_model.set_course(new_course)
+            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
+            dialogue.open()
             self.app.screen_manager.transition.direction = 'left'
             self.app.screen_manager.current = 'main'

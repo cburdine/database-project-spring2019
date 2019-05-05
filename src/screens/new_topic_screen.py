@@ -84,7 +84,7 @@ class NewTopicScreenRoot(Widget):
             logging.info("NewTopicScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="ID must be numeric")
             dialogue.open()
-        elif already_in_db.name is not None:
+        elif already_in_db is not None:
             logging.info("NewTopicScreenRoot: trying to create somehting that's already there")
             dialogue = MessageDialogue(title="DB error", message="entry already in the database")
             dialogue.open()
