@@ -37,16 +37,6 @@ class ClientModel:
                 self._person_map[id] = p
                 return p
 
-    def get_curriculum_names(self):
-
-        if len(self._curricula_map.keys()) <= 0:
-            self.update_curriculum_names()
-        return self._curricula_map.keys()
-
-    def update_curriculum_names(self):
-        for name in self.adapter.get_curricula_names():
-            self._curricula_map[name] = None
-
     def get_curriculum(self, name):
         if name in self._curricula_map.keys():
             if self._curricula_map[name] == None:
@@ -86,6 +76,8 @@ class ClientModel:
     def get_course(self, course_name):
         """Function to retrieve a topic from the db"""
         if course_name in self._course_map.keys():
+            if self._course_map[course_name] is None:
+                self._course_map[course_name] = self.adapter.get_course(course_name)
             return self._course_map[course_name]
         else:
             c = self.adapter.get_course(course_name)
@@ -99,15 +91,15 @@ class ClientModel:
         self._course_map[new_course.name] = new_course
 
     def get_section(self, new_section):
-        if new_section.unit_id in self._section_map.keys():
-            return self._section_map[new_section.unit_id]
+        if new_section.section_id in self._section_map.keys():
+            return self._section_map[new_section.section_id]
         else:
             return self.adapter.get_section(new_section)
 
     def set_section(self, new_section, updating=False):
         """Function that adds new section to the database"""
         self.adapter.set_section(new_section, updating)
-        self._section_map[new_section.unit_id] = new_section
+        self._section_map[new_section.section_id] = new_section
 
     def set_curriculum(self, new_curriculum, updating=False):
         """Function to set new curriculum"""

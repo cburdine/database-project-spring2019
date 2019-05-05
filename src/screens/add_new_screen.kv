@@ -27,7 +27,7 @@ AddNewScreenRoot:
         size: (dp(400), dp(240))
 
         GridLayout
-            rows: 8
+            rows: 6
             cols: 1
             padding: dp(5)
             spacing: dp(8)
@@ -35,10 +35,6 @@ AddNewScreenRoot:
             Button:
                 text: 'New Curriculum'
                 on_press: root.add_curriculum_callback()
-
-            Button:
-                text: 'New Topic'
-                on_press: root.add_topic_callback()
 
             Button:
                 text: 'New Course'
@@ -49,17 +45,13 @@ AddNewScreenRoot:
                 on_press: root.add_section_callback()
 
             Button:
-                text: 'New Person'
-                on_press: root.add_person_callback()
+                text: 'New Topic'
+                on_press: root.add_topic_callback()
 
             Button:
                 text: 'New Goal'
                 on_press: root.add_goal_callback()
 
             Button:
-                text: 'New Course Goal'
-                on_press: root.add_course_goal_callback()
-
-            Button:
-                text: 'New Course Topic'
-                on_press: root.add_course_topic_callback()
+                text: 'New Person'
+                on_press: root.add_person_callback()

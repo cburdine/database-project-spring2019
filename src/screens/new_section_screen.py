@@ -74,27 +74,26 @@ class NewSectionScreenRoot(Widget):
         new_section = classes.Section()
 
         # getting input from ui
+        sem_char = 'F'
+        if self.ids.semester.text is 'Winter':
+            sem_char = 'W'
+        elif self.ids.semester.text is 'Summer':
+            sem_char = 'S'
+        elif self.ids.semester.text is 'Spring':
+            sem_char = 'R'
+
         new_section.course_name = None if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
-        new_section.semester = None if len(self.ids.semester.text) == 0 else self.ids.semester.text
+        new_section.semester = sem_char
+        new_section.year = None if len(self.ids.year.text) == 0 else self.ids.year.text
         new_section.section_id = None if len(self.ids.section_id.text) == 0 else self.ids.section_id.text
         new_section.num_students = None if len(self.ids.num_students.text) == 0 else self.ids.num_students.text
-        new_section.comment1 = None if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text
-        new_section.comment2 = None if len(self.ids.comment_2.text) == 0 else self.ids.comment_2.text
+        new_section.comment1 = self.ids.comment_1.text
+        new_section.comment2 = self.ids.comment_2.text
 
         # to validate input...
         #       semester must be a character
         #       unit_id and num_students must be numbers
         #       course must be a legit course
-
-        if new_section.unit_id is not None:
-            unit_id_is_numeric = False
-            if str.isdigit(new_section.unit_id):
-                unit_id_is_numeric = True
-
-        if new_section.num_students is not None:
-            num_students_is_numeric = False
-            if str.isdigit(new_section.num_students):
-                num_students_is_numeric = True
 
         course_not_in_db = None
         course_not_in_db = self.app.client_model.get_course(new_section.course_name)
@@ -103,33 +102,21 @@ class NewSectionScreenRoot(Widget):
         already_in_db = self.app.client_model.get_section(new_section)
 
 
-        if new_section.course_name is None or new_section.unit_id is None \
+        if new_section.course_name is None or new_section.section_id is None \
                 or new_section.semester is None or new_section.num_students is None:
             logging.info("NewSectionScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
+            dialogue = MessageDialogue(title="Format error", message="All fields must contain input.")
             dialogue.open()
-        elif not unit_id_is_numeric:
-            logging.info("NewSectionScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="Unit id must be numeric")
-            dialogue.open()
-        elif not num_students_is_numeric:
-            logging.info("NewSectionScreenRoot: some text fields lack input")
-            dialogue = MessageDialogue(title="Format error", message="num students must be numeric")
-            dialogue.open()
-        elif course_not_in_db.name is None:
+        elif course_not_in_db is None:
             logging.info("NewSectionScreenRoot: db issue")
             dialogue = MessageDialogue(title="Database error", message="course is not in the db")
             dialogue.open()
-        elif already_in_db.unit_id is not None:
-            logging.info("NewSectionScreenRoot: trying to create somehting that's already there")
-            dialogue = MessageDialogue(title="DB error", message="entry already in the database")
+        elif already_in_db is not None:
+            logging.info("NewSectionScreenRoot: trying to create something that's already there")
+            dialogue = MessageDialogue(title="DB error", message="Entry is already in the database.")
             dialogue.open()
         else:
             # can safely add it to the database
             self.app.client_model.set_section(new_section)
-            dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
-            dialogue.open()
-            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'main'
-
-        print("submit")

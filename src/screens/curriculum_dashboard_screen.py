@@ -41,7 +41,7 @@ class CurriculumDashboardScreenRoot(Widget):
 
     #Ensure widgets are instantiated before calling this:
     def populate(self):
-        rows = self.app.client_model.get_curriculum_names()
+        rows = self.app.client_model.adapter.get_curricula_names()
         self.curriculum_selector = self.ids.curriculum_selector
         self.curriculum_selector.setRows(rows)
         self.curriculum_selector.set_callback(self.set_curriculum_text_description)

@@ -102,6 +102,21 @@ class DBAdapter:
 
         return return_list
 
+    def get_course_names(self):
+        COURSE_NAMES = """SELECT name FROM Course"""
+        return_list = []
+
+        try:
+            self.db_cursor.execute(COURSE_NAMES)
+            self.db_connection.commit()
+            tups = self.db_cursor.fetchall()
+            for t in tups:
+                return_list.append(t[0])
+        except:
+           logging.warning("DBAdapter: Error- cannot retrieve Course names.")
+
+        return return_list
+
     def get_curriculum(self, name):
         CURRICULUM = """SELECT * FROM Curriculum WHERE name = %s"""
         TOPICS = """SELECT * FROM CurriculumTopics WHERE curriculum_name = %s"""
@@ -303,13 +318,18 @@ class DBAdapter:
 
         return ret
 
-    def set_section(self, new_section):
+    def set_section(self, new_section, updating=False):
         """Function for adding a section to the db"""
-        SECTION_QUERY = """UPDATE Section SET num_students = %s, comment1 = %s, comment2 = %s WHERE course_name = %s, semester = %s, unit_id = %s""" if updating \
-            else """INSERT INTO Section (course_name, semester, unit_id, num_students, comment1, comment2) VALUES (%s, %s, %s, %s, %s, %s)"""
+        SECTION_QUERY = """UPDATE Section SET num_students = %s, comment1 = %s, comment2 = %s WHERE course_name = %s, semester = %s, section_id = %s, year = %s""" if updating \
+            else """INSERT INTO Section (course_name, semester, section_id, num_students, comment1, comment2, year) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
 
-        self.db_cursor.execute(SECTION_QUERY,
-            (new_section.num_students, new_section.comment1, new_section.comment2, new_section.course_name, new_section.semester, new_section.unit_id))
+        if updating:
+            self.db_cursor.execute(SECTION_QUERY,
+                (new_section.num_students, new_section.comment1, new_section.comment2, new_section.course_name, new_section.semester, new_section.section_id, new_section.year))
+        else:
+            self.db_cursor.execute(SECTION_QUERY,
+                                   (new_section.course_name, new_section.semester, new_section.section_id,
+                                    new_section.num_students, new_section.comment1, new_section.comment2, new_section.year))
         self.db_connection.commit()
 
     def set_curriculum(self, new_curriculum, updating=False):
