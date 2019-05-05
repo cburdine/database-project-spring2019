@@ -409,7 +409,7 @@ class DBAdapter:
         try:
             self.db_cursor.execute(GET_ALL_CONTEXTS,(goalId,))
             descriptions = self.db_cursor.fetchall()
-            if len(descriptions) is 1:
+            if len(descriptions) <= 0:
                 return None
 
             ret_str = []

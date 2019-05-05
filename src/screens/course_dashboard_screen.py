@@ -71,11 +71,19 @@ class CourseDashboardScreenRoot(Widget):
             Clock.schedule_once(self.set_course_text_description, 0.0)
 
     def set_topics_tree(self, course):
-        self.ids.topics_tree.setRows(course.topics)
+        topic_text_list = []
+        for t_id in course.topics:
+            t = self.app.client_model.get_topic(id=t_id)
+            topic_text_list.append(t)
+        self.ids.topics_tree.setRows(topic_text_list)
         self.ids.sv_topics.height = self.ids.topics_tree.get_height()
 
     def set_goals_tree(self, course):
-        self.ids.goals_tree.setRows(course.goals)
+
+        cf_goals_list = []
+        for g_id in course.goals:
+            cf_goals_list.append(self.app.client_model.get_context_free_goal(g_id))
+        self.ids.goals_tree.setRows(cf_goals_list)
         self.ids.sv_goals.height = self.ids.goals_tree.get_height()
 
 
@@ -88,15 +96,6 @@ class CourseDashboardScreenRoot(Widget):
             ENDL = "\n"
 
             course = self.app.client_model.get_course(course_name)
-
-            print(course.topics)
-            for c in course.topics:
-                c_topic = self.app.client_model.get_topic(id=c)
-
-                """
-                if c_topic is not None:
-                    c._linked_topic_name = c_topic.name
-                """
 
             self.set_goals_tree(course)
             self.set_topics_tree(course)

@@ -1,5 +1,5 @@
 from src.db.adapter import DBAdapter
-from src.model.classes import Person, CurriculumTopic, Curriculum, Goal, Section, SectionGrades, SectionGoalGrades
+from src.model.classes import Person, CurriculumTopic, Curriculum, Goal, Section, SectionGrades, SectionGoalGrades, ContextFreeGoal
 import logging
 from src.widgets.dialogues import MessageDialogue
 
@@ -298,6 +298,16 @@ class ClientModel:
 
         return goal_valid
 
+    def get_context_free_goal(self, id):
+
+        desc = self.adapter.fetch_goal_context_description(goalId=id)
+        if desc is None:
+            return None
+        else:
+            cfg = ContextFreeGoal()
+            cfg.description = desc
+            cfg.id = id
+        return cfg
 
     def get_section_grades(self, section):
         """Auxilary function to get_section_statistics to get the grades for each section"""

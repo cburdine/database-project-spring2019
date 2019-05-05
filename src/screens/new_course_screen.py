@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 from src.model import classes
-from src.db import adapter
+from kivy.metrics import dp
 import logging
 from src.widgets.dialogues import MessageDialogue
 
@@ -56,7 +56,7 @@ class NewCourseScreenRoot(Widget):
         else:
             del self.course_goals[rem_goal.id]
             self.ids.goals_list.remove_selected_row()
-            self.ids.sv_goals_list.height = self.ids.goals_list.get_height()
+            self.ids.sv_goals_list.height = max(dp(200), self.ids.goals_list.get_height(expected_node_height=2.0))
 
     def remove_topic_callback(self):
         rem_topic = self.ids.topics_list.get_selected_row()
@@ -66,7 +66,7 @@ class NewCourseScreenRoot(Widget):
         else:
             del self.course_topics[rem_topic.id]
             self.ids.topics_list.remove_selected_row()
-            self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
+            self.ids.sv_topics_list.height = max(dp(200), self.ids.topics_list.get_height())
 
     def add_topic_callback(self):
         topic_id_txt = self.ids.course_topic_id.text
@@ -98,11 +98,11 @@ class NewCourseScreenRoot(Widget):
     def add_goal_callback(self):
         goal_id_txt = self.ids.course_goal_id.text
         if len(goal_id_txt) > 0:
-            goal_text = self.app.client_model.adapter.fetch_goal_context_description(int(goal_id_txt))
+            goal = self.app.client_model.get_context_free_goal(int(goal_id_txt))
         else:
-            goal_text = None
+            goal = None
 
-        if goal_text is None:
+        if goal is None:
             logging.info("NewCourseScreenRoot: Could not find goal with id " + str(goal_id_txt))
             dialogue = MessageDialogue(title="Database Error",
                                        message="The Goal with id " + str(goal_id_txt) +
@@ -115,8 +115,8 @@ class NewCourseScreenRoot(Widget):
                                                "\nhas already been added.")
             dialogue.open()
         else:
-            self.course_goals[int(goal_id_txt)] = goal_text
-            self.ids.goals_list.addRow(goal_text)
+            self.course_goals[int(goal_id_txt)] = goal
+            self.ids.goals_list.addRow(goal)
             self.ids.sv_goals_list.height = self.ids.goals_list.get_height(expected_node_height=2.0)
             self.ids.course_goal_id.text = ''
 

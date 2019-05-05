@@ -341,3 +341,13 @@ class Goal:
     def __hash__(self):
         return hash(self.id, self.curriculum_name)
 
+class ContextFreeGoal:
+
+    def __init__(self):
+        self.id = None
+        self.description = None
+
+    def __str__(self):
+        return self.description
+
+
