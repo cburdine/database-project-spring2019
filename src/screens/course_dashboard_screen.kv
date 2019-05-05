@@ -90,7 +90,9 @@ CourseDashboardScreenRoot:
                 Label:
                     text_size: self.size
                     id: topic_tree_label
-                    text: ''
+                    text: 'Topics'
+                    size_hint_y: None
+                    height: dp(40)
 
                 ScrollView:
                     height: dp(200)
@@ -105,6 +107,12 @@ CourseDashboardScreenRoot:
                         height: dp(400)
 
                         RowSelectorWidget:
+                            canvas.before:
+                                Color:
+                                    rgb: 1.0, 0.05, 0.05
+                                Rectangle:
+                                    pos: self.pos
+                                    size: self.size
                             pos: root.x, root.y
                             size_hint_x: 1.0
                             size_hint_y: 1.0
@@ -113,7 +121,9 @@ CourseDashboardScreenRoot:
                 Label:
                     text_size: self.size
                     id: goal_tree_label
-                    text: ''
+                    size_hint_y: None
+                    height: dp(40)
+                    text: 'Goals'
 
                 ScrollView:
                     height: dp(200)
@@ -128,6 +138,12 @@ CourseDashboardScreenRoot:
                         height: dp(400)
 
                         RowSelectorWidget:
+                            canvas.before:
+                                Color:
+                                    rgb: 0.05, 1.0, 0.05
+                                Rectangle:
+                                    pos: self.pos
+                                    size: self.size
                             pos: root.x, root.y
                             size_hint_x: 1.0
                             size_hint_y: 1.0
