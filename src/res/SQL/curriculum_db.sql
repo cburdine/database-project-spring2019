@@ -41,7 +41,7 @@ INSERT INTO `Curriculum` (`name`, `min_credit_hours`,`id_in_charge`) VALUES
 DROP TABLE IF EXISTS `Course`;
 CREATE TABLE IF NOT EXISTS `Course` (
 	`name` varchar(25) NOT NULL,
-    `subject_code` varchar(4) NOT NULL,
+    `subject_code` varchar(25) NOT NULL,
     `credit_hours` int NOT NULL,
     `description` varchar(1023),
     PRIMARY KEY (`name`)
@@ -186,6 +186,8 @@ CREATE TABLE IF NOT EXISTS `SectionGoalGrades` (
     `count_dp` int NOT NULL,
     `count_d` int NOT NULL,
     `count_dm` int NOT NULL,
+
+    `count_f` int NOT NULL,
     
     PRIMARY KEY (`course`,`semester`,`year`,`section_id`,`goal_id`),
     FOREIGN KEY (`course`,`semester`,`year`,`section_id`) REFERENCES Section(`course_name`,`semester`,`year`,`section_id`)

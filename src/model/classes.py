@@ -117,7 +117,8 @@ class Section:
     def __init__(self):
         self.course_name = None
         self.semester = None
-        self.unit_id = None
+        self.year = None
+        self.section_id = None
         self.num_students = None
         self.comment1 = None
         self.comment2 = None

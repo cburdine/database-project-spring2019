@@ -68,6 +68,7 @@ class NewCourseScreenRoot(Widget):
                                                "\nhas already been added.")
             dialogue.open()
         else:
+            pass
 
     def add_goal_callback(self):
         pass

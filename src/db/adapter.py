@@ -506,3 +506,107 @@ class DBAdapter:
             logging.warning("DBAdapter: Error- cannot retrieve curriculum goal list: " + str(id))
 
         return ret
+
+    def get_section_grades(self, section):
+        """Function to retrieve the section grades from the db and return them as a list"""
+        SECTION_GRADES = """SELECT count_ap, count_a count_am, count_bp, count_b count_bm, count_cp, count_c count_cm, count_dp, count_d, count_dm, count_f,count_i, count_w FROM SectionGrades WHERE course = %s AND semester = %s AND year = % AND section_id = %s"""
+
+        ret = None
+        try:
+            self.db_cursor.execute(
+                SECTION_GRADES,
+                (section.course_name, section.semester, section.year, section.section_id))
+            grades = self.db_cursor.fetchall()
+            ret = {}
+            if grades:
+                ret['a+'] = grades[0][0]
+                ret['a'] = grades[0][1]
+                ret['a-'] = grades[0][2]
+                ret['b+'] = grades[0][3]
+                ret['b'] = grades[0][4]
+                ret['b-'] = grades[0][5]
+                ret['c+'] = grades[0][6]
+                ret['c'] = grades[0][7]
+                ret['c-'] = grades[0][8]
+                ret['d+'] = grades[0][9]
+                ret['d'] = grades[0][10]
+                ret['d-'] = grades[0][11]
+                ret['f'] = grades[0][12]
+                ret['i'] = grades[0][13]
+                ret['w'] = grades[0][14]
+            else:
+                ret = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve section grades: " + str(id))
+
+        return ret
+
+    def get_sections(self, start_year, start_semester, end_year, end_semester):
+        """Function to retrieve a list of sections based on the given criteria"""
+        SECTION_GRADES = """SELECT course_name, section_id, num_students, comment1, comment2 FROM Section WHERE semester = %s AND year = %s"""
+
+        spring = 'R'
+        fall = 'F'
+        summer = 'S'
+        winter = 'W'
+
+        sem1 = {1 : 'F', 2 : 'W', 3 : 'R', 4 : 'S'}
+        sem2 = {'F' : 1, 'W' : 2, 'R' : 3,'S' : 4}
+        start = sem2[start_semester]
+        end = sem2[end_semester]
+
+        semester_list = []
+        year_list = []
+        if start_year != end_year:
+            num_years = end_year-start_year
+            for i in range(0, num_years+1):
+                year_list.append(start_year+i)
+                ctr = start
+
+                # todo: very jank way of doing this but idk what else to do rn
+                # basically, for each year, we put on 4 semesters in order of when the start semester occurs
+                # we should be putting on one of each
+                for i in range(1,5):
+                    semester_list.append(sem1[ctr%5])
+                    ctr+=1
+                    if ctr%5 == 0:
+                        ctr+=1
+            # when we're done with each year, we pop off the end of semester_list until we have the right end semester
+            while semester_list[len(semester_list)-1] != sem1[end]:
+                semester_list.pop(len(semester_list)-1)
+
+        else:
+            year_list.append(start_year)
+            for i in range(start, end+1):
+                year_list.append(i)
+
+
+
+        ret = None
+        section_list1 = []
+        section_list2 = []
+        current_section = Section()
+        try:
+            for i in year_list:
+                for j in semester_list:
+                    self.db_cursor.execute(SECTION_GRADES, (j, i))
+                    section_list1 = self.db_cursor.fetchall()
+                    for k in section_list1:
+                        current_section.course_name = k[0]
+                        current_section.section_id = k[1]
+                        current_section.num_students = k[2]
+                        current_section.comment1 = k[3]
+                        current_section.comment2 = k[4]
+                        current_section.year = i
+                        current_section.semester = j
+                        section_list2.append(current_section)
+            if section_list2:
+                ret = section_list2
+            else:
+                ret = None
+
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve sections: " + str(id))
+
+        return ret
