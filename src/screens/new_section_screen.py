@@ -37,7 +37,22 @@ class NewSectionScreenRoot(Widget):
         self.app.screen_manager.current = 'add_new_screen'
 
     def update_live_description_callback(self):
-        pass
+        course_name = "<Course Name>" if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
+        section_name = "<Section>" if len(self.ids.topic_name.text) == 0 else self.ids.topic_name.text
+        semester = "<Semester>" if len(self.ids.topic_id.text) == 0 else int(self.ids.topic_id.text)
+        year = "<year>" if len(self.ids.year.text) == 0 else int(self.ids.year.text)
+
+
+        IND = "\n           "
+        description_label = []
+        description_label.append(IND + f"[color=ffffff][size=40]Name: {topic_name}[/size][/color]")
+        description_label.append(IND + f"ID Number: {topic_id}")
+
+        self.ids.live_description_label.halign = 'left'
+        self.ids.live_description_label.valign = 'top'
+        self.ids.live_description_label.markup = True
+        self.ids.live_description_label.text = ''.join(description_label)
+        self.ids.live_description_label.texture_update()
 
     def submit_callback(self):
 
