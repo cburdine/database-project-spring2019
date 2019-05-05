@@ -131,7 +131,7 @@ class DBAdapter:
             ct.topic_id = t[1]
             ct.level = t[2]
             ct.subject_area = t[3]
-            ct.time_unit = t[3]
+            ct.time_unit = t[4]
             cur.cur_topics.append(ct)
 
         for c in courses:
@@ -314,8 +314,8 @@ class DBAdapter:
         self.db_connection.commit()
 
         #Add curriculum topics:
-        arg_list = list(map(lambda ct: (new_curriculum.name, ct.topic_id, ct.level, ct.subject_area, ct.time_unit), new_curriculum.req_course_names))
-        self.db_cursor.execute(
+        arg_list = list(map(lambda ct: (new_curriculum.name, ct.topic_id, ct.level, ct.subject_area, ct.time_unit), new_curriculum.cur_topics))
+        self.db_cursor.executemany(
             """INSERT INTO CurriculumTopics (curriculum_name, topic_id, level, subject_area, time_unit) VALUES (%s, %s, %s, %s, %s)""",arg_list)
         self.db_connection.commit()
 

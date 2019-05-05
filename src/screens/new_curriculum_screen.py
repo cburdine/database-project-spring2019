@@ -163,7 +163,7 @@ class NewCurriculumScreenRoot(Widget):
 
         new_curriculum.req_course_names = self.req_courses
         new_curriculum.opt_course_names = self.opt_courses
-        new_curriculum.cur_topics = self.cur_topics
+        new_curriculum.cur_topics = self.cur_topics.values()
 
         # to validate input
         #       need to make sure min_credit_hours and id_in_charge are numbers
@@ -186,8 +186,8 @@ class NewCurriculumScreenRoot(Widget):
             dialogue.open()
             return
 
-        if new_curriculum.cur_topics is not {}:
-            for ct in new_curriculum.cur_topics.values():
+        if new_curriculum.cur_topics is not []:
+            for ct in new_curriculum.cur_topics:
                 tp = self.app.client_model.get_topic(ct.topic_id)
                 if tp is None:
                     logging.info("NewCurriculumScreenRoot: Invalid topic")
@@ -220,10 +220,10 @@ class NewCurriculumScreenRoot(Widget):
             dialogue.open()
             return
 
-        for t in new_curriculum.cur_topics.values():
+        for t in new_curriculum.cur_topics:
             t.curriculum_name = new_curriculum.name
 
-        self.app.client_model.set_curriculum_topic(new_curriculum)
+        self.app.client_model.set_curriculum(new_curriculum)
 
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'new_curriculum_topic'

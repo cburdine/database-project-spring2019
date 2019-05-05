@@ -89,6 +89,10 @@ class CurriculumDashboardScreenRoot(Widget):
             ENDL = "\n"
 
             cur = self.app.client_model.get_curriculum(cur_name)
+            for c in cur.cur_topics:
+                c_topic = self.app.client_model.get_topic(c.topic_id)
+                if c_topic is not None:
+                    c._linked_topic_name = c_topic.name
 
             self.set_courses_trees(cur)
             self.set_topics_tree(cur)

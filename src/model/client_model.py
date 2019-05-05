@@ -112,6 +112,8 @@ class ClientModel:
         """Function to set new curriculum"""
         self.adapter.set_curriculum(new_curriculum)
         self._curricula_map[new_curriculum.name] = new_curriculum
+        if new_curriculum.name not in self._curricula_map.values():
+            self._curricula_map[new_curriculum.name] = None
 
     def get_goal(self, new_goal):
         """Function to get a goal from the db"""

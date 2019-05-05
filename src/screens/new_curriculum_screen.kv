@@ -51,12 +51,22 @@ NewCurriculumScreenRoot:
                     size_hint_y: None
                     text: ''
 
-                Label:
-                    markup: True
-                    text: '           [size=30]Topics:[/size]'
-                    text_size: self.size
-                    size_hint: (1.0, None)
+                BoxLayout:
+                    size_hint: (None, None)
                     height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+                    Label:
+                        markup: True
+                        text: '           [size=30]Topics:[/size]'
+                        text_size: self.size
+                        size_hint: (1.0, None)
+                        height: dp(80)
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected topic'
 
                 ScrollView:
                     size_hint: (None, None)
@@ -64,7 +74,7 @@ NewCurriculumScreenRoot:
                     width: root.width - dp(20)
                     canvas.before:
                         Color:
-                            rgb: 0.05, 0.05, 1.0
+                            rgb: 0.05, 0.05, 0.05
                         Rectangle:
                             pos: self.pos
                             size: self.size
@@ -77,12 +87,23 @@ NewCurriculumScreenRoot:
                             size_hint_x: 1.0
                             size_hint_y: 1.0
                             id: topics_list
-                Label:
-                    markup: True
-                    text: '           [size=30]Required Courses:[/size]'
-                    text_size: self.size
-                    size_hint: (1.0, None)
+
+                BoxLayout:
+                    size_hint: (None, None)
                     height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+                    Label:
+                        markup: True
+                        text: '           [size=30]Required Courses:[/size]'
+                        text_size: self.size
+                        size_hint: (1.0, None)
+                        height: dp(80)
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected course'
 
                 ScrollView:
                     size_hint: (None,None)
@@ -90,7 +111,7 @@ NewCurriculumScreenRoot:
                     width: root.width - dp(20)
                     canvas.before:
                         Color:
-                            rgb: 0.05, 0.05, 1.0
+                            rgb: 0.05, 0.05, 0.05
                         Rectangle:
                             pos: self.pos
                             size: self.size
@@ -103,12 +124,22 @@ NewCurriculumScreenRoot:
                             size_hint_x: 1.0
                             size_hint_y: 1.0
                             id: req_courses_list
-                Label:
-                    markup: True
-                    text: '           [size=30]Elective Courses:[/size]'
-                    text_size: self.size
-                    size_hint: (1.0, None)
+
+                BoxLayout:
+                    size_hint: (None, None)
                     height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+
+                    Label:
+                        markup: True
+                        text: '           [size=30]Elective Courses:[/size]'
+                        text_size: self.size
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected course'
 
                 ScrollView:
                     size_hint: (None,None)
@@ -116,7 +147,7 @@ NewCurriculumScreenRoot:
                     height: dp(120)
                     canvas.before:
                         Color:
-                            rgb: 0.05, 0.05, 1.0
+                            rgb: 0.05, 0.05, 0.05
                         Rectangle:
                             pos: self.pos
                             size: self.size
