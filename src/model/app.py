@@ -47,8 +47,6 @@ class CurriculaApp(App):
         screen_list.append(NewCourseScreen(root_app=self))
         screen_list.append(NewSectionScreen(root_app=self))
         screen_list.append(NewCurriculumTopicScreen(root_app=self))
-        screen_list.append(EnterGradesScreen(root_app=self))
-        screen_list.append(AddGoalGradesScreen(root_app=self))
         screen_list.append(AddRealGradesScreen(root_app=self))
         screen_list.append(NewCourseGoalScreen(root_app=self))
         screen_list.append(NewCourseTopicScreen(root_app=self))

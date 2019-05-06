@@ -738,5 +738,32 @@ class DBAdapter:
 
     def get_sections_of_a_course(self, course_name, year, semester_name):
         """Function to retrieve a list of sections based off of a course"""
+        if semester_name not in SEMESTER_NAME_MAP.keys():
+            logging.warning("DBAdapter: Error- invalid semester name.")
+            return None
+        semester = SEMESTER_NAME_MAP[semester_name]
+        return_list = []
 
-        pass
+        GET_SECTIONS = """SELECT section_id, num_students, comment1, comment2 FROM Section WHERE course_name = %s AND semester = %s AND year = %s"""
+
+        #try:
+        self.db_cursor.execute(GET_SECTIONS, (course_name, semester, year))
+        tups = self.db_cursor.fetchall()
+        for t in tups:
+            new_section = Section()
+            new_section.semester = semester
+            new_section.year = year
+            new_section.course_name = course_name
+            new_section.section_id = t[0]
+            new_section.num_students = t[1]
+            new_section.comment1 = t[2]
+            new_section.comment2 = t[3]
+            return_list.append(new_section)
+
+        return return_list
+
+        """
+        except:
+            logging.warning("DBAdapter: Error- failed to retrieve all sections of a course.")
+            return []
+        """

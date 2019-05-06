@@ -653,7 +653,7 @@ class ClientModel:
         return [total_students_enrolled_across_periods, all_grades, all_goal_grades,
                 avg_grade_across_periods, avg_goal_grade_across_periods]
 
-    def get_sections_of_a_course(self, course):
+    def get_sections_of_a_course(self, course, year, semester_name):
         """Function to retrieve a list of sections based off of a course"""
-        return self.adapter.get_sections_of_a_course(course)
+        return self.adapter.get_sections_of_a_course(course, year=year, semester_name=semester_name)
 

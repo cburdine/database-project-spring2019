@@ -45,7 +45,7 @@ AddRealGradesScreenRoot:
                 halign: 'center'
                 valign: 'bottom'
             IntTextInput:
-                on_text: root.update_live_description_callback()
+                on_text: root.set_course_filter_callback()
                 size_hint_y: None
                 height: dp(32)
                 id: year
@@ -57,7 +57,7 @@ AddRealGradesScreenRoot:
                 values: ('Fall', 'Summer','Spring','Winter')
                 size_hint_y: None
                 height: dp(32)
-                on_text: root.update_live_description_callback()
+                on_text: root.set_course_filter_callback()
 
             ScrollView:
                 do_scroll_x: False
@@ -106,41 +106,38 @@ AddRealGradesScreenRoot:
                     size_hint_y: None
                     height: dp(40)
 
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    Label:
+                        size_hint_x: None
+                        width: 100
+                        text_size: self.size
+                        font_size: '20dp'
+                        text: 'Section: '
+                        halign: 'right'
+                        valign: 'center'
+
+                    Spinner:
+                        id: section_spinner
+                        size_hint_y: None
+                        height: dp(34)
+                        text: 'No Sections Exist'
+
                 Label:
+                    size_hint_y: None
+                    height: dp(100)
                     text_size: self.size
                     id: description_field
                     text: ''
 
-                Label:
-                    text_size: self.size
-                    id: section_tree_label
-                    text: 'Sections'
+                TabbedPanel:
+                    id: goal_tabbed_panel
                     size_hint_y: None
-                    height: dp(40)
+                    height: root.height - dp(180)
+                    do_default_tab: False
 
-                ScrollView:
-                    height: dp(200)
-                    size_hint_y: None
-                    do_scroll_x: False
-                    do_scroll_y: True
 
-                    StackLayout:
-                        id: sv_sections
-                        orientation: 'lr-tb'
-                        size_hint_y: None
-                        height: dp(400)
-
-                        RowSelectorWidget:
-                            canvas.before:
-                                Color:
-                                    rgb: 1.0, 0.05, 0.05
-                                Rectangle:
-                                    pos: self.pos
-                                    size: self.size
-                            pos: root.x, root.y
-                            size_hint_x: 1.0
-                            size_hint_y: 1.0
-                            id: sections_tree
 
     AnchorLayout:
         anchor_x: 'left'
@@ -153,3 +150,213 @@ AddRealGradesScreenRoot:
             size: (dp(100), dp(30))
             text: 'Back'
             on_press: root.back_callback()
+
+<SectionGradesPanel>:
+    padding: dp(10)
+    spacing: dp(10)
+    orientation: 'vertical'
+
+    Label:
+        text: "Section Grades"
+        size_hint_y: None
+        height: dp(50)
+        font_size: '30dp'
+    BoxLayout:
+        size_hint_y: None
+        height: dp(160)
+        orientation: 'horizontal'
+        Widget
+        GradeInputBlock:
+            id: grade_block
+        Widget
+    BoxLayout:
+        size_hint_y: None
+        height: dp(34)
+        orientation: 'horizontal'
+        Label:
+            halign: 'right'
+            text: 'Comment 1:'
+            size_hint_x: None
+            width: dp(160)
+        TextInput:
+            id: comment1
+    BoxLayout:
+        size_hint_y: None
+        height: dp(34)
+        orientation: 'horizontal'
+        Label:
+            halign: 'right'
+            text: 'Comment 2:'
+            size_hint_x: None
+            width: dp(160)
+        TextInput:
+            id: comment2
+    Button:
+        size_hint_y: None
+        height: dp(32)
+        text: 'Submit'
+
+
+
+
+<GoalGradesPanel>:
+    padding: dp(10)
+    spacing: dp(10)
+    orientation: 'vertical'
+    Label:
+        text: "Goal Grades"
+        size_hint_y: None
+        height: dp(50)
+        font_size: '30dp'
+    Label:
+        id: goal_description
+        text: ''
+        size_hint: (None, None)
+        height: dp(88)
+        width: root.width - dp(80)
+    BoxLayout:
+        size_hint_y: None
+        height: dp(160)
+        orientation: 'horizontal'
+        Widget
+        GradeInputBlock:
+            id: grade_block
+        Widget
+    Button:
+        size_hint_y: None
+        height: dp(32)
+        text: 'Submit'
+
+
+#Forgive me father, for I have sinned:
+<GradeInputBlock>:
+    size_hint: (None, None)
+    size: (dp(300), dp(160))
+    rows: 5
+    cols: 3
+    spacing_horizontal: dp(20)
+    spacing_vertical: dp(10)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'A+'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_ap
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'A'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_a
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'A-'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_am
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'B+'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_bp
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'B'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_b
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'B-'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_bm
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'C+'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_cp
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'C'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_c
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'C-'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_cm
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'D+'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_dp
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'D'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_d
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'D'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_dm
+    BoxLayout:
+        id: last_row_f
+        orientation: 'horizontal'
+        Label:
+            text: 'F'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_f
+    BoxLayout:
+        id: last_row_i
+        orientation: 'horizontal'
+        Label:
+            text: 'I'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_i
+    BoxLayout:
+        id: last_row_w
+        orientation: 'horizontal'
+        Label:
+            text: 'W'
+            size_hint_x: None
+            width: dp(18)
+        IntTextInput:
+            id: num_w

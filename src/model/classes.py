@@ -129,11 +129,13 @@ class Section:
         str = []
         str.append(f"course_name: {self.course_name}\n")
         str.append(f"semester: {self.semester}\n")
-        str.append(f"unit_id: {self.unit_id}\n")
+        str.append(f"year: {self.year}\n")
+        str.append(f"section_id: {self.section_id}\n")
         str.append(f"num_students: {self.num_students}\n")
         str.append(f"comment1: {self.comment1}\n")
         str.append(f"comment2: {self.comment2}\n")
         return ''.join(str)
+
 
 class SectionGrades:
 
@@ -181,57 +183,6 @@ class SectionGrades:
         print(f"count_i: {self.count_i}")
         print(f"count_w: {self.count_w}")
 
-    def set_course(self, n):
-        self.course = n
-
-    def set_semester(self, n):
-        self.semester = n
-
-    def set_unit_id(self, n):
-        self.unit_id = n
-
-    def set_count_ap(self, n):
-        self.count_ap = n
-
-    def set_count_a(self, n):
-        self.count_a = n
-
-    def set_count_am(self, n):
-        self.count_am = n
-
-    def set_count_bp(self, n):
-        self.count_bp = n
-
-    def set_count_b(self, n):
-        self.count_b = n
-
-    def set_count_bm(self, n):
-        self.count_bm = n
-
-    def set_count_cp(self, n):
-        self.count_cp = n
-
-    def set_count_c(self, n):
-        self.count_c = n
-
-    def set_count_cm(self, n):
-        self.count_cm = n
-
-    def set_count_dp(self, n):
-        self.count_dp = n
-
-    def set_count_d(self, n):
-        self.count_d = n
-
-    def set_count_dm(self, n):
-        self.count_dm = n
-
-    def set_count_i(self, n):
-        self.count_i = n
-
-    def set_count_w(self, n):
-        self.count_w = n
-
 
 class SectionGoalGrades:
     def __init__(self):
@@ -273,54 +224,6 @@ class SectionGoalGrades:
         print(f"count_dp: {self.count_dp}")
         print(f"count_d: {self.count_d}")
         print(f"count_dm,: {self.count_dm}")
-
-    def set_course(self, n):
-        self.course = n
-
-    def set_semester(self, n):
-        self.semester = n
-
-    def set_unit_id(self, n):
-        self.unit_id = n
-
-    def set_goal_id(self, n):
-        self.goal_id = n
-
-    def set_count_ap(self, n):
-        self.count_ap = n
-
-    def set_count_a(self, n):
-        self.count_a = n
-
-    def set_count_am(self, n):
-        self.count_am = n
-
-    def set_count_bp(self, n):
-        self.count_bp = n
-
-    def set_count_b(self, n):
-        self.count_b = n
-
-    def set_count_bm(self, n):
-        self.count_bm = n
-
-    def set_count_cp(self, n):
-        self.count_cp = n
-
-    def set_count_c(self, n):
-        self.count_c = n
-
-    def set_count_cm(self, n):
-        self.count_cm = n
-
-    def set_count_dp(self, n):
-        self.count_dp = n
-
-    def set_count_d(self, n):
-        self.count_d = n
-
-    def set_count_dm(self, n):
-        self.count_dm = n
 
 class Goal:
     def __init__(self):
