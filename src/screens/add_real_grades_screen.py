@@ -67,8 +67,7 @@ class AddRealGradesScreenRoot(Widget):
     def set_section_tree(self, course):
         section_text_list = []
 
-        #self.ids.sections_tree.setRows(course.)
-        self.ids.sv_sections.height = self.ids.topics_tree.get_height()
+
 
     def update_live_description_callback(self):
         semester = "<Semester>" if len(self.ids.semester.text) == 0 else self.ids.semester.text
