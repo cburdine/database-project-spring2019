@@ -5,6 +5,7 @@ from src.model.classes import Curriculum, Course, Topic, Person, CurriculumTopic
 
 import threading
 from kivy.clock import Clock
+from src.db.schema import SEMESTER_NAME_MAP
 
 class DBAdapter:
 
@@ -712,7 +713,28 @@ class DBAdapter:
 
         return ret
 
-    def get_sections_of_a_course(self, course):
+    def get_filtered_course_names(self, year, semester_name):
+        FILTERED_COURSE_NAMES = """SELECT c.name FROM Course c WHERE EXISTS(
+        SELECT * FROM Section s WHERE s.course_name = c.name AND s.year = %s AND s.semester = %s)"""
+
+        if semester_name not in SEMESTER_NAME_MAP.keys():
+            logging.warning("DBAdapter: Error- invalid semester name.")
+            return []
+        semester = SEMESTER_NAME_MAP[semester_name]
+        return_list = []
+
+        try:
+            self.db_cursor.execute(FILTERED_COURSE_NAMES, (year, semester))
+            self.db_connection.commit()
+            tups = self.db_cursor.fetchall()
+            for t in tups:
+                return_list.append(t[0])
+        except:
+            logging.warning("DBAdapter: Error- cannot retrieve Course names.")
+
+        return return_list
+
+    def get_sections_of_a_course(self, course_name, year, semester_name):
         """Function to retrieve a list of sections based off of a course"""
-        # TODO
+
         pass

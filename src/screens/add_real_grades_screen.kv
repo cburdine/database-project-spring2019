@@ -37,28 +37,27 @@ AddRealGradesScreenRoot:
                 size_hint: (1.0, None)
                 height: dp(40)
 
+            Label:
+                size_hint_y: None
+                height: dp(30)
+                text: 'Year/Semester:'
+                text_size: self.size
+                halign: 'center'
+                valign: 'bottom'
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                size_hint_y: None
+                height: dp(32)
+                id: year
+                multiline: False
+                text: ''
             Spinner:
                 id: semester
                 text: 'Fall'
                 values: ('Fall', 'Summer','Spring','Winter')
                 size_hint_y: None
-                height: dp(50)
+                height: dp(32)
                 on_text: root.update_live_description_callback()
-
-            Label:
-                size_hint_y: None
-                height: dp(50)
-                text: 'year'
-                text_size: self.size
-                halign: 'center'
-                valign: 'middle'
-            IntTextInput:
-                on_text: root.update_live_description_callback()
-                size_hint_y: None
-                height: dp(50)
-                id: year
-                multiline: False
-                text: ''
 
             ScrollView:
                 do_scroll_x: False
