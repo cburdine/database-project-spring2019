@@ -205,7 +205,10 @@ class ClientModel:
 
                     for j in curriculum_obj.opt_course_names:
                         k = self.get_course_topic(i.topic_id, j)
-                        course_topic = k[1]
+                        if k:
+                            course_topic = k[1]
+                        else:
+                            course_topic = None
                         if current_curriculum_topic.topic_id == course_topic:
                             d = self.get_course(j)
                             cred_hours = d.credit_hours
