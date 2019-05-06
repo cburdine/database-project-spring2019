@@ -171,56 +171,54 @@ class ClientModel:
             level_3_topics = []
 
             for i in curriculum_obj.cur_topics:
-                q = self.get_curriculum_topic(curriculum_obj.name, i)
-                c_name = i.name
-                curriculum_topic = i[1]
-                level = i[2]
-                subject_area = i[3]
-                time_unit = i[4]
+                current_curriculum_topic = self.get_curriculum_topic(curriculum_obj.name, i.topic_id)
 
-                if level == 1:
-                    level_1_topics.append(q)
-                elif level == 2:
-                    level_2_topics.append(q)
-                elif level == 3:
-                    level_3_topics.append(q)
+                if current_curriculum_topic.level == 1:
+                    level_1_topics.append(current_curriculum_topic)
+                elif current_curriculum_topic == 2:
+                    level_2_topics.append(current_curriculum_topic)
+                elif current_curriculum_topic == 3:
+                    level_3_topics.append(current_curriculum_topic)
 
-                hours_to_cover = time_unit
+                hours_to_cover = current_curriculum_topic.time_unit
 
                 for j in curriculum_obj.req_course_names:
-                    k = self.get_course_topic(i, j)
-                    course_topic = k[1]
+                    k = self.get_course_topic(i.topic_id, j)
+                    if k:
+                        course_topic = k[1]
+                    else:
+                        course_topic = None
 
-                    if curriculum_topic == course_topic:
+                    if current_curriculum_topic.topic_id == course_topic:
                         d = self.get_course(j)
                         cred_hours = d.credit_hours
                         hours_to_cover -= cred_hours
 
                 if hours_to_cover <= 0:
-                    if level == 1:
-                        level_1_topics_covered_by_required_courses.append(q)
-                    elif level == 2:
-                        level_2_topics_covered_by_required_courses.append(q)
-                    elif level == 3:
-                        level_3_topics_covered_by_required_courses.append(q)
+                    if current_curriculum_topic.level == 1:
+                        level_1_topics_covered_by_required_courses.append(current_curriculum_topic)
+                    elif current_curriculum_topic.level == 2:
+                        level_2_topics_covered_by_required_courses.append(current_curriculum_topic)
+                    elif current_curriculum_topic.level == 3:
+                        level_3_topics_covered_by_required_courses.append(current_curriculum_topic)
                 else:
 
                     for j in curriculum_obj.opt_course_names:
-                        k = self.get_course_topic(i, j)
+                        k = self.get_course_topic(i.topic_id, j)
                         course_topic = k[1]
-                        if curriculum_topic == course_topic:
+                        if current_curriculum_topic.topic_id == course_topic:
                             d = self.get_course(j)
                             cred_hours = d.credit_hours
                             hours_to_cover -= cred_hours
 
 
                     if hours_to_cover <= 0:
-                        if level == 1:
-                            level_1_topics_covered_period.append(q)
-                        elif level == 2:
-                            level_2_topics_covered_period.append(q)
-                        elif level == 3:
-                            level_3_topics_covered_period.append(q)
+                        if current_curriculum_topic.level == 1:
+                            level_1_topics_covered_period.append(current_curriculum_topic)
+                        elif current_curriculum_topic.level == 2:
+                            level_2_topics_covered_period.append(current_curriculum_topic)
+                        elif current_curriculum_topic.level == 3:
+                            level_3_topics_covered_period.append(current_curriculum_topic)
 
 
 
@@ -253,19 +251,34 @@ class ClientModel:
                 all_2_covered = False
 
 
+            if len(level_3_topics) != 0 and len(level_2_topics) != 0:
+                if all_1_covered_by_required and all_2_covered_by_required and len(level_3_topics_covered_by_required_courses)/len(level_3_topics) >= required_percentage:
+                    return 'Extensive'
+                elif all_1_covered_by_required and all_2_covered_by_required and len(level_3_topics_covered_by_required_courses)/len(level_3_topics) < required_percentage:
+                    return 'Inclusive'
+                elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) >= required_percentage and all_1_covered and all_2_covered:
+                    return 'Basic-plus'
+                elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) >= required_percentage:
+                    return 'Basic'
+                elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) < required_percentage:
+                    return 'Unsatisfactory'
+                elif not all_1_covered_by_required:
+                    return 'Substandard'
+            elif len(level_3_topics) == 0 and len(level_2_topics) != 0:
+                if all_1_covered_by_required and len(level_2_topics_covered_by_required_courses) / len(
+                        level_2_topics) >= required_percentage and all_1_covered and all_2_covered:
+                    return 'Basic-plus'
+                elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses) / len(
+                        level_2_topics) >= required_percentage:
+                    return 'Basic'
+                elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses) / len(
+                        level_2_topics) < required_percentage:
+                    return 'Unsatisfactory'
+                elif not all_1_covered_by_required:
+                    return 'Substandard'
+            elif len(level_3_topics) == 0 and len(level_2_topics) == 0 and not all_1_covered_by_required:
+                    return 'Substandard'
 
-            if all_1_covered_by_required and all_2_covered_by_required and len(level_3_topics_covered_by_required_courses)/len(level_3_topics) >= required_percentage:
-                return 'Extensive'
-            elif all_1_covered_by_required and all_2_covered_by_required and len(level_3_topics_covered_by_required_courses)/len(level_3_topics) < required_percentage:
-                return 'Inclusive'
-            elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) >= required_percentage and all_1_covered and all_2_covered:
-                return 'Basic-plus'
-            elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) >= required_percentage:
-                return 'Basic'
-            elif all_1_covered_by_required and len(level_2_topics_covered_by_required_courses)/len(level_2_topics) < required_percentage:
-                return 'Unsatisfactory'
-            elif not all_1_covered_by_required:
-                return 'Substandard'
 
     def get_curriculum_goal_list(self, curriculum_name):
         """Aux function to get a list of goals for the curriculum based off its name"""

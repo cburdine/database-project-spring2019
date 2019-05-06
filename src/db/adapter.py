@@ -485,7 +485,6 @@ class DBAdapter:
                 """SELECT course_name, topic_id FROM CourseTopics WHERE course_name = %s AND topic_id = %s""",
                 (course_name, topic_id))
             ct = self.db_cursor.fetchall()
-            ret = Course()
             if ct:
                 cname = ct[0][0]
                 ctopic = ct[0][1]
@@ -533,16 +532,19 @@ class DBAdapter:
         ret = None
         try:
             self.db_cursor.execute(
-                """SELECT course_name, topic_id, level, subject_area, time_unit FROM CurriculumTopics WHERE curriculum_name = %s AND topic_id = %s""",
+                """SELECT level, subject_area, time_unit FROM CurriculumTopics WHERE curriculum_name = %s AND topic_id = %s""",
                 (curriculum_name, curriculum_topic))
             ct = self.db_cursor.fetchall()
             if ct:
-                cname = ct[0][0]
-                ctopic = ct[0][1]
-                level = ct[0][2]
-                subject_area = ct[0][3]
-                time_unit = ct[0][4]
-                ret = [cname, ctopic, level, subject_area, time_unit]
+                ret = CurriculumTopic
+                level = ct[0][0]
+                subject_area = ct[0][1]
+                time_unit = ct[0][2]
+                ret.curriculum_name = curriculum_name
+                ret.topic_id = curriculum_topic
+                ret.time_unit = time_unit
+                ret.subject_area = subject_area
+                ret.level = level
             else:
                 ret = None
 
