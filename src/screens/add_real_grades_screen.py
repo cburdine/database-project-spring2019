@@ -85,6 +85,11 @@ class AddRealGradesScreenRoot(Widget):
             self.ids.section_spinner.values = ()
             self.ids.description_field.text = ''
             self.ids.goal_tabbed_panel.clear_widgets()
+            self.ids.goal_tabbed_panel.clear_tabs()
+
+        elif self.course_selector.get_selected_row() is not None:
+            self.set_course_section_list()
+
 
     def set_course_section_list(self, *args):
         course_name = self.course_selector.get_selected_row()
@@ -96,7 +101,7 @@ class AddRealGradesScreenRoot(Widget):
             active_section = self.active_section_grades_panel.section
             if active_section.course_name == course_name and \
                active_section.semester == SEMESTER_NAME_MAP[semester] and \
-               active_section.year == year:
+               active_section.year == year and self.ids.section_spinner.text != 'No Sections Exist':
                 return
 
         if course_name != None:
@@ -293,7 +298,7 @@ class GradeInputBlock(GridLayout):
 
         grades_obj.count_dp = 0 if len(text_dp) is 0 else int(text_dp)
         grades_obj.count_d = 0 if len(text_d) is 0 else int(text_d)
-        grades_obj.count_cm = 0 if len(text_dm) is 0 else int(text_dm)
+        grades_obj.count_dm = 0 if len(text_dm) is 0 else int(text_dm)
 
         grades_obj.count_f = 0 if len(text_f) is 0 else int(text_f)
 

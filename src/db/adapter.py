@@ -314,23 +314,23 @@ class DBAdapter:
         SECTION = """SELECT COUNT(*) FROM Section WHERE id = %s"""
 
         ret = None
-        try:
-            self.db_cursor.execute("""SELECT num_students, comment1, comment2 FROM Section WHERE course_name = %s AND semester = %s AND unit_id  = %s""",
-                                   (new_section.course_name, new_section.semester, new_section.unit_id))
-            c = self.db_cursor.fetchall()
-            ret = Section()
-            if c:
-                ret.num_students = c[0][0]
-                ret.comment1 = c[0][1]
-                ret.comment2 = c[0][2]
-                ret.course_name = new_section.course_name
-                ret.semester = new_section.semester
-                ret.unit_id = new_section.unit_id
-            else:
-                ret = None
+        #try:
+        self.db_cursor.execute("""SELECT num_students, comment1, comment2 FROM Section WHERE course_name = %s AND semester = %s AND section_id  = %s""",
+                               (new_section.course_name, new_section.semester, new_section.section_id))
+        c = self.db_cursor.fetchall()
+        ret = Section()
+        if c:
+            ret.num_students = c[0][0]
+            ret.comment1 = c[0][1]
+            ret.comment2 = c[0][2]
+            ret.course_name = new_section.course_name
+            ret.semester = new_section.semester
+            ret.section_id = new_section.section_id
+        else:
+            ret = None
 
-        except:
-            logging.warning("DBAdapter: Error- cannot retrieve section: " + str(new_section.unit_id))
+        #except:
+        #    logging.warning("DBAdapter: Error- cannot retrieve section: " + str(new_section.section_id))
 
         return ret
 
