@@ -1,2 +1,3 @@
-# database-project-spring2019
+### database-project-spring2019
+----
 Database "Canvas" project - 2019
