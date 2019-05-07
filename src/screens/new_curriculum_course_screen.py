@@ -34,6 +34,9 @@ class NewCurriculumCourseScreenRoot(Widget):
         self.app = app_ref
 
     def back_callback(self):
+        self.ids.curriculum_name.text = ''
+        self.ids.course_name.text = ''
+        self.ids.required.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'main'
 

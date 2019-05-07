@@ -574,7 +574,7 @@ class DBAdapter:
                 (new_goal.description, new_goal.id, new_goal.curriculum_name))
         self.db_connection.commit()
 
-    def set_course_goal(self, goal_id, course_name, updating=False):
+    def set_course_goal(self, goal_id, course_name):
         """Function to write course goal to the db"""
         self.db_cursor.execute(
             """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)""",
@@ -768,9 +768,9 @@ class DBAdapter:
 
         return ret
 
-    def get_sections(self, start_year, start_semester, end_year, end_semester, section_goal=False):
+    def get_sections(self, start_year, start_semester, end_year, end_semester, course, section_goal=False):
         """Function to retrieve a list of sections based on the given criteria"""
-        SECTION_GRADES = """SELECT course_name, section_id, num_students, comment1, comment2 FROM Section WHERE semester = %s AND year = %s"""
+        SECTION_GRADES = """SELECT section_id, num_students, comment1, comment2 FROM Section WHERE semester = %s AND year = %s AND course_name = %s"""
 
         spring = 'R'
         fall = 'F'
@@ -816,14 +816,14 @@ class DBAdapter:
         try:
             for i in year_list:
                 for j in semester_list:
-                    self.db_cursor.execute(SECTION_GRADES, (j, i))
+                    self.db_cursor.execute(SECTION_GRADES, (j, i, course.name))
                     section_list1 = self.db_cursor.fetchall()
                     for k in section_list1:
-                        current_section.course_name = k[0]
-                        current_section.section_id = k[1]
-                        current_section.num_students = k[2]
-                        current_section.comment1 = k[3]
-                        current_section.comment2 = k[4]
+                        current_section.course_name = course.name
+                        current_section.section_id = k[0]
+                        current_section.num_students = k[1]
+                        current_section.comment1 = k[2]
+                        current_section.comment2 = k[3]
                         current_section.year = i
                         current_section.semester = j
                         section_list2.append(current_section)
@@ -929,3 +929,77 @@ class DBAdapter:
             self.db_connection.commit()
         except:
             logging.warning("DBAdapter: Error- Could not delete curriculum.")
+
+    def edit_course(self, course):
+        """Function to edit a course in the db"""
+        EDIT_COURSE = """UPDATE Course SET subject_code = %s, credit_hours = %s, description = %s WHERE name = %s"""
+
+        self.db_cursor.execute(EDIT_COURSE, (
+        course.subject_code, course.credit_hours, course.description, course.name))
+        self.db_connection.commit()
+
+        DELETE_COURSE_TOPICS = """DELETE FROM CourseTopics WHERE course_name = %s"""
+        self.db_cursor.execute(DELETE_COURSE_TOPICS, (course.name,))
+        self.db_connection.commit()
+        INSERT_COURSE_TOPICS = """INSERT INTO CourseTopics (course_name, topic_id) VALUES (%s, %s)"""
+        for ct in course.topics:
+            self.db_cursor.execute(INSERT_COURSE_TOPICS, (course.name,ct))
+            self.db_connection.commit()
+
+        DELETE_COURSE_GOALS = """DELETE FROM CourseGoals WHERE course_name = %s"""
+        self.db_cursor.execute(DELETE_COURSE_GOALS, (course.name,))
+        self.db_connection.commit()
+        INSERT_COURSE_GOALS = """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)"""
+        for cg in course.goals:
+            self.db_cursor.execute(INSERT_COURSE_GOALS, (course.name, cg))
+            self.db_connection.commit()
+
+    def remove_course_goals(self, course):
+        """Fuction to remove course goals from the db"""
+        DELETE_COURSE_GOALS = """DELETE FROM CourseGoals WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_GOALS, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_topics(self, course):
+        """Function to remove course topics from the db"""
+        DELETE_COURSE_TOPICS = """DELETE FROM CourseTopics WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_TOPICS, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_curriculum_listings(self, course):
+        """Function to remove courses from a curriculum in the db"""
+        DELETE_CURRICULUM_COURSES = """DELETE FROM CurriculumListings WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_CURRICULUM_COURSES, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_section(self, course):
+        """Function to remove all sections of a course in the db"""
+        DELETE_COURSE_SECTIONS = """DELETE FROM Section WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_SECTIONS, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_section_grades(self, course):
+        """Function to remove occurances of course in section grades in the db"""
+        DELETE_COURSE_SECTION_GRADES = """DELETE FROM SectionGrades WHERE course = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_SECTION_GRADES, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_section_goal_grades(self, course):
+        """Function to remove occurances of course in section grades in the db"""
+        DELETE_COURSE_SECTION_GOAL_GRADES = """DELETE FROM SectionGoalGrades WHERE course = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_SECTION_GOAL_GRADES, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course(self, course):
+        """Function to remove course from the db"""
+        DELETE_COURSE = """DELETE FROM Course WHERE name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE, (course.name,))
+        self.db_connection.commit()
+

@@ -33,6 +33,8 @@ class NewPersonScreenRoot(Widget):
         self.app = app_ref
 
     def back_callback(self):
+        self.ids.person_name.text = ''
+        self.ids.person_id.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 

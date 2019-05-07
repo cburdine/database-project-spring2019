@@ -10,11 +10,11 @@ import logging
 from src.widgets.dialogues import MessageDialogue
 
 
-class NewCourseScreen(Screen):
+class EditCourseScreen(Screen):
 
-    screen_name = 'new_course'
+    screen_name = 'edit_course'
 
-    view_kv_filepath = 'screens/new_course_screen.kv'
+    view_kv_filepath = 'screens/edit_course_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
@@ -25,10 +25,11 @@ class NewCourseScreen(Screen):
     def on_enter(self, *args):
         self.root_widget.populate()
 
-class NewCourseScreenRoot(Widget):
+class EditCourseScreenRoot(Widget):
 
     def __init__(self):
         Widget.__init__(self)
+        self.course = classes.Course()
         self.course_topics = {}  # indexed by topic id
         self.course_goals = {}  # indexed by goal id
 
@@ -36,6 +37,12 @@ class NewCourseScreenRoot(Widget):
         self.app = app_ref
 
     def populate(self):
+        self.course = self.app.client_model._course_to_edit
+        for ct in self.course.topics:
+            ctopic = self.app.client_model.get_course_topic(ct, self.course.name)
+            self.course_topics[ct] = self.app.client_model.get_topic(ctopic[1])
+        for cg in self.course.goals:
+            self.course_goals[cg] = self.app.client_model.get_context_free_goal(cg) # putting in context free goal here
         self.update_live_description_callback()
 
         self.ids.topics_list.setRows(self.course_topics.values())
@@ -44,13 +51,15 @@ class NewCourseScreenRoot(Widget):
         self.ids.goals_list.setRows(self.course_goals.values())
         self.ids.sv_goals_list.height = self.ids.goals_list.get_height()
 
+        self.ids.course_name.text = self.course.name
+
     def back_callback(self):
         self.ids.course_name.text = ''
         self.ids.subject_code.text = ''
         self.ids.credit_hours.text = ''
         self.ids.comment_1.text = ''
-        self.app.screen_manager.transition.direction = 'right'
-        self.app.screen_manager.current = 'add_new_screen'
+        self.app.screen_manager.transition.direction = 'down'
+        self.app.screen_manager.current = 'course_dashboard'
 
     def remove_goal_callback(self):
         rem_goal = self.ids.goals_list.get_selected_row()
@@ -128,19 +137,20 @@ class NewCourseScreenRoot(Widget):
     def update_live_description_callback(self):
 
         IND = "\n           "
-        course_name = "<Course Name>" if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
-        subj_code = "<Subject Code>" if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
-        credit_hours = "<Credit Hours>" if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
-        comment_1 = "" if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text.replace('\n', IND)
-        course_topic_id = "<Topic_ID>"if len(self.ids.course_topic_id.text) == 0 else self.ids.course_topic_id.text
-        course_goal_id = "<Goal_ID>" if len(self.ids.course_goal_id.text) == 0 else self.ids.course_goal_id.text
+        course_name = self.course.name if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
+        subj_code = self.course.subject_code if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
+        credit_hours = self.course.credit_hours if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
+        comment_1 = self.course.description if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text.replace('\n', IND)
+        course_topic_id = self.course_topics if len(self.ids.course_topic_id.text) == 0 else self.ids.course_topic_id.text
+        course_goal_id = self.course_goals if len(self.ids.course_goal_id.text) == 0 else self.ids.course_goal_id.text
 
         description_label = []
         description_label.append(IND + f"[color=ffffff][size=40]Course: {course_name} [/size][/color]")
         description_label.append(IND + f"Subject Code: {subj_code}")
         description_label.append(IND + f"Credit Hours: {credit_hours}\n")
         description_label.append(IND + f"[color=ffffff][size=20]Description:[/size][/color]")
-        description_label.append(IND + comment_1)
+        if comment_1:
+            description_label.append(IND + comment_1)
 
         self.ids.live_description_label.halign = 'left'
         self.ids.live_description_label.valign = 'top'
@@ -152,10 +162,10 @@ class NewCourseScreenRoot(Widget):
         new_course = classes.Course()
 
         # getting input from ui
-        new_course.name = None if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
-        new_course.subject_code = None if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
-        new_course.credit_hours = None if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
-        new_course.description = None if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text
+        new_course.name = self.course.name if len(self.ids.course_name.text) == 0 else self.ids.course_name.text
+        new_course.subject_code = self.course.subject_code if len(self.ids.subject_code.text) == 0 else self.ids.subject_code.text
+        new_course.credit_hours = self.course.credit_hours if len(self.ids.credit_hours.text) == 0 else int(self.ids.credit_hours.text)
+        new_course.description = self.course.description if len(self.ids.comment_1.text) == 0 else self.ids.comment_1.text
         new_course.topics = self.course_topics.keys()
         new_course.goals = self.course_goals.keys()
 
@@ -166,23 +176,44 @@ class NewCourseScreenRoot(Widget):
 
         db_course = self.app.client_model.get_course(new_course.name)
 
-        if new_course.name is None or new_course.subject_code is None or\
-                new_course.credit_hours is None or new_course.description is None :
+        if new_course.name is None:
             logging.info("NewCourseScreenRoot: some text fields lack input")
             dialogue = MessageDialogue(title="Format error", message="All fields must contain input")
             dialogue.open()
-        elif db_course is not None:
-            logging.info("NewCourseScreenRoot: trying to create somehting that's already there")
-            dialogue = MessageDialogue(title="Database Error", message="Course is already in the database.")
+        elif db_course is None:
+            logging.info("NewCourseScreenRoot: trying to edit something that's not there")
+            dialogue = MessageDialogue(title="Database Error", message="Course is not already in the database.")
             dialogue.open()
         else:
             # can safely enter course into the db
-            self.app.client_model.set_course(new_course)
+            self.app.client_model.edit_course(new_course)
             dialogue = MessageDialogue(title="success", message="successfully stored tuple in the db")
             dialogue.open()
             self.ids.course_name.text = ''
             self.ids.subject_code.text = ''
             self.ids.credit_hours.text = ''
             self.ids.comment_1.text = ''
-            self.app.screen_manager.transition.direction = 'right'
-            self.app.screen_manager.current = 'main'
+            self.app.screen_manager.transition.direction = 'down'
+            self.app.screen_manager.current = 'course_dashboard'
+
+    def remove_course_callback(self):
+
+        self.app.client_model.remove_course_goals(self.course)
+        self.app.client_model.remove_course_topics(self.course)
+        self.app.client_model.remove_course_in_curriculum_listings(self.course)
+        self.app.client_model.remove_course_in_section(self.course)
+        self.app.client_model.remove_course_in_section_grades(self.course)
+        self.app.client_model.remove_course_in_section_goal_grades(self.course)
+        self.app.client_model.remove_course(self.course)
+        self.app.client_model._course_to_edit = classes.Course()
+        self.ids.course_name.text = ''
+        self.ids.subject_code.text = ''
+        self.ids.credit_hours.text = ''
+        self.ids.comment_1.text = ''
+        self.app.screen_manager.transition.direction = 'down'
+        self.app.screen_manager.current = 'course_dashboard'
+        dialogue = MessageDialogue(title="success", message="We removed the course from the db")
+        dialogue.open()
+
+
+

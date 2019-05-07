@@ -62,8 +62,8 @@ class EditCurriculumScreenRoot(Widget):
 
     def back_callback(self):
         self.app.client_model._curriculum_to_edit = classes.Curriculum()
-        self.app.screen_manager.transition.direction = 'right'
-        self.app.screen_manager.current = 'main'
+        self.app.screen_manager.transition.direction = 'down'
+        self.app.screen_manager.current = 'curriculum_dashboard'
 
     def remove_req_course_callback(self):
         rem_req_course = self.ids.req_courses_list.get_selected_row()
@@ -290,8 +290,8 @@ class EditCurriculumScreenRoot(Widget):
         self.app.client_model.remove_curriculum_topics(self.curriculum)
         self.app.client_model.remove_curriculum_courses(self.curriculum)
         self.app.client_model.remove_curriculum(self.curriculum)
+        self.app.client_model._curriculum_to_edit = classes.Curriculum()
         self.app.screen_manager.transition.direction = 'down'
         self.app.screen_manager.current = 'curriculum_dashboard'
         dialogue = MessageDialogue(title="success", message="We removed the curriculum from the db")
         dialogue.open()
-        pass

@@ -1,0 +1,295 @@
+#:kivy 1.0
+
+#:import login_screen src.screens.main_screen
+#:import text_input_widgets src.widgets.text_input_widgets
+
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+EditCourseScreenRoot:
+
+    BoxLayout:
+        orientation: 'vertical'
+        pos: (dp(0), dp(260))
+        width: root.width
+        height: root.height - dp(260)
+        size_hint: (None, None)
+
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0.37, 0.37, 0.37
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text: 'New Course'
+            size_hint: (1.0, None)
+            height: dp(40)
+
+        Button:
+            size_hint: (None,None)
+            width: dp(200)
+            height: dp(30)
+            text: 'Remove Course'
+            on_press: root.remove_course_callback()
+
+        ScrollView:
+            scroll_type: ['content', 'bars']
+            bar_margin: dp(2)
+            bar_width: dp(16)
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(580)
+
+                Label:
+                    text_size: self.size
+                    id: live_description_label
+                    height: dp(180)
+                    size_hint_y: None
+                    text: ''
+
+                BoxLayout:
+                    size_hint: (None, None)
+                    height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+                    Label:
+                        markup: True
+                        text: '           [size=30]Topics:[/size]'
+                        text_size: self.size
+                        size_hint: (1.0, None)
+                        height: dp(80)
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected topic'
+                        on_press: root.remove_topic_callback()
+
+                ScrollView:
+                    size_hint: (None, None)
+                    height: dp(120)
+                    width: root.width - dp(20)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_topics_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: topics_list
+                BoxLayout:
+                    size_hint: (None, None)
+                    height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+                    Label:
+                        markup: True
+                        text: '           [size=30]Goals:[/size]'
+                        text_size: self.size
+                        size_hint: (1.0, None)
+                        height: dp(80)
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected goal'
+                        on_press: root.remove_goal_callback()
+
+                ScrollView:
+                    size_hint: (None, None)
+                    height: dp(120)
+                    width: root.width - dp(20)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_goals_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: goals_list
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(100))
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+    StackLayout:
+        orientation: 'lr-bt'
+
+        GridLayout
+            pos_hint: (None, None)
+            size_hint: (None, None)
+            size: (root.width, dp(256))
+            rows: 8
+            cols: 2
+            padding: dp(10)
+            spacing: dp(2)
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Course Name:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            TextInput:
+                disabled: True
+                background_color: (0.9, 0.9, 0.9, 1)
+                on_text: root.update_live_description_callback()
+                id: course_name
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Subject Code:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            TextInput:
+                on_text: root.update_live_description_callback()
+                id: subject_code
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Credit Hours:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                id: credit_hours
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Description:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+            TextInput:
+                on_text: root.update_live_description_callback()
+                id: comment_1
+                multiline: False
+                text: ''
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Add Course Topic:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    height: dp(50)
+                    width: dp(30)
+                    text: '+'
+                    size_hint_x: None
+                    on_press: root.add_topic_callback()
+
+                Label:
+                    text: 'Topic ID:'
+                    height: dp(50)
+                    width: dp(60)
+                    size_hint_x: None
+                IntTextInput:
+                    on_text: root.update_live_description_callback()
+                    height: dp(50)
+                    id: course_topic_id
+                    multiline: False
+                    text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Add Course Goal:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    height: dp(50)
+                    width: dp(30)
+                    text: '+'
+                    size_hint_x: None
+                    on_press: root.add_goal_callback()
+
+                Label:
+                    text: 'Goal ID:'
+                    height: dp(50)
+                    width: dp(60)
+                    size_hint_x: None
+
+                IntTextInput:
+                    on_text: root.update_live_description_callback()
+                    height: dp(50)
+                    id: course_goal_id
+                    multiline: False
+                    text: ''
+
+            Widget: # empty widget
+                size_hint_x: None
+                height: dp(50)
+
+            Widget: # empty widget
+                size_hint_x: None
+                width: dp(80)
+
+            Widget: # empty widget
+                size_hint_x: None
+                height: dp(50)
+
+            Button:
+                height: dp(50)
+                text: 'Submit'
+                on_press: root.submit_callback()

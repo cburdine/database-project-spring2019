@@ -138,6 +138,7 @@ class CurriculumDashboardScreenRoot(Widget):
     def edit_curriculum_callback(self):
         print('Edit Curriculum')
         tmp = self.curriculum_selector.get_selected_row()
-        self.app.client_model._curriculum_to_edit = self.app.client_model.get_curriculum(tmp)
-        self.app.screen_manager.transition.direction = 'up'
-        self.app.screen_manager.current = 'edit_curriculum'
+        if tmp:
+            self.app.client_model._curriculum_to_edit = self.app.client_model.get_curriculum(tmp)
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'edit_curriculum'

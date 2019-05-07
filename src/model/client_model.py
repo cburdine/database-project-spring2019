@@ -1,5 +1,5 @@
 from src.db.adapter import DBAdapter
-from src.model.classes import Person, CurriculumTopic, Curriculum, Goal, Section, SectionGrades, SectionGoalGrades, ContextFreeGoal
+from src.model.classes import Person, CurriculumTopic, Curriculum, Goal, Section, SectionGrades, SectionGoalGrades, ContextFreeGoal, Course
 import logging
 from src.widgets.dialogues import MessageDialogue
 
@@ -25,6 +25,7 @@ class ClientModel:
         self._section_map = {}
         self._cur_topic_temp = CurriculumTopic()
         self._curriculum_to_edit = Curriculum()  # this is for edit functionality
+        self._course_to_edit = Course() # this is for edit functionality
 
     def get_person(self, id):
 
@@ -470,8 +471,8 @@ class ClientModel:
         else:
             return [grades, actual_grade_avg]
 
-    def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester, section_goal=False):
-        sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester, section_goal)
+    def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester, course, section_goal=False):
+        sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester, course, section_goal)
         total_students_enrolled_across_periods = 0
         avg_grade_total_across_periods = []
         avg_goal_grade_total_across_periods = []
@@ -729,3 +730,34 @@ class ClientModel:
             logging.warning("client_model: could not remove curriculum name from the curricula_map")
         self.adapter.remove_curriculum(curriculum)
 
+    def edit_course(self, new_course):
+        """Function to edit a course using a course object"""
+        self.adapter.edit_course(new_course)
+
+    def remove_course_goals(self, course):
+        """Function to remove course goals based off of course object"""
+        self.adapter.remove_course_goals(course)
+
+    def remove_course_topics(self, course):
+        """Function to remove course topics based off of course object"""
+        self.adapter.remove_course_topics(course)
+
+    def remove_course_in_curriculum_listings(self, course):
+        """Function to remove courses in a particular curriculum using a course object"""
+        self.adapter.remove_course_in_curriculum_listings(course)
+
+    def remove_course_in_section(self, course):
+        """Function to remove all sections of a course"""
+        self.adapter.remove_course_in_section(course)
+
+    def remove_course_in_section_grades(self, course):
+        """Function to remove all the course appearances in section grades"""
+        self.adapter.remove_course_in_section_grades(course)
+
+    def remove_course_in_section_goal_grades(self, course):
+        """Function to remove all the course appearances in section goal grades"""
+        self.adapter.remove_course_in_section_goal_grades(course)
+
+    def remove_course(self, course):
+        """Function to remove all the courses from the db"""
+        self.adapter.remove_course(course)
