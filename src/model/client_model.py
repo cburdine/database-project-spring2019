@@ -1,5 +1,5 @@
 from src.db.adapter import DBAdapter
-from src.model.classes import Person, CurriculumTopic, Curriculum, Goal, Section, SectionGrades, SectionGoalGrades, ContextFreeGoal
+from src.model.classes import Person, CurriculumTopic, Curriculum, Goal, Section, SectionGrades, SectionGoalGrades, ContextFreeGoal, Course
 import logging
 from src.widgets.dialogues import MessageDialogue
 
@@ -25,6 +25,7 @@ class ClientModel:
         self._section_map = {}
         self._cur_topic_temp = CurriculumTopic()
         self._curriculum_to_edit = Curriculum()  # this is for edit functionality
+        self._course_to_edit = Course() # this is for edit functionality
 
     def get_person(self, id):
 
@@ -716,4 +717,8 @@ class ClientModel:
         except:
             logging.warning("client_model: could not remove curriculum name from the curricula_map")
         self.adapter.remove_curriculum(curriculum)
+
+    def edit_course(self, new_course):
+        """Function to edit a course using a course object"""
+        self.adapter.edit_course(new_course)
 

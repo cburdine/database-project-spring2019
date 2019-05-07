@@ -290,6 +290,7 @@ class EditCurriculumScreenRoot(Widget):
         self.app.client_model.remove_curriculum_topics(self.curriculum)
         self.app.client_model.remove_curriculum_courses(self.curriculum)
         self.app.client_model.remove_curriculum(self.curriculum)
+        self.app.client_model._curriculum_to_edit = classes.Curriculum()
         self.app.screen_manager.transition.direction = 'down'
         self.app.screen_manager.current = 'curriculum_dashboard'
         dialogue = MessageDialogue(title="success", message="We removed the curriculum from the db")

@@ -524,7 +524,7 @@ class DBAdapter:
                 (new_goal.description, new_goal.id, new_goal.curriculum_name))
         self.db_connection.commit()
 
-    def set_course_goal(self, goal_id, course_name, updating=False):
+    def set_course_goal(self, goal_id, course_name):
         """Function to write course goal to the db"""
         self.db_cursor.execute(
             """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)""",
@@ -873,3 +873,28 @@ class DBAdapter:
             self.db_connection.commit()
         except:
             logging.warning("DBAdapter: Error- Could not delete curriculum.")
+
+    def edit_course(self, course):
+        """Function to edit a course in the db"""
+        EDIT_COURSE = """UPDATE Course SET subject_code = %s, credit_hours = %s, description = %s WHERE name = %s"""
+
+        self.db_cursor.execute(EDIT_COURSE, (
+        course.subject_code, course.credit_hours, course.description, course.name))
+        self.db_connection.commit()
+
+        DELETE_COURSE_TOPICS = """DELETE FROM CourseTopics WHERE course_name = %s"""
+        self.db_cursor.execute(DELETE_COURSE_TOPICS, (course.name,))
+        self.db_connection.commit()
+        INSERT_COURSE_TOPICS = """INSERT INTO CourseTopics (course_name, topic_id) VALUES (%s, %s)"""
+        for ct in course.topics:
+            self.db_cursor.execute(INSERT_COURSE_TOPICS, (course.name,ct))
+            self.db_connection.commit()
+
+        DELETE_COURSE_GOALS = """DELETE FROM CourseGoals WHERE course_name = %s"""
+        self.db_cursor.execute(DELETE_COURSE_GOALS, (course.name,))
+        self.db_connection.commit()
+        INSERT_COURSE_GOALS = """INSERT INTO CourseGoals (course_name, goal_id) VALUES (%s, %s)"""
+        for cg in course.goals:
+            self.db_cursor.execute(INSERT_COURSE_GOALS, (course.name, cg))
+            self.db_connection.commit()
+
