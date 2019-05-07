@@ -192,6 +192,7 @@ AddRealGradesScreenRoot:
         TextInput:
             id: comment2
     Button:
+        on_press: root.submit()
         size_hint_y: None
         height: dp(32)
         text: 'Submit'
@@ -223,6 +224,7 @@ AddRealGradesScreenRoot:
             id: grade_block
         Widget
     Button:
+        on_press: root.submit()
         size_hint_y: None
         height: dp(32)
         text: 'Submit'

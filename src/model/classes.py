@@ -165,24 +165,25 @@ class SectionGrades:
         """
         Overridden str function
         """
-        print(f"course: {self.course}")
-        print(f"semester: {self.semester}")
-        print(f"unit_id: {self.unit_id}")
-        print(f"count_ap: {self.count_ap}")
-        print(f"count_a: {self.count_a}")
-        print(f"count_am,: {self.count_am}")
-        print(f"count_bp: {self.count_bp}")
-        print(f"count_b: {self.count_b}")
-        print(f"count_bm,: {self.count_bm}")
-        print(f"count_cp: {self.count_cp}")
-        print(f"count_c: {self.count_c}")
-        print(f"count_cm,: {self.count_cm}")
-        print(f"count_dp: {self.count_dp}")
-        print(f"count_d: {self.count_d}")
-        print(f"count_dm,: {self.count_dm}")
-        print(f"count_i: {self.count_i}")
-        print(f"count_w: {self.count_w}")
-
+        ret = []
+        ret.append(f"course: {self.course}\n")
+        ret.append(f"semester: {self.semester}\n")
+        ret.append(f"unit_id: {self.section_id}\n")
+        ret.append(f"count_ap: {self.count_ap}\n")
+        ret.append(f"count_a: {self.count_a}\n")
+        ret.append(f"count_am,: {self.count_am}\n")
+        ret.append(f"count_bp: {self.count_bp}\n")
+        ret.append(f"count_b: {self.count_b}\n")
+        ret.append(f"count_bm,: {self.count_bm}\n")
+        ret.append(f"count_cp: {self.count_cp}\n")
+        ret.append(f"count_c: {self.count_c}\n")
+        ret.append(f"count_cm,: {self.count_cm}\n")
+        ret.append(f"count_dp: {self.count_dp}\n")
+        ret.append(f"count_d: {self.count_d}\n")
+        ret.append(f"count_dm,: {self.count_dm}\n")
+        ret.append(f"count_i: {self.count_i}\n")
+        ret.append(f"count_w: {self.count_w}\n")
+        return ''.join(ret)
 
 class SectionGoalGrades:
     def __init__(self):
@@ -203,27 +204,30 @@ class SectionGoalGrades:
         self.count_dp = 0
         self.count_d = 0
         self.count_dm = 0
+        self.count_f = 0
 
     def __str__(self):
         """
         Overridden str function
         """
-        print(f"course: {self.course}")
-        print(f"semester: {self.semester}")
-        print(f"unit_id: {self.unit_id}")
-        print(f"goal_id: {self.goal_id}")
-        print(f"count_ap: {self.count_ap}")
-        print(f"count_a: {self.count_a}")
-        print(f"count_am,: {self.count_am}")
-        print(f"count_bp: {self.count_bp}")
-        print(f"count_b: {self.count_b}")
-        print(f"count_bm,: {self.count_bm}")
-        print(f"count_cp: {self.count_cp}")
-        print(f"count_c: {self.count_c}")
-        print(f"count_cm,: {self.count_cm}")
-        print(f"count_dp: {self.count_dp}")
-        print(f"count_d: {self.count_d}")
-        print(f"count_dm,: {self.count_dm}")
+        ret = []
+        ret.append(f"course: {self.course}\n")
+        ret.append(f"semester: {self.semester}\n")
+        ret.append(f"unit_id: {self.section_id}\n")
+        ret.append(f"goal_id: {self.goal_id}\n")
+        ret.append(f"count_ap: {self.count_ap}\n")
+        ret.append(f"count_a: {self.count_a}\n")
+        ret.append(f"count_am,: {self.count_am}\n")
+        ret.append(f"count_bp: {self.count_bp}\n")
+        ret.append(f"count_b: {self.count_b}\n")
+        ret.append(f"count_bm,: {self.count_bm}\n")
+        ret.append(f"count_cp: {self.count_cp}\n")
+        ret.append(f"count_c: {self.count_c}\n")
+        ret.append(f"count_cm,: {self.count_cm}\n")
+        ret.append(f"count_dp: {self.count_dp}\n")
+        ret.append(f"count_d: {self.count_d}\n")
+        ret.append(f"count_dm,: {self.count_dm}\n")
+        return ''.join(ret)
 
 class Goal:
     def __init__(self):

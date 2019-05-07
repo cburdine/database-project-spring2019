@@ -324,10 +324,39 @@ class ClientModel:
             cfg.description = desc
             cfg.id = id
         return cfg
+    def set_section_grades(self, grades):
+        grade_section = Section()
+        grade_section.semester = grades.semester
+        grade_section.year = grades.year
+        grade_section.course_name = grades.course
+        grade_section.section_id = grades.section_id
+        existing_grade = self.adapter.get_section_grades(grade_section)
+
+        if existing_grade is None:
+            self.adapter.set_section_grades(grades, updating=False)
+        else:
+            self.adapter.set_section_grades(grades, updating=True)
+
+
 
     def get_section_grades(self, section):
         """Auxilary function to get_section_statistics to get the grades for each section"""
         ret = self.adapter.get_section_grades(section)
+        return ret
+
+    def get_section_goal_grades(self, section_goal):
+        """Auxilary function to get_section_statistics to get the grades for each section"""
+        ret = self.adapter.get_section_grades(section=section_goal,section_goal=True)
+        return ret
+
+    def get_section_goal_grades_by_id(self, section, goal_id):
+        grade_goal = SectionGoalGrades()
+        grade_goal.semester = section.semester
+        grade_goal.year = section.year
+        grade_goal.section_id = section.section_id
+        grade_goal.goal_id = goal_id
+        ret = self.adapter.get_section_grades(section=grade_goal, section_goal=True)
+        return ret
 
 
     def get_solo_section_statistics(self, section, section_goal=False):

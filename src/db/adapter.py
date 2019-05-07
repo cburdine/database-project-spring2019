@@ -330,7 +330,7 @@ class DBAdapter:
                 ret = None
 
         except:
-            logging.warning("DBAdapter: Error- cannot retrieve section: " + str(id))
+            logging.warning("DBAdapter: Error- cannot retrieve section: " + str(new_section.unit_id))
 
         return ret
 
@@ -347,6 +347,58 @@ class DBAdapter:
                                    (new_section.course_name, new_section.semester, new_section.section_id,
                                     new_section.num_students, new_section.comment1, new_section.comment2, new_section.year))
         self.db_connection.commit()
+
+    def set_section_grades(self, section_grades, updating=False):
+        ADD_SECTION_GRADES = """INSERT INTO SectionGrades (course, semester, year, section_id, count_ap, count_a, count_am, count_bp, count_b, count_bm, count_cp, count_c, count_cm, count_dp, count_d, count_dm, count_f,count_i, count_w) VALUES
+                                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        UPDATE_SECTION_GRADES = """UPDATE SectionGrades SET count_ap = %s, count_a = %s, count_am = %s, count_bp = %s, count_b = %s, count_bm = %s, count_cp = %s, count_c = %s, count_cm = %s, count_dp = %s, count_d = %s, count_dm = %s, count_f = %s,count_i = %s, count_w = %s
+                                    WHERE course = %s AND semester = %s AND year = %s AND section_id = %s"""
+        #try:
+        if not updating:
+            self.db_cursor.execute(ADD_SECTION_GRADES, (section_grades.course,
+                                                       section_grades.semester,
+                                                       section_grades.year,
+                                                       section_grades.section_id,
+                                                       section_grades.count_ap,
+                                                       section_grades.count_a,
+                                                       section_grades.count_am,
+                                                       section_grades.count_bp,
+                                                       section_grades.count_b,
+                                                       section_grades.count_bm,
+                                                       section_grades.count_cp,
+                                                       section_grades.count_c,
+                                                       section_grades.count_cm,
+                                                       section_grades.count_dp,
+                                                       section_grades.count_d,
+                                                       section_grades.count_dm,
+                                                       section_grades.count_f,
+                                                       section_grades.count_i,
+                                                       section_grades.count_w))
+        else:
+            self.db_cursor.execute(UPDATE_SECTION_GRADES,(
+                                                       section_grades.count_ap,
+                                                       section_grades.count_a,
+                                                       section_grades.count_am,
+                                                       section_grades.count_bp,
+                                                       section_grades.count_b,
+                                                       section_grades.count_bm,
+                                                       section_grades.count_cp,
+                                                       section_grades.count_c,
+                                                       section_grades.count_cm,
+                                                       section_grades.count_dp,
+                                                       section_grades.count_d,
+                                                       section_grades.count_dm,
+                                                       section_grades.count_f,
+                                                       section_grades.count_i,
+                                                       section_grades.count_w,
+                                                       section_grades.course,
+                                                       section_grades.semester,
+                                                       section_grades.year,
+                                                       section_grades.section_id))
+
+        self.db_connection.commit()
+        #except:
+        #logging.warning("DBAdapter: Error- cannot update section grades.")
 
     def set_curriculum(self, new_curriculum, updating=False):
         """Function for adding curriculum to the db"""
@@ -580,69 +632,75 @@ class DBAdapter:
         """Function to retrieve the section grades from the db and return them as a list
         (this works for SectionGrades table and SectionGoalGrades table)"""
         if not section_goal:
-            SECTION_GRADES = """SELECT count_ap, count_a count_am, count_bp, count_b count_bm, count_cp, count_c count_cm, count_dp, count_d, count_dm, count_f,count_i, count_w FROM SectionGrades WHERE course = %s AND semester = %s AND year = % AND section_id = %s"""
+            SECTION_GRADES = """SELECT count_ap, count_a, count_am, count_bp, count_b, count_bm, count_cp, count_c, count_cm, count_dp, count_d, count_dm, count_f,count_i, count_w FROM SectionGrades WHERE course = %s AND semester = %s AND year = %s AND section_id = %s"""
         else:
-            SECTION_GRADES = """SELECT count_ap, count_a count_am, count_bp, count_b count_bm, count_cp, count_c count_cm, count_dp, count_d, count_dm, count_f FROM SectionGoalGrades WHERE course = %s AND semester = %s AND year = % AND section_id = %s AND goal_id = %s"""
+            SECTION_GRADES = """SELECT count_ap, count_a, count_am, count_bp, count_b count_bm, count_cp, count_c, count_cm, count_dp, count_d, count_dm, count_f FROM SectionGoalGrades WHERE course = %s AND semester = %s AND year = %s AND section_id = %s AND goal_id = %s"""
 
         ret = None
-        try:
-            if not section_goal:
-                self.db_cursor.execute(
-                    SECTION_GRADES,
-                    (section.course_name, section.semester, section.year, section.section_id))
-            else:
-                self.db_cursor.execute(
-                    SECTION_GRADES,
-                    (section.course_name, section.semester, section.year, section.section_id, section.goal_id))
-            section_grades = self.db_cursor.fetchall()
-            if not section_goal:
-                ret = SectionGrades
-            else:
-                ret = SectionGoalGrades
-            if section_grades and not section_goal:
-                ret.count_ap= section_grades[0][0]
-                ret.count_a = section_grades[0][1]
-                ret.count_am = section_grades[0][2]
-                ret.count_bp = section_grades[0][3]
-                ret.count_b = section_grades[0][4]
-                ret.count_bm = section_grades[0][5]
-                ret.count_cp = section_grades[0][6]
-                ret.count_c = section_grades[0][7]
-                ret.count_cm = section_grades[0][8]
-                ret.count_dp = section_grades[0][9]
-                ret.count_d = section_grades[0][10]
-                ret.count_dm = section_grades[0][11]
-                ret.count_f = section_grades[0][12]
-                ret.count_i = section_grades[0][13]
-                ret.count_w = section_grades[0][14]
-                ret.course = section.course_name
-                ret.semester = section.semester
-                ret.year = section.year
-                ret.section_id = section.section_id
-            elif section_grades and section_goal:
-                ret.count_ap = section_grades[0][0]
-                ret.count_a = section_grades[0][1]
-                ret.count_am = section_grades[0][2]
-                ret.count_bp = section_grades[0][3]
-                ret.count_b = section_grades[0][4]
-                ret.count_bm = section_grades[0][5]
-                ret.count_cp = section_grades[0][6]
-                ret.count_c = section_grades[0][7]
-                ret.count_cm = section_grades[0][8]
-                ret.count_dp = section_grades[0][9]
-                ret.count_d = section_grades[0][10]
-                ret.count_dm = section_grades[0][11]
-                ret.count_f = section_grades[0][12]
-                ret.course = section.course_name
-                ret.semester = section.semester
-                ret.year = section.year
-                ret.section_id = section.section_id
-                ret.goal_id = section.goal_id
-            else:
-                ret = None
+        #try:
+        if not section_goal:
+            self.db_cursor.execute(
+                SECTION_GRADES,
+                (section.course_name, section.semester, section.year, section.section_id))
+        else:
+            self.db_cursor.execute(
+                SECTION_GRADES,
+                (section.course, section.semester, section.year, section.section_id, section.goal_id))
+        section_grades = self.db_cursor.fetchall()
+        if len(section_grades) > 0 and not section_goal:
+            ret = SectionGrades()
+            ret.section_id = section.section_id
+            ret.semester = section.semester
+            ret.year = section.year
+            ret.course = section.course_name
+            ret.count_ap = section_grades[0][0]
+            ret.count_a = section_grades[0][1]
+            ret.count_am = section_grades[0][2]
+            ret.count_bp = section_grades[0][3]
+            ret.count_b = section_grades[0][4]
+            ret.count_bm = section_grades[0][5]
+            ret.count_cp = section_grades[0][6]
+            ret.count_c = section_grades[0][7]
+            ret.count_cm = section_grades[0][8]
+            ret.count_dp = section_grades[0][9]
+            ret.count_d = section_grades[0][10]
+            ret.count_dm = section_grades[0][11]
+            ret.count_f = section_grades[0][12]
+            ret.count_i = section_grades[0][13]
+            ret.count_w = section_grades[0][14]
+            ret.course = section.course_name
+            ret.semester = section.semester
+            ret.year = section.year
+            ret.section_id = section.section_id
+        elif len(section_grades) > 0 and section_goal:
+            ret = SectionGoalGrades()
+            ret.section_id = section.section_id
+            ret.semester = section.semester
+            ret.year = section.year
+            ret.course = section.course_name
+            ret.count_ap = section_grades[0][0]
+            ret.count_a = section_grades[0][1]
+            ret.count_am = section_grades[0][2]
+            ret.count_bp = section_grades[0][3]
+            ret.count_b = section_grades[0][4]
+            ret.count_bm = section_grades[0][5]
+            ret.count_cp = section_grades[0][6]
+            ret.count_c = section_grades[0][7]
+            ret.count_cm = section_grades[0][8]
+            ret.count_dp = section_grades[0][9]
+            ret.count_d = section_grades[0][10]
+            ret.count_dm = section_grades[0][11]
+            ret.count_f = section_grades[0][12]
+            ret.course = section.course_name
+            ret.semester = section.semester
+            ret.year = section.year
+            ret.section_id = section.section_id
+            ret.goal_id = section.goal_id
+        else:
+            ret = None
 
-        except:
-            logging.warning("DBAdapter: Error- cannot retrieve section grades: " + str(id))
+        #except:
+        #    logging.warning("DBAdapter: Error- cannot retrieve section grades: " + str(id))
 
         return ret
 
