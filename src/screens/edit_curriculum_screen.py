@@ -295,4 +295,3 @@ class EditCurriculumScreenRoot(Widget):
         self.app.screen_manager.current = 'curriculum_dashboard'
         dialogue = MessageDialogue(title="success", message="We removed the curriculum from the db")
         dialogue.open()
-        pass

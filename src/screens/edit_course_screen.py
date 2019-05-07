@@ -191,3 +191,21 @@ class EditCourseScreenRoot(Widget):
             self.ids.comment_1.text = ''
             self.app.screen_manager.transition.direction = 'right'
             self.app.screen_manager.current = 'course_dashboard'
+
+    def remove_course_callback(self):
+
+        self.app.client_model.remove_course_goals(self.course)
+        self.app.client_model.remove_course_topics(self.course)
+        self.app.client_model.remove_course_in_curriculum_listings(self.course)
+        self.app.client_model.remove_course_in_section(self.course)
+        self.app.client_model.remove_course_in_section_grades(self.course)
+        self.app.client_model.remove_course_in_section_goal_grades(self.course)
+        self.app.client_model.remove_course(self.course)
+        self.app.client_model._course_to_edit = classes.Course()
+        self.app.screen_manager.transition.direction = 'down'
+        self.app.screen_manager.current = 'course_dashboard'
+        dialogue = MessageDialogue(title="success", message="We removed the course from the db")
+        dialogue.open()
+
+
+

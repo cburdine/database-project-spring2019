@@ -898,3 +898,52 @@ class DBAdapter:
             self.db_cursor.execute(INSERT_COURSE_GOALS, (course.name, cg))
             self.db_connection.commit()
 
+    def remove_course_goals(self, course):
+        """Fuction to remove course goals from the db"""
+        DELETE_COURSE_GOALS = """DELETE FROM CourseGoals WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_GOALS, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_topics(self, course):
+        """Function to remove course topics from the db"""
+        DELETE_COURSE_TOPICS = """DELETE FROM CourseTopics WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_TOPICS, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_curriculum_listings(self, course):
+        """Function to remove courses from a curriculum in the db"""
+        DELETE_CURRICULUM_COURSES = """DELETE FROM CurriculumListings WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_CURRICULUM_COURSES, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_section(self, course):
+        """Function to remove all sections of a course in the db"""
+        DELETE_COURSE_SECTIONS = """DELETE FROM Section WHERE course_name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_SECTIONS, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_section_grades(self, course):
+        """Function to remove occurances of course in section grades in the db"""
+        DELETE_COURSE_SECTION_GRADES = """DELETE FROM SectionGrades WHERE course = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_SECTION_GRADES, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course_in_section_goal_grades(self, course):
+        """Function to remove occurances of course in section grades in the db"""
+        DELETE_COURSE_SECTION_GOAL_GRADES = """DELETE FROM SectionGoalGrades WHERE course = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE_SECTION_GOAL_GRADES, (course.name,))
+        self.db_connection.commit()
+
+    def remove_course(self, course):
+        """Function to remove course from the db"""
+        DELETE_COURSE = """DELETE FROM Course WHERE name = %s"""
+
+        self.db_cursor.execute(DELETE_COURSE, (course.name,))
+        self.db_connection.commit()
+

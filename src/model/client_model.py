@@ -722,3 +722,30 @@ class ClientModel:
         """Function to edit a course using a course object"""
         self.adapter.edit_course(new_course)
 
+    def remove_course_goals(self, course):
+        """Function to remove course goals based off of course object"""
+        self.adapter.remove_course_goals(course)
+
+    def remove_course_topics(self, course):
+        """Function to remove course topics based off of course object"""
+        self.adapter.remove_course_topics(course)
+
+    def remove_course_in_curriculum_listings(self, course):
+        """Function to remove courses in a particular curriculum using a course object"""
+        self.adapter.remove_course_in_curriculum_listings(course)
+
+    def remove_course_in_section(self, course):
+        """Function to remove all sections of a course"""
+        self.adapter.remove_course_in_section(course)
+
+    def remove_course_in_section_grades(self, course):
+        """Function to remove all the course appearances in section grades"""
+        self.adapter.remove_course_in_section_grades(course)
+
+    def remove_course_in_section_goal_grades(self, course):
+        """Function to remove all the course appearances in section goal grades"""
+        self.adapter.remove_course_in_section_goal_grades(course)
+
+    def remove_course(self, course):
+        """Function to remove all the courses from the db"""
+        self.adapter.remove_course(course)
