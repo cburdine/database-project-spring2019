@@ -29,3 +29,4 @@ class KivyGraphWidget(Widget):
             plt.title('Average appearance of each letter grade over the time interval')
         else:
             plt.title('Total appearance of each letter grade over the time interval')
+        plt.show()
