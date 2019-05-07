@@ -169,6 +169,7 @@ class ViewSectionStatsScreenRoot(Widget):
             if db_grades is None:
                 db_grades = SectionGrades()
             self.active_section_grades_panel = SectionStatsPanel(section=section, section_grades=db_grades)
+            self.active_section_grades_panel.link_to_app(self.app)
             all_header.content = self.active_section_grades_panel
             self.ids.goal_tabbed_panel.add_widget(all_header)
 
@@ -179,6 +180,7 @@ class ViewSectionStatsScreenRoot(Widget):
                 if db_goal_grades is None:
                     db_goal_grades = SectionGoalGrades()
                 new_content = GoalStatsPanel(cfg, section=section, section_goal_grades=db_goal_grades)
+                new_content.link_to_app(self.app)
                 self.active_goal_grades_panels.append(new_content)
                 new_header = TabbedPanelHeader(text=f"Goal#{cfg.id}")
                 new_header.content = new_content
@@ -195,7 +197,35 @@ class SectionStatsPanel(BoxLayout):
         BoxLayout.__init__(self)
         self.section = section
         self.grades = section_grades
+        self.app = None
+        Clock.schedule_once(self.init, 0.0)
 
+    def link_to_app(self, app):
+        self.app = app
+
+    def init(self, *args):
+        IND = "\n     "
+        description = []
+        description.append(f"[color=ffffff][size=28]Section Statistics:[/size][/color]\n")
+        description.append(IND + f"Section #{self.section.section_id}")
+        description.append(IND + f"Number of Students: {self.section.num_students}")
+        self.ids.section_description.halign = 'left'
+        self.ids.section_description.valign = 'top'
+        self.ids.section_description.text = ''.join(description)
+        self.ids.section_description.markup = True
+        self.ids.section_description.texture_update()
+        self.populate_stats()
+
+    def populate_stats(self):
+        self.ids.stats_label.markup = True
+        start_year = -1 if len(self.ids.start_year.text) is 0 else int(self.ids.start_year.text)
+        end_year = -1 if len(self.ids.end_year.text) is 0 else int(self.ids.end_year.text)
+        start_sem = SEMESTER_NAME_MAP[self.ids.start_semester.text]
+        end_sem = SEMESTER_NAME_MAP[self.ids.end_semester.text]
+        stats = "<stats go here>"
+        #stats = self.app.client_model.get_aggregate_section_statistics(self, start_year=start_year, start_semester=start_sem,
+        #                                        end_year=end_year, end_semester=end_sem, course=self.section)
+        self.ids.stats_label.text = str(stats)
 
 class GoalStatsPanel(BoxLayout):
     """" else str(grades_obj.count_w)"""
@@ -204,3 +234,17 @@ class GoalStatsPanel(BoxLayout):
         self.section = section
         self.cfg = context_free_goal
         self.grades = section_goal_grades
+        self.app = None
+        Clock.schedule_once(self.init, 0.0)
+
+    def init(self, *args):
+        description = []
+        description.append(f"[color=ffffff][size=28]Goal Statistics:[/size][/color]\n")
+        description.append(str(self.cfg.description))
+        self.ids.goal_description.valign = 'top'
+        self.ids.goal_description.halign = 'left'
+        self.ids.goal_description.markup = True
+        self.ids.goal_description.text = ''.join(description)
+
+    def link_to_app(self, app):
+        self.app = app

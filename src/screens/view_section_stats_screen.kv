@@ -2,6 +2,7 @@
 
 #:import login_screen src.screens.main_screen
 #:import tree_widgets src.widgets.tree_widgets
+#:import kivy_graph src.widgets.kivy_graph
 
 # This script is written in kv script language
 # which makes our implementation a bit easier.
@@ -152,11 +153,99 @@ ViewSectionStatsScreenRoot:
             text: 'Back'
             on_press: root.back_callback()
 
+
 <SectionStatsPanel>:
-    Button:
-        text: 'Section Stats here!'
+    orientation: 'vertical'
+    padding: dp(10)
+    Label:
+        valign: 'top'
+        halign: 'left'
+        id: section_description
+        text: '<Goal Description>'
+        size_hint_y: None
+        size_y: dp(60)
+
+    Label:
+        id: stats_label
+        text: 'Section stats here!'
+
+    BoxLayout:
+        size_hint: (None, None)
+        width: root.width - dp(20)
+        height: dp(32)
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Begin Year/Semester:'
+
+        IntTextInput:
+            id: start_year
+        Spinner:
+            id: start_semester
+            text: 'Fall'
+            values: ('Fall', 'Summer','Spring','Winter')
+
+    BoxLayout:
+        size_hint: (None, None)
+        width: root.width - dp(20)
+        height: dp(32)
+        orientation: 'horizontal'
+
+        Label:
+            text: 'End Year/Semester:'
+
+        IntTextInput:
+            id: end_year
+
+        Spinner:
+            id: end_semester
+            text: 'Fall'
+            values: ('Fall', 'Summer','Spring','Winter')
 
 <GoalStatsPanel>:
-    Button:
-        text: 'Goal stats here!'
+    orientation: 'vertical'
+    padding: dp(10)
+    Label:
+        valign: 'top'
+        halign: 'left'
+        id: goal_description
+        text: '<Goal Description>'
+        size_hint_y: None
+        size_y: dp(60)
+
+    Label:
+        text: 'Section stats here!'
+
+    BoxLayout:
+        size_hint: (None, None)
+        width: root.width - dp(20)
+        height: dp(32)
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Begin Year/Semester:'
+
+        IntTextInput:
+            id: start_year
+
+        Spinner:
+            id: start_semester
+            text: 'Fall'
+            values: ('Fall', 'Summer','Spring','Winter')
+
+    BoxLayout:
+        size_hint: (None, None)
+        width: root.width - dp(20)
+        height: dp(32)
+        orientation: 'horizontal'
+
+        Label:
+            text: 'End Year/Semester:'
+
+        IntTextInput:
+            id: end_year
+        Spinner:
+            id: end_semester
+            text: 'Fall'
+            values: ('Fall', 'Summer','Spring','Winter')
 

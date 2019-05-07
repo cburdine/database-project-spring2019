@@ -81,6 +81,7 @@ class AddRealGradesScreenRoot(Widget):
         rows = self.app.client_model.adapter.get_filtered_course_names(year=year, semester_name=semester)
         self.ids.course_selector.setRows(rows)
         self.ids.sv_container.height = self.ids.course_selector.get_height()
+
         if len(rows) is 0:
             self.ids.section_spinner.text = 'No Sections Exist'
             self.ids.section_spinner.values = ()
@@ -154,7 +155,6 @@ class AddRealGradesScreenRoot(Widget):
             description = []
             description.append(IND + f"[color=ffffff][size=30]{section.course_name} ({self.ids.semester.text} {section.year})[/size][/color]")
             description.append(IND + f"Section #{section.section_id}")
-            description.append(IND + f"Number of Students: {section.num_students}")
             self.ids.description_field.halign = 'left'
             self.ids.description_field.valign = 'top'
             self.ids.description_field.text = ''.join(description)
