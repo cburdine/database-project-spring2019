@@ -33,6 +33,8 @@ class NewCourseTopicScreenRoot(Widget):
         self.app = app_ref
 
     def back_callback(self):
+        self.ids.topic_id.text = ''
+        self.ids.course_name.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 

@@ -33,6 +33,11 @@ class NewCurriculumTopicScreenRoot(Widget):
         self.app = app_ref
 
     def back_callback(self):
+        self.ids.curriculum_name.text = ''
+        self.ids.topic_id.text = ''
+        self.ids.level.text = ''
+        self.ids.subject_area.text = ''
+        self.ids.time_unit.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'main'
 
@@ -68,8 +73,6 @@ class NewCurriculumTopicScreenRoot(Widget):
         t = self.app.client_model.get_topic(topic_id)
         if t.id is not None:
             topic_exists = True
-
-        # todo: check for duplicates
 
         if curriculum_name is None or topic_id is None or level is None or subject_area is None or time_unit is None:
             logging.info("NewCurriculumTopicScreenRoot: Fields lack input")

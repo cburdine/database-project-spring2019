@@ -33,6 +33,9 @@ class NewGoalScreenRoot(Widget):
         self.app = app_ref
 
     def back_callback(self):
+        self.ids.curriculum_name.text = ''
+        self.ids.goal_id.text = ''
+        self.ids.goal_description.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 

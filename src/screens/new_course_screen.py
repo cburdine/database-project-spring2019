@@ -45,6 +45,10 @@ class NewCourseScreenRoot(Widget):
         self.ids.sv_goals_list.height = self.ids.goals_list.get_height()
 
     def back_callback(self):
+        self.ids.course_name.text = ''
+        self.ids.subject_code.text = ''
+        self.ids.credit_hours.text = ''
+        self.ids.comment_1.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 

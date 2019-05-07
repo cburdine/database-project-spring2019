@@ -50,6 +50,9 @@ class NewCurriculumScreenRoot(Widget):
         self.ids.sv_opt_courses_list.height = self.ids.opt_courses_list.get_height()
 
     def back_callback(self):
+        self.ids.curriculum_name.text = ''
+        self.ids.min_credit_hours.text = ''
+        self.ids.id_in_charge.text = ''
         self.app.screen_manager.transition.direction = 'right'
         self.app.screen_manager.current = 'add_new_screen'
 

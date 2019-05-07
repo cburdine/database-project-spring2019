@@ -54,6 +54,10 @@ class EditCourseScreenRoot(Widget):
         self.ids.course_name.text = self.course.name
 
     def back_callback(self):
+        self.ids.course_name.text = ''
+        self.ids.subject_code.text = ''
+        self.ids.credit_hours.text = ''
+        self.ids.comment_1.text = ''
         self.app.screen_manager.transition.direction = 'down'
         self.app.screen_manager.current = 'course_dashboard'
 
@@ -202,6 +206,10 @@ class EditCourseScreenRoot(Widget):
         self.app.client_model.remove_course_in_section_goal_grades(self.course)
         self.app.client_model.remove_course(self.course)
         self.app.client_model._course_to_edit = classes.Course()
+        self.ids.course_name.text = ''
+        self.ids.subject_code.text = ''
+        self.ids.credit_hours.text = ''
+        self.ids.comment_1.text = ''
         self.app.screen_manager.transition.direction = 'down'
         self.app.screen_manager.current = 'course_dashboard'
         dialogue = MessageDialogue(title="success", message="We removed the course from the db")
