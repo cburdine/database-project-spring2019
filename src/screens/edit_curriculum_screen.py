@@ -62,8 +62,8 @@ class EditCurriculumScreenRoot(Widget):
 
     def back_callback(self):
         self.app.client_model._curriculum_to_edit = classes.Curriculum()
-        self.app.screen_manager.transition.direction = 'right'
-        self.app.screen_manager.current = 'main'
+        self.app.screen_manager.transition.direction = 'down'
+        self.app.screen_manager.current = 'curriculum_dashboard'
 
     def remove_req_course_callback(self):
         rem_req_course = self.ids.req_courses_list.get_selected_row()

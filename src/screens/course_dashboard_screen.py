@@ -128,7 +128,8 @@ class CourseDashboardScreenRoot(Widget):
 
     def edit_course_callback(self):
         tmp = self.course_selector.get_selected_row()
-        self.app.client_model._course_to_edit = self.app.client_model.get_course(tmp)
-        self.app.screen_manager.transition.direction = 'up'
-        self.app.screen_manager.current = 'edit_course'
+        if tmp:
+            self.app.client_model._course_to_edit = self.app.client_model.get_course(tmp)
+            self.app.screen_manager.transition.direction = 'up'
+            self.app.screen_manager.current = 'edit_course'
         print('Edit Course')
