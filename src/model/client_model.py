@@ -808,26 +808,37 @@ class ClientModel:
         """Function to remove all the courses from the db"""
         self.adapter.remove_course(course)
 
-    def convert_to_str(self, stats):
+    def convert_to_str(self, stats, solo_stats=False):
         """Aux function to present our stats"""
         print(stats)
-
-        total_students = stats[0]
-        all_grades = stats[1]
-        all_goal_grades = stats[2]
-        avg_grade = stats[3]
-        avg_of_each_letter = stats[5]
-
         ret_str = " "
-        ret_str += f"total students: {total_students} \n"
-        ret_str += f"all grades across sections:                                         Average Grade per section\n"
-        ret_str += f"A+ : {all_grades['a+']}        A: {all_grades['a']}       A- : {all_grades['a-']}                                  A+ : {avg_of_each_letter['a+']}        A: {avg_of_each_letter['a']}       A- : {avg_of_each_letter['a-']}\n"
-        ret_str += f"B+ : {all_grades['b+']}        B: {all_grades['b']}       B- : {all_grades['b-']}                                  B+ : {avg_of_each_letter['b+']}        B: {avg_of_each_letter['b']}       B- : {avg_of_each_letter['b-']}\n"
-        ret_str += f"C+ : {all_grades['c+']}        C: {all_grades['c']}       C- : {all_grades['c-']}                                  C+ : {avg_of_each_letter['c+']}        C: {avg_of_each_letter['c']}       C- : {avg_of_each_letter['c-']}\n"
-        ret_str += f"D+ : {all_grades['d+']}        D: {all_grades['d']}       D- : {all_grades['d-']}                                  D+ : {avg_of_each_letter['d+']}        D: {avg_of_each_letter['d']}       D- : {avg_of_each_letter['d-']}\n"
-        ret_str += f"F : {all_grades['f']}          I: {all_grades['i']}       W  : {all_grades['w']}                                   F  : {avg_of_each_letter['f']}         I: {avg_of_each_letter['i']}       W  : {avg_of_each_letter['w']}\n\n"
-        ret_str += f"Average Grade: {avg_grade}"
 
+        if not solo_stats:
+            total_students = stats[0]
+            all_grades = stats[1]
+            all_goal_grades = stats[2]
+            avg_grade = stats[3]
+            avg_of_each_letter = stats[5]
 
+            ret_str += f"total students: {total_students} \n"
+            ret_str += f"all grades across sections:                                         Average Grade per section\n"
+            ret_str += f"A+ : {all_grades['a+']}        A: {all_grades['a']}       A- : {all_grades['a-']}                                  A+ : {avg_of_each_letter['a+']}        A: {avg_of_each_letter['a']}       A- : {avg_of_each_letter['a-']}\n"
+            ret_str += f"B+ : {all_grades['b+']}        B: {all_grades['b']}       B- : {all_grades['b-']}                                  B+ : {avg_of_each_letter['b+']}        B: {avg_of_each_letter['b']}       B- : {avg_of_each_letter['b-']}\n"
+            ret_str += f"C+ : {all_grades['c+']}        C: {all_grades['c']}       C- : {all_grades['c-']}                                  C+ : {avg_of_each_letter['c+']}        C: {avg_of_each_letter['c']}       C- : {avg_of_each_letter['c-']}\n"
+            ret_str += f"D+ : {all_grades['d+']}        D: {all_grades['d']}       D- : {all_grades['d-']}                                  D+ : {avg_of_each_letter['d+']}        D: {avg_of_each_letter['d']}       D- : {avg_of_each_letter['d-']}\n"
+            ret_str += f"F : {all_grades['f']}          I: {all_grades['i']}       W  : {all_grades['w']}                                   F  : {avg_of_each_letter['f']}         I: {avg_of_each_letter['i']}       W  : {avg_of_each_letter['w']}\n\n"
+            ret_str += f"Average Grade: {avg_grade}"
+        else:
+            total_students = stats[0]
+            all_grades = stats[1]
+            avg_grade = stats[2]
+            ret_str += f"total students: {total_students} \n"
+            ret_str += f"all grades for this section:\n"
+            ret_str += f"A+ : {all_grades.count_ap}        A: {all_grades.count_a}       A- : {all_grades.count_am}\n"
+            ret_str += f"B+ : {all_grades.count_bp}        B: {all_grades.count_b}       B- : {all_grades.count_bm}\n"
+            ret_str += f"C+ : {all_grades.count_cp}        C: {all_grades.count_c}       C- : {all_grades.count_cm}\n"
+            ret_str += f"D+ : {all_grades.count_dp}        D: {all_grades.count_d}       D- : {all_grades.count_dm}\n"
+            ret_str += f"F : {all_grades.count_f}          I: {all_grades.count_i}       W  : {all_grades.count_w}\n"
+            ret_str += f"Average Grade: {avg_grade}"
 
         return ret_str
