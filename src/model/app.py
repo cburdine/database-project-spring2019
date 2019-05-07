@@ -17,6 +17,7 @@ from src.screens.new_course_goal_screen import NewCourseGoalScreen
 from src.screens.new_course_topic_screen import NewCourseTopicScreen
 from src.screens.new_curriculum_course_screen import NewCurriculumCourseScreen
 from src.screens.course_dashboard_screen import CourseDashboardScreen
+from src.screens.edit_curriculum_screen import EditCurriculumScreen
 from src.db.adapter import DBAdapter
 from src.model.client_model import ClientModel
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
@@ -51,6 +52,7 @@ class CurriculaApp(App):
         screen_list.append(NewCourseGoalScreen(root_app=self))
         screen_list.append(NewCourseTopicScreen(root_app=self))
         screen_list.append(NewCurriculumCourseScreen(root_app=self))
+        screen_list.append(EditCurriculumScreen(root_app=self))
 
         for screen in screen_list:
             self.screen_manager.add_widget(screen)

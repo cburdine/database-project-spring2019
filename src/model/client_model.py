@@ -24,6 +24,7 @@ class ClientModel:
         self._goal_map = {}
         self._section_map = {}
         self._cur_topic_temp = CurriculumTopic()
+        self._curriculum_to_edit = Curriculum()  # this is for edit functionality
 
     def get_person(self, id):
 
@@ -656,4 +657,34 @@ class ClientModel:
     def get_sections_of_a_course(self, course, year, semester_name):
         """Function to retrieve a list of sections based off of a course"""
         return self.adapter.get_sections_of_a_course(course, year=year, semester_name=semester_name)
+
+    def get_curricula_names(self):
+        """Function to retrieve all the curriculum names and store them in a list"""
+        return self.adapter.get_curricula_names()
+
+    def remove_curriculum_goals(self, curriculum):
+        """Function to remove a curriculum's goals using a curriculum object"""
+        goal_list = self.get_curriculum_goal_list(curriculum.name)
+        for g in goal_list:
+            try:
+                del self._goal_map[g.id]
+            except:
+                logging.warning("client_model: could not remove goal from the goal map")
+        self.adapter.remove_curriculum_goals(curriculum)
+
+    def remove_curriculum_topics(self, curriculum):
+        """Function to remove a curriculum's topics using a curriculum object"""
+        self.adapter.remove_curriculum_topics(curriculum)
+
+    def remove_curriculum_courses(self, curriculum):
+        """Function to remove a curriculum's courses using a curriculum object"""
+        self.adapter.remove_curriculum_courses(curriculum)
+
+    def remove_curriculum(self, curriculum):
+        """Function to remove curriculum after all other things depending on it have been removed"""
+        try:
+            del self._curricula_map[curriculum.name]
+        except:
+            logging.warning("client_model: could not remove curriculum name from the curricula_map")
+        self.adapter.remove_curriculum(curriculum)
 
