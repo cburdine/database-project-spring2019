@@ -31,7 +31,7 @@ class KivyGraphWidget(Widget):
             plt.title('Average appearance of each letter grade over the time interval')
         else:
             plt.title('Total appearance of each letter grade over the time interval')
-
+            
         self.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
 
@@ -45,3 +45,4 @@ class KivyGraphWidget(Widget):
         plt.ylabel('Usage')
         plt.title('Programming language usage')
         self.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+
