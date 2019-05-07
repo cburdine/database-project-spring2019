@@ -10,10 +10,10 @@ from src.screens.new_person_screen import NewPersonScreen
 from src.screens.new_course_screen import NewCourseScreen
 from src.screens.new_section_screen import NewSectionScreen
 from src.screens.new_curriculum_topic_screen import NewCurriculumTopicScreen
-from src.screens.enter_grades_screen import EnterGradesScreen
 from src.screens.add_goal_grades_screen import AddGoalGradesScreen
 from src.screens.add_real_grades_screen import AddRealGradesScreen
 from src.screens.new_course_goal_screen import NewCourseGoalScreen
+from src.screens.view_section_stats_screen import ViewSectionStatsScreen
 from src.screens.new_course_topic_screen import NewCourseTopicScreen
 from src.screens.new_curriculum_course_screen import NewCurriculumCourseScreen
 from src.screens.course_dashboard_screen import CourseDashboardScreen
@@ -49,6 +49,7 @@ class CurriculaApp(App):
         screen_list.append(NewCourseScreen(root_app=self))
         screen_list.append(NewSectionScreen(root_app=self))
         screen_list.append(NewCurriculumTopicScreen(root_app=self))
+        screen_list.append(ViewSectionStatsScreen(root_app=self))
         screen_list.append(AddRealGradesScreen(root_app=self))
         screen_list.append(NewCourseGoalScreen(root_app=self))
         screen_list.append(NewCourseTopicScreen(root_app=self))

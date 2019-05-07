@@ -53,7 +53,8 @@ class MainScreenRoot(Widget):
         self.app.screen_manager.current = 'course_dashboard'
 
     def course_stats_callback(self):
-        print('Course Stats')
+        self.app.screen_manager.transition.direction = 'left'
+        self.app.screen_manager.current = 'view_section_stats'
 
     def enter_grades_callback(self):
         print('Enter Grades')

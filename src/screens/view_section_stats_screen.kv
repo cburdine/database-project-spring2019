@@ -1,0 +1,162 @@
+#:kivy 1.0
+
+#:import login_screen src.screens.main_screen
+#:import tree_widgets src.widgets.tree_widgets
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+
+
+ViewSectionStatsScreenRoot:
+    on_size: root.resize_callback()
+
+    BoxLayout:
+        id: boxlayoutframe
+        orientation: 'horizontal'
+        size: root.size
+
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+            id: sv_container
+
+            Label:
+                canvas.before:
+                    Color:
+                        rgb: 0.37, 0.37, 0.37
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                text: 'Course'
+                size_hint: (1.0, None)
+                height: dp(40)
+
+            Label:
+                size_hint_y: None
+                height: dp(30)
+                text: 'Year/Semester:'
+                text_size: self.size
+                halign: 'center'
+                valign: 'bottom'
+            IntTextInput:
+                on_text: root.set_course_filter_callback()
+                size_hint_y: None
+                height: dp(32)
+                id: year
+                multiline: False
+                text: ''
+            Spinner:
+                id: semester
+                text: 'Fall'
+                values: ('Fall', 'Summer','Spring','Winter')
+                size_hint_y: None
+                height: dp(32)
+                on_text: root.set_course_filter_callback()
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                id: sv_left
+                canvas.before:
+                    Color:
+                        rgb: 0.05, 0.05, 0.05
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                StackLayout:
+                    id: sv_container
+                    orientation: 'lr-tb'
+                    size_hint_y: None
+                    height: dp(2000)
+
+                    RowSelectorWidget:
+                        pos: root.x, root.y
+                        size_hint_x: 1.0
+                        size_hint_y: 1.0
+                        id: course_selector
+
+
+        ScrollView:
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                id: sv_description_container
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    canvas.before:
+                        Color:
+                            rgb: 0.37, 0.37, 0.37
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    text: 'Sections'
+                    background_color: (1,0,0,1)
+                    size_hint_y: None
+                    height: dp(40)
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    Label:
+                        size_hint_x: None
+                        width: 100
+                        text_size: self.size
+                        font_size: '20dp'
+                        text: 'Section: '
+                        halign: 'right'
+                        valign: 'center'
+
+                    Spinner:
+                        id: section_spinner
+                        size_hint_y: None
+                        height: dp(34)
+                        text: 'No Sections Exist'
+                        on_text: root.set_course_text_description()
+
+                Label:
+                    size_hint_y: None
+                    height: dp(100)
+                    text_size: self.size
+                    id: description_field
+                    text: ''
+
+                TabbedPanel:
+                    id: goal_tabbed_panel
+                    size_hint_y: None
+                    height: root.height - dp(180)
+                    do_default_tab: False
+
+
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(40))
+        padding: dp(10)
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+<SectionStatsPanel>:
+    Button:
+        text: 'Section Stats here!'
+
+<GoalStatsPanel>:
+    Button:
+        text: 'Goal stats here!'
+
