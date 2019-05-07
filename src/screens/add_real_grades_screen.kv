@@ -153,7 +153,7 @@ AddRealGradesScreenRoot:
 
 <SectionGradesPanel>:
     padding: dp(10)
-    spacing: dp(10)
+    spacing: dp(2)
     orientation: 'vertical'
 
     Label:
@@ -169,6 +169,17 @@ AddRealGradesScreenRoot:
         GradeInputBlock:
             id: grade_block
         Widget
+    BoxLayout:
+        size_hint_y: None
+        height: dp(34)
+        orientation: 'horizontal'
+        Label:
+            halign: 'right'
+            text: 'Number of Students:'
+            size_hint_x: None
+            width: dp(160)
+        IntTextInput:
+            id: num_students
     BoxLayout:
         size_hint_y: None
         height: dp(34)
@@ -330,7 +341,7 @@ AddRealGradesScreenRoot:
     BoxLayout:
         orientation: 'horizontal'
         Label:
-            text: 'D'
+            text: 'D-'
             size_hint_x: None
             width: dp(18)
         IntTextInput:

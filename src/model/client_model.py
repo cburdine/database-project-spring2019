@@ -325,6 +325,7 @@ class ClientModel:
             cfg.description = desc
             cfg.id = id
         return cfg
+
     def set_section_grades(self, grades):
         grade_section = Section()
         grade_section.semester = grades.semester
@@ -338,6 +339,16 @@ class ClientModel:
         else:
             self.adapter.set_section_grades(grades, updating=True)
 
+    def set_section_goal_grades(self, grades):
+        existing_grade = self.adapter.get_section_grades(grades, section_goal=True)
+        print(grades)
+        print('-----')
+        print(existing_grade)
+
+        if existing_grade is None:
+            self.adapter.set_section_goal_grades(grades, updating=False)
+        else:
+            self.adapter.set_section_goal_grades(grades, updating=True)
 
 
     def get_section_grades(self, section):
@@ -352,6 +363,7 @@ class ClientModel:
 
     def get_section_goal_grades_by_id(self, section, goal_id):
         grade_goal = SectionGoalGrades()
+        grade_goal.course = section.course_name
         grade_goal.semester = section.semester
         grade_goal.year = section.year
         grade_goal.section_id = section.section_id

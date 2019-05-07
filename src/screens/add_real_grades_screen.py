@@ -6,7 +6,9 @@ from kivy.uix.tabbedpanel import TabbedPanel,TabbedPanelItem, TabbedPanelHeader
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from src.model.classes import SectionGrades, SectionGoalGrades
+from src.widgets.dialogues import MessageDialogue
 from src.db.schema import SEMESTER_NAME_MAP
+import logging
 from kivy.app import Widget
 from kivy.metrics import dp
 from kivy.clock import Clock
@@ -119,11 +121,20 @@ class AddRealGradesScreenRoot(Widget):
                 self.set_course_text_description()
 
     def submit_section_grades(self, section_grades_panel):
+        logging.info("AddRealGradesScreenRoot: Submitting Grades...")
         self.app.client_model.set_section_grades(section_grades_panel.grades)
+        self.app.client_model.adapter.update_section(section_grades_panel.section)
+        print(section_grades_panel.section)
+        dialogue = MessageDialogue(title="Grades Submitted",
+                                   message=f"Updated grades and Info for\nSection #{section_grades_panel.section.section_id}.")
+        dialogue.open()
 
-
-    def submit_goal_grades(self, goal_grades_panel):
-        print(goal_grades_panel.grades)
+    def submit_goal_grades(self, section_grades_panel):
+        logging.info("AddRealGradesScreenRoot: Submitting Grades...")
+        self.app.client_model.set_section_goal_grades(section_grades_panel.grades)
+        dialogue = MessageDialogue(title="Grades Submitted",
+                                   message=f"Updated goal grades for\nSection #{section_grades_panel.section.section_id}.")
+        dialogue.open()
 
     def set_course_text_description(self, *args):
 
@@ -152,7 +163,9 @@ class AddRealGradesScreenRoot(Widget):
             db_grades = self.app.client_model.get_section_grades(section)
             if db_grades is not None:
                 self.active_section_grades_panel.grades = db_grades
+                self.active_section_grades_panel.init()
             self.active_section_grades_panel.ids.comment1.text = section.comment1
+            self.active_section_grades_panel.ids.num_students.text = str(section.num_students)
             self.active_section_grades_panel.ids.comment2.text = section.comment2
             self.active_section_grades_panel.submit_callback = self.submit_section_grades
             all_header.content = self.active_section_grades_panel
@@ -164,8 +177,11 @@ class AddRealGradesScreenRoot(Widget):
                 new_header = TabbedPanelHeader(text=f"Goal#{cfg.id}")
                 new_content = GoalGradesPanel(cfg,section=section)
                 db_goal_grades = self.app.client_model.get_section_goal_grades_by_id(section=section, goal_id=g_id)
+                print("SECTION:\n" + str(section))
+                print(db_goal_grades)
                 if db_goal_grades is not None:
                     new_content.grades = db_goal_grades
+                    new_content.init()
                 new_content.submit_callback = self.submit_goal_grades
 
                 self.active_goal_grades_panels.append(new_content)
@@ -184,6 +200,7 @@ class GoalGradesPanel(BoxLayout):
         self.grades.semester = section.semester
         self.grades.year = section.year
         self.grades.section_id = section.section_id
+        self.grades.goal_id = context_free_goal.id
         self.submit_callback = self.null_func
         Clock.schedule_once(self.init, 0.0)
 
@@ -232,6 +249,10 @@ class SectionGradesPanel(BoxLayout):
     def submit(self):
         self.ids.grade_block.set_basic_grades(self.grades)
         self.ids.grade_block.set_i_w_grades(self.grades)
+        num_students_text = self.ids.num_students.text
+        self.section.num_students = 0 if len(num_students_text) is 0 else int(num_students_text)
+        self.section.comment1 = self.ids.comment1.text
+        self.section.comment2 = self.ids.comment2.text
         self.submit_callback(self)
 
     def null_func(self):
@@ -239,6 +260,7 @@ class SectionGradesPanel(BoxLayout):
 
     def init(self, *args):
         self.ids.grade_block.populate_basic_grades(self.grades)
+        self.ids.grade_block.populate_i_w_grades(self.grades)
 
 class GradeInputBlock(GridLayout):
 
