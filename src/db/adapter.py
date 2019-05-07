@@ -712,9 +712,9 @@ class DBAdapter:
 
         return ret
 
-    def get_sections(self, start_year, start_semester, end_year, end_semester, section_goal=False):
+    def get_sections(self, start_year, start_semester, end_year, end_semester, course, section_goal=False):
         """Function to retrieve a list of sections based on the given criteria"""
-        SECTION_GRADES = """SELECT course_name, section_id, num_students, comment1, comment2 FROM Section WHERE semester = %s AND year = %s"""
+        SECTION_GRADES = """SELECT section_id, num_students, comment1, comment2 FROM Section WHERE semester = %s AND year = %s AND course_name = %s"""
 
         spring = 'R'
         fall = 'F'
@@ -760,14 +760,14 @@ class DBAdapter:
         try:
             for i in year_list:
                 for j in semester_list:
-                    self.db_cursor.execute(SECTION_GRADES, (j, i))
+                    self.db_cursor.execute(SECTION_GRADES, (j, i, course.name))
                     section_list1 = self.db_cursor.fetchall()
                     for k in section_list1:
-                        current_section.course_name = k[0]
-                        current_section.section_id = k[1]
-                        current_section.num_students = k[2]
-                        current_section.comment1 = k[3]
-                        current_section.comment2 = k[4]
+                        current_section.course_name = course.name
+                        current_section.section_id = k[0]
+                        current_section.num_students = k[1]
+                        current_section.comment1 = k[2]
+                        current_section.comment2 = k[3]
                         current_section.year = i
                         current_section.semester = j
                         section_list2.append(current_section)

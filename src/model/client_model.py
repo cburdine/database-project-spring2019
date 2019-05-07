@@ -459,8 +459,8 @@ class ClientModel:
         else:
             return [grades, actual_grade_avg]
 
-    def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester, section_goal=False):
-        sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester, section_goal)
+    def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester, course, section_goal=False):
+        sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester, course, section_goal)
         total_students_enrolled_across_periods = 0
         avg_grade_total_across_periods = []
         avg_goal_grade_total_across_periods = []
