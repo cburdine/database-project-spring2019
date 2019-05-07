@@ -433,24 +433,32 @@ class DBAdapter:
             self.db_connection.commit()
 
             # update optional courses:
-            arg_list = list(map(lambda r: (False, new_curriculum.name, r), new_curriculum.opt_course_names))
+            arg_list = list(map(lambda r: (False, r, new_curriculum.name), new_curriculum.opt_course_names))
+            self.db_cursor.execute(
+                """DELETE FROM CurriculumListings WHERE curriculum_name = %s""", (new_curriculum.name,)
+            )
+            self.db_connection.commit()
             self.db_cursor.executemany(
-                """UPDATE CurriculumListings SET required = %s WHERE curriculum_name = %s AND course_name = %s""",
+                """INSERT INTO CurriculumListings (required, course_name, curriculum_name) VALUES (%s, %s, %s)""",
                 arg_list)
             self.db_connection.commit()
 
             # update required courses:
-            arg_list = list(map(lambda r: (True, new_curriculum.name, r), new_curriculum.req_course_names))
+            arg_list = list(map(lambda r: (True, r, new_curriculum.name), new_curriculum.req_course_names))
             self.db_cursor.executemany(
-                """UPDATE CurriculumListings SET required = %s WHERE curriculum_name = %s AND course_name = %s""",
+                """INSERT INTO CurriculumListings (required, course_name, curriculum_name) VALUES (%s, %s, %s)""",
                 arg_list)
             self.db_connection.commit()
 
             # update curriculum topics:
             arg_list = list(map(lambda ct: (ct.level, ct.subject_area, ct.time_unit, new_curriculum.name, ct.topic_id),
                                 new_curriculum.cur_topics))
+            self.db_cursor.execute(
+                """DELETE FROM CurriculumTopics WHERE curriculum_name = %s""", (new_curriculum.name,)
+            )
+            self.db_connection.commit()
             self.db_cursor.executemany(
-                """UPDATE CurriculumTopics SET level = %s, subject_area = %s, time_unit = %s WHERE curriculum_name = %s AND topic_id = %s""",
+                """INSERT INTO CurriculumTopics (level, subject_area, time_unit, curriculum_name, topic_id) VALUES (%s, %s, %s, %s, %s)""",
                 arg_list)
             self.db_connection.commit()
 
@@ -825,3 +833,43 @@ class DBAdapter:
             logging.warning("DBAdapter: Error- failed to retrieve all sections of a course.")
             return []
         """
+
+    def remove_curriculum_goals(self, curriculum):
+        """Function to remove curriculum goals from the db"""
+        DELETE_CURRICULUM_GOALS = """DELETE FROM Goal WHERE curriculum_name = %s"""
+
+        try:
+            self.db_cursor.execute(DELETE_CURRICULUM_GOALS, (curriculum.name,))
+            self.db_connection.commit()
+        except:
+            logging.warning("DBAdapter: Error- Could not delete curriculum goals.")
+
+    def remove_curriculum_topics(self, curriculum):
+        """Function to remove curriculum topics from the db"""
+        DELETE_FROM_CURRICULUM_TOPICS = """DELETE FROM CurriculumTopics WHERE curriculum_name = %s"""
+
+        try:
+            self.db_cursor.execute(DELETE_FROM_CURRICULUM_TOPICS, (curriculum.name,))
+            self.db_connection.commit()
+        except:
+            logging.warning("DBAdapter: Error- Could not delete curriculum topics.")
+
+    def remove_curriculum_courses(self, curriculum):
+        """Function to remove curriculum courses from the db"""
+        DELETE_FROM_CURRICULUM_LISTINGS = """DELETE FROM CurriculumListings WHERE curriculum_name = %s"""
+
+        try:
+            self.db_cursor.execute(DELETE_FROM_CURRICULUM_LISTINGS, (curriculum.name,))
+            self.db_connection.commit()
+        except:
+            logging.warning("DBAdapter: Error- Could not delete curriculum courses.")
+
+    def remove_curriculum(self, curriculum):
+        """Function to remove curriculum from the db"""
+        DELETE_CURRICULUM = """DELETE FROM Curriculum WHERE name = %s"""
+
+        try:
+            self.db_cursor.execute(DELETE_CURRICULUM, (curriculum.name,))
+            self.db_connection.commit()
+        except:
+            logging.warning("DBAdapter: Error- Could not delete curriculum.")

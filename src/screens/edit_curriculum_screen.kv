@@ -1,0 +1,360 @@
+#:kivy 1.0
+
+#:import login_screen src.screens.main_screen
+#:import text_input_widgets src.widgets.text_input_widgets
+
+# This script is written in kv script language
+# which makes our implementation a bit easier.
+# Documentation and syntax can be found at:
+#
+# https://kivy.org/doc/stable/guide/lang.html
+#
+
+EditCurriculumScreenRoot:
+
+
+    BoxLayout:
+        orientation: 'vertical'
+        pos: (dp(0), dp(230))
+        width: root.width
+        height: root.height - dp(230)
+        size_hint: (None, None)
+
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0.37, 0.37, 0.37
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text: 'New Curriculum'
+            size_hint: (1.0, None)
+            height: dp(40)
+
+        Button:
+            size_hint: (None,None)
+            width: dp(200)
+            height: dp(30)
+            text: 'Remove Curriculum'
+            on_press: root.remove_curriculum_callback()
+
+        ScrollView:
+            scroll_type: ['content', 'bars']
+            bar_margin: dp(2)
+            bar_width: dp(16)
+            id: sv_page
+            do_scroll_x: False
+            do_scroll_y: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(720)
+
+                Label:
+                    text_size: self.size
+                    id: live_description_label
+                    height: dp(120)
+                    size_hint_y: None
+                    text: ''
+
+                BoxLayout:
+                    size_hint: (None, None)
+                    height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+                    Label:
+                        markup: True
+                        text: '           [size=30]Topics:[/size]'
+                        text_size: self.size
+                        size_hint: (1.0, None)
+                        height: dp(80)
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected topic'
+                        on_press: root.remove_topic_callback()
+
+                ScrollView:
+                    size_hint: (None, None)
+                    height: dp(120)
+                    width: root.width - dp(20)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_topics_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: topics_list
+
+                BoxLayout:
+                    size_hint: (None, None)
+                    height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+                    Label:
+                        markup: True
+                        text: '           [size=30]Required Courses:[/size]'
+                        text_size: self.size
+                        size_hint: (1.0, None)
+                        height: dp(80)
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected course'
+                        on_press: root.remove_req_course_callback()
+
+                ScrollView:
+                    size_hint: (None,None)
+                    height: dp(120)
+                    width: root.width - dp(20)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_req_courses_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: req_courses_list
+
+                BoxLayout:
+                    size_hint: (None, None)
+                    height: dp(80)
+                    width: root.width - dp(20)
+                    orientation: 'horizontal'
+
+                    Label:
+                        markup: True
+                        text: '           [size=30]Elective Courses:[/size]'
+                        text_size: self.size
+                    Button:
+                        size_hint: (None,None)
+                        width: dp(200)
+                        height: dp(30)
+                        text: 'Remove selected course'
+                        on_press: root.remove_opt_course_callback()
+
+                ScrollView:
+                    size_hint: (None,None)
+                    width: root.width - dp(20)
+                    height: dp(120)
+                    canvas.before:
+                        Color:
+                            rgb: 0.05, 0.05, 0.05
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    StackLayout:
+                        id: sv_opt_courses_list
+                        orientation: 'lr-tb'
+                        size_hint_y: None
+
+                        RowSelectorWidget:
+                            pos: root.x, root.y
+                            size_hint_x: 1.0
+                            size_hint_y: 1.0
+                            id: opt_courses_list
+
+
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+        size: (dp(100), dp(100))
+        padding: 10
+
+        Button:
+            size_hint: (None, None)
+            size: (dp(100), dp(30))
+            text: 'Back'
+            on_press: root.back_callback()
+
+    StackLayout:
+        orientation: 'lr-bt'
+
+        GridLayout:
+            pos_hint: (None, None)
+            size_hint: (None, None)
+            size: (root.width, dp(228))
+            rows: 7
+            cols: 2
+            padding: dp(10)
+            spacing: dp(2)
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Curriculum Name:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            TextInput:
+                disabled: True
+                background_color: (0.9, 0.9, 0.9, 1)
+                on_text: root.update_live_description_callback()
+                id: curriculum_name
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Minimum Credit Hours:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
+                id: min_credit_hours
+                multiline: False
+                text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'ID of Person in Charge:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            IntTextInput:
+                on_text: root.update_live_description_callback()
+                height: dp(50)
+                id: id_in_charge
+                multiline: False
+                text: ''
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Add Curriculum Topic:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    height: dp(50)
+                    width: dp(30)
+                    text: '+'
+                    size_hint_x: None
+                    on_press: root.add_topic_callback()
+
+                Label:
+                    text: 'ID:'
+                    height: dp(50)
+                    width: dp(30)
+                    size_hint_x: None
+                IntTextInput:
+                    on_text: root.update_live_description_callback()
+                    height: dp(50)
+                    id: curriculum_topic_id
+                    multiline: False
+                    text: ''
+                Label:
+                    text: 'Level:'
+                    height: dp(50)
+                    width: dp(50)
+                    size_hint_x: None
+                Spinner:
+                    height: dp(30)
+                    width: dp(30)
+                    size_hint_x: None
+                    id: curriculum_topic_level
+                    text: '1'
+                    values: ('1', '2', '3')
+                Label:
+                    text: 'Subject Area:'
+                    height: dp(40)
+                    width: dp(100)
+                    size_hint_x: None
+                TextInput:
+                    height: dp(50)
+                    id: curriculum_topic_subj_area
+                    multiline: False
+                    text: ''
+                Label:
+                    text: 'Units:'
+                    height: dp(50)
+                    width: dp(50)
+                    size_hint_x: None
+                FloatTextInput:
+                    height: dp(50)
+                    id: curriculum_topic_units
+                    multiline: False
+                    text: ''
+
+            Label:
+                size_hint_x: None
+                width: dp(200)
+                height: dp(50)
+                text: 'Add Curriculum Course:'
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    height: dp(50)
+                    width: dp(30)
+                    text: '+'
+                    size_hint_x: None
+                    on_press: root.add_course_callback()
+                Label:
+                    size_hint_x: None
+                    height: dp(50)
+                    width: dp(100)
+                    text: 'Course Name:'
+                TextInput:
+                    height: dp(50)
+                    id: course_name
+                    multiline: False
+                    text: ''
+                Spinner:
+                    height: dp(30)
+                    width: dp(80)
+                    size_hint_x: None
+                    id: course_type
+                    text: 'Required'
+                    values: ('Required', 'Optional')
+
+            Widget: # empty widget
+                size_hint_x: None
+                width: dp(80)
+
+            Widget: # empty widget
+                height: dp(50)
+
+            Widget: # empty widget
+                size_hint_x: None
+                width: dp(80)
+
+            Button:
+                height: dp(50)
+                text: 'Submit'
+                on_press: root.submit_callback()
