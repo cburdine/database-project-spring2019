@@ -163,7 +163,7 @@ ViewSectionStatsScreenRoot:
         id: section_description
         text: '<Goal Description>'
         size_hint_y: None
-        size_y: dp(60)
+        size_y: dp(100)
 
     Label:
         id: stats_label
@@ -180,6 +180,7 @@ ViewSectionStatsScreenRoot:
 
         IntTextInput:
             id: start_year
+            on_text: root.populate_stats()
         Spinner:
             id: start_semester
             text: 'Fall'
@@ -196,7 +197,7 @@ ViewSectionStatsScreenRoot:
 
         IntTextInput:
             id: end_year
-
+            on_text: root.populate_stats()
         Spinner:
             id: end_semester
             text: 'Fall'

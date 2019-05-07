@@ -352,9 +352,9 @@ class ClientModel:
             self.adapter.set_section_goal_grades(grades, updating=True)
 
 
-    def get_section_grades(self, section):
+    def get_section_grades(self, section, section_goal=False):
         """Auxilary function to get_section_statistics to get the grades for each section"""
-        ret = self.adapter.get_section_grades(section)
+        ret = self.adapter.get_section_grades(section, section_goal=False)
         return ret
 
     def get_section_goal_grades(self, section_goal):
@@ -384,355 +384,363 @@ class ClientModel:
         else:
             grades = self.get_section_grades(section, True) # section goal grades
 
-        total_grade_count = 0  # sum of each grade count
-        total_grades = 0  # sum of actual grades we have recorded (for averaging purposed
+        if grades:
+            total_grade_count = 0  # sum of each grade count
+            total_grades = 0  # sum of actual grades we have recorded (for averaging purposed
 
-        total_grade_count += grades.count_ap * 7
-        total_grades += grades.count_ap
+            total_grade_count += grades.count_ap * 7
+            total_grades += grades.count_ap
 
-        total_grade_count += grades.count_a * 6.5
-        total_grades += grades.count_a
+            total_grade_count += grades.count_a * 6.5
+            total_grades += grades.count_a
 
-        total_grade_count += grades.count_am * 6
-        total_grades += grades.count_am
+            total_grade_count += grades.count_am * 6
+            total_grades += grades.count_am
 
-        total_grade_count += grades.count_bp * 5.5
-        total_grades += grades.count_bp
+            total_grade_count += grades.count_bp * 5.5
+            total_grades += grades.count_bp
 
-        total_grade_count += grades.count_b * 5
-        total_grades += grades.count_b
+            total_grade_count += grades.count_b * 5
+            total_grades += grades.count_b
 
-        total_grade_count += grades.count_bm * 4.5
-        total_grades += grades.count_bm
+            total_grade_count += grades.count_bm * 4.5
+            total_grades += grades.count_bm
 
-        total_grade_count += grades.count_cp * 4
-        total_grades += grades.count_cp
+            total_grade_count += grades.count_cp * 4
+            total_grades += grades.count_cp
 
-        total_grade_count += grades.count_c * 3.5
-        total_grades += grades.count_c
+            total_grade_count += grades.count_c * 3.5
+            total_grades += grades.count_c
 
-        total_grade_count += grades.count_cm * 3
-        total_grades += grades.count_cm
+            total_grade_count += grades.count_cm * 3
+            total_grades += grades.count_cm
 
-        total_grade_count += grades.count_dp * 2.5
-        total_grades += grades.count_dp
+            total_grade_count += grades.count_dp * 2.5
+            total_grades += grades.count_dp
 
-        total_grade_count += grades.count_d * 2
-        total_grades += grades.count_d
+            total_grade_count += grades.count_d * 2
+            total_grades += grades.count_d
 
-        total_grade_count += grades.count_dm*1.5
-        total_grades += grades.count_dm
+            total_grade_count += grades.count_dm*1.5
+            total_grades += grades.count_dm
 
-        total_grade_count += grades.count_f*1
-        total_grades += grades.count_f
+            total_grade_count += grades.count_f*1
+            total_grades += grades.count_f
 
-        numerical_grade_avg = total_grade_count/total_grades
-        if numerical_grade_avg == 7:
-            actual_grade_avg = 'a+'
-        elif numerical_grade_avg == 6.5:
-            actual_grade_avg = 'a'
-        elif numerical_grade_avg == 6:
-            actual_grade_avg = 'a-'
-        elif numerical_grade_avg == 5.5:
-            actual_grade_avg = 'b+'
-        elif numerical_grade_avg == 5:
-            actual_grade_avg = 'b'
-        elif numerical_grade_avg == 4.5:
-            actual_grade_avg = 'b-'
-        elif numerical_grade_avg == 4:
-            actual_grade_avg = 'c+'
-        elif numerical_grade_avg == 3.5:
-            actual_grade_avg = 'c'
-        elif numerical_grade_avg == 3:
-            actual_grade_avg = 'c-'
-        elif numerical_grade_avg == 2.5:
-            actual_grade_avg = 'd+'
-        elif numerical_grade_avg == 2:
-            actual_grade_avg = 'd'
-        elif numerical_grade_avg == 1.5:
-            actual_grade_avg = 'd-'
-        elif numerical_grade_avg == 1:
-            actual_grade_avg = 'f'
-        elif numerical_grade_avg < 7 and numerical_grade_avg > 6:
-            actual_grade_avg = 'a'
-        elif numerical_grade_avg < 5.5 and numerical_grade_avg > 4.5:
-            actual_grade_avg = 'b'
-        elif numerical_grade_avg < 4 and numerical_grade_avg > 3:
-            actual_grade_avg = 'c'
-        elif numerical_grade_avg < 2.5 and numerical_grade_avg > 1.5:
-            actual_grade_avg = 'd'
-        elif numerical_grade_avg < 1.5:
-            actual_grade_avg = 'f'
+            numerical_grade_avg = total_grade_count/total_grades
+            if numerical_grade_avg == 7:
+                actual_grade_avg = 'a+'
+            elif numerical_grade_avg == 6.5:
+                actual_grade_avg = 'a'
+            elif numerical_grade_avg == 6:
+                actual_grade_avg = 'a-'
+            elif numerical_grade_avg == 5.5:
+                actual_grade_avg = 'b+'
+            elif numerical_grade_avg == 5:
+                actual_grade_avg = 'b'
+            elif numerical_grade_avg == 4.5:
+                actual_grade_avg = 'b-'
+            elif numerical_grade_avg == 4:
+                actual_grade_avg = 'c+'
+            elif numerical_grade_avg == 3.5:
+                actual_grade_avg = 'c'
+            elif numerical_grade_avg == 3:
+                actual_grade_avg = 'c-'
+            elif numerical_grade_avg == 2.5:
+                actual_grade_avg = 'd+'
+            elif numerical_grade_avg == 2:
+                actual_grade_avg = 'd'
+            elif numerical_grade_avg == 1.5:
+                actual_grade_avg = 'd-'
+            elif numerical_grade_avg == 1:
+                actual_grade_avg = 'f'
+            elif numerical_grade_avg < 7 and numerical_grade_avg > 6:
+                actual_grade_avg = 'a'
+            elif numerical_grade_avg < 5.5 and numerical_grade_avg > 4.5:
+                actual_grade_avg = 'b'
+            elif numerical_grade_avg < 4 and numerical_grade_avg > 3:
+                actual_grade_avg = 'c'
+            elif numerical_grade_avg < 2.5 and numerical_grade_avg > 1.5:
+                actual_grade_avg = 'd'
+            elif numerical_grade_avg < 1.5:
+                actual_grade_avg = 'f'
+            else:
+                actual_grade_avg = None
+
+            if not section_goal:
+                return [number_of_students_enrolled, grades, actual_grade_avg]
+            else:
+                return [grades, actual_grade_avg]
         else:
-            actual_grade_avg = None
-
-        if not section_goal:
-            return [number_of_students_enrolled, grades, actual_grade_avg]
-        else:
-            return [grades, actual_grade_avg]
+            return None
 
     def get_aggregate_section_statistics(self, start_year, start_semester, end_year, end_semester, course, section_goal=False):
         sections_list = self.adapter.get_sections(start_year, start_semester, end_year, end_semester, course, section_goal)
-        total_students_enrolled_across_periods = 0
-        avg_grade_total_across_periods = []
-        avg_goal_grade_total_across_periods = []
-        all_grades = {}
-        all_goal_grades = {}
-        sec_count = 0
-        total_grade_count = 0
-        total_goal_grade_count = 0
-        all_grades['a+'] = 0
-        all_grades['a'] = 0
-        all_grades['a-'] = 0
-        all_grades['b+'] = 0
-        all_grades['b'] = 0
-        all_grades['b-'] = 0
-        all_grades['c+'] = 0
-        all_grades['c'] = 0
-        all_grades['c-'] = 0
-        all_grades['d+'] = 0
-        all_grades['d'] = 0
-        all_grades['d-'] = 0
-        all_grades['f'] = 0
-        all_grades['i'] = 0
-        all_grades['w'] = 0
+        if sections_list:
+            total_students_enrolled_across_periods = 0
+            avg_grade_total_across_periods = []
+            avg_goal_grade_total_across_periods = []
+            all_grades = {}
+            all_goal_grades = {}
+            sec_count = 0
+            total_grade_count = 0
+            total_goal_grade_count = 0
+            all_grades['a+'] = 0
+            all_grades['a'] = 0
+            all_grades['a-'] = 0
+            all_grades['b+'] = 0
+            all_grades['b'] = 0
+            all_grades['b-'] = 0
+            all_grades['c+'] = 0
+            all_grades['c'] = 0
+            all_grades['c-'] = 0
+            all_grades['d+'] = 0
+            all_grades['d'] = 0
+            all_grades['d-'] = 0
+            all_grades['f'] = 0
+            all_grades['i'] = 0
+            all_grades['w'] = 0
 
-        all_goal_grades['a+'] = 0
-        all_goal_grades['a'] = 0
-        all_goal_grades['a-'] = 0
-        all_goal_grades['b+'] = 0
-        all_goal_grades['b'] = 0
-        all_goal_grades['b-'] = 0
-        all_goal_grades['c+'] = 0
-        all_goal_grades['c'] = 0
-        all_goal_grades['c-'] = 0
-        all_goal_grades['d+'] = 0
-        all_goal_grades['d'] = 0
-        all_goal_grades['d-'] = 0
-        all_goal_grades['f'] = 0
+            all_goal_grades['a+'] = 0
+            all_goal_grades['a'] = 0
+            all_goal_grades['a-'] = 0
+            all_goal_grades['b+'] = 0
+            all_goal_grades['b'] = 0
+            all_goal_grades['b-'] = 0
+            all_goal_grades['c+'] = 0
+            all_goal_grades['c'] = 0
+            all_goal_grades['c-'] = 0
+            all_goal_grades['d+'] = 0
+            all_goal_grades['d'] = 0
+            all_goal_grades['d-'] = 0
+            all_goal_grades['f'] = 0
+
+            # sections_list = list(set(sections_list))
+
+            for s in sections_list:
+                sec_count+=1
+                current_section_info = self.get_solo_section_statistics(s)
+                current_section_goal_info = self.get_solo_section_statistics(s, True)
+
+                if current_section_info:
+                    total_students_enrolled_across_periods += current_section_info[0]
+                    avg_grade_total_across_periods.append(current_section_info[2])
+                    all_grades['a+'] += current_section_info[1].count_ap
+                    all_grades['a'] += current_section_info[1].count_a
+                    all_grades['a-'] += current_section_info[1].count_am
+                    all_grades['b+'] += current_section_info[1].count_bp
+                    all_grades['b'] += current_section_info[1].count_b
+                    all_grades['b-'] += current_section_info[1].count_bm
+                    all_grades['c+'] += current_section_info[1].count_cp
+                    all_grades['c'] += current_section_info[1].count_c
+                    all_grades['c-'] += current_section_info[1].count_cm
+                    all_grades['d+'] += current_section_info[1].count_dp
+                    all_grades['d'] += current_section_info[1].count_d
+                    all_grades['d-'] += current_section_info[1].count_dm
+                    all_grades['f'] += current_section_info[1].count_f
+                    all_grades['i'] += current_section_info[1].count_i
+                    all_grades['w'] += current_section_info[1].count_w
+
+                if current_section_goal_info:
+                    avg_goal_grade_total_across_periods.append(current_section_goal_info[1])
+                    all_goal_grades['a+'] += current_section_goal_info[0].count_ap
+                    all_goal_grades['a'] += current_section_goal_info[0].count_a
+                    all_goal_grades['a-'] += current_section_goal_info[0].count_am
+                    all_goal_grades['b+'] += current_section_goal_info[0].count_bp
+                    all_goal_grades['b'] += current_section_goal_info[0].count_b
+                    all_goal_grades['b-'] += current_section_goal_info[0].count_bm
+                    all_goal_grades['c+'] += current_section_goal_info[0].count_cp
+                    all_goal_grades['c'] += current_section_goal_info[0].count_c
+                    all_goal_grades['c-'] += current_section_goal_info[0].count_cm
+                    all_goal_grades['d+'] += current_section_goal_info[0].count_dp
+                    all_goal_grades['d'] += current_section_goal_info[0].count_d
+                    all_goal_grades['d-'] += current_section_goal_info[0].count_dm
+                    all_goal_grades['f'] += current_section_goal_info[0].count_f
+
+            for i in avg_grade_total_across_periods:
+                if i == 'a+':
+                    total_grade_count += 7
+                elif i == 'a':
+                    total_grade_count += 6.5
+                elif i == 'a-':
+                    total_grade_count += 6
+                elif i == 'b+':
+                    total_grade_count += 5.5
+                elif i == 'b':
+                    total_grade_count += 5
+                elif i == 'b-':
+                    total_grade_count += 4.5
+                elif i == 'c+':
+                    total_grade_count += 4
+                elif i == 'c':
+                    total_grade_count += 3.5
+                elif i == 'c-':
+                    total_grade_count += 3
+                elif i == 'd+':
+                    total_grade_count += 2.5
+                elif i == 'd':
+                    total_grade_count += 2
+                elif i == 'd-':
+                    total_grade_count += 1.5
+                elif i == 'f':
+                    total_grade_count += 1
+                elif i == 'i':
+                    pass
+                elif i == 'w':
+                    pass
+
+            for i in avg_goal_grade_total_across_periods:
+                if i == 'a+':
+                    total_goal_grade_count += 7
+                elif i == 'a':
+                    total_goal_grade_count += 6.5
+                elif i == 'a-':
+                    total_goal_grade_count += 6
+                elif i == 'b+':
+                    total_goal_grade_count += 5.5
+                elif i == 'b':
+                    total_goal_grade_count += 5
+                elif i == 'b-':
+                    total_goal_grade_count += 4.5
+                elif i == 'c+':
+                    total_goal_grade_count += 4
+                elif i == 'c':
+                    total_goal_grade_count += 3.5
+                elif i == 'c-':
+                    total_goal_grade_count += 3
+                elif i == 'd+':
+                    total_goal_grade_count += 2.5
+                elif i == 'd':
+                    total_goal_grade_count += 2
+                elif i == 'd-':
+                    total_goal_grade_count += 1.5
+                elif i == 'f':
+                    total_goal_grade_count += 1
+                elif i == 'i':
+                    pass
+                elif i == 'w':
+                    pass
+
+            numerical_grade_avg = total_grade_count / sec_count
+            numerical_goal_grade_avg = total_goal_grade_count/sec_count
+            if numerical_grade_avg == 7:
+                avg_grade_across_periods = 'a+'
+            elif numerical_grade_avg == 6.5:
+                avg_grade_across_periods = 'a'
+            elif numerical_grade_avg == 6:
+                avg_grade_across_periods = 'a-'
+            elif numerical_grade_avg == 5.5:
+                avg_grade_across_periods = 'b+'
+            elif numerical_grade_avg == 5:
+                avg_grade_across_periods = 'b'
+            elif numerical_grade_avg == 4.5:
+                avg_grade_across_periods = 'b-'
+            elif numerical_grade_avg == 4:
+                avg_grade_across_periods = 'c+'
+            elif numerical_grade_avg == 3.5:
+                avg_grade_across_periods = 'c'
+            elif numerical_grade_avg == 3:
+                avg_grade_across_periods = 'c-'
+            elif numerical_grade_avg == 2.5:
+                avg_grade_across_periods = 'd+'
+            elif numerical_grade_avg == 2:
+                avg_grade_across_periods = 'd'
+            elif numerical_grade_avg == 1.5:
+                avg_grade_across_periods = 'd-'
+            elif numerical_grade_avg == 1:
+                avg_grade_across_periods = 'f'
+            elif numerical_grade_avg < 7 and numerical_grade_avg > 6:
+                avg_grade_across_periods = 'a'
+            elif numerical_grade_avg < 5.5 and numerical_grade_avg > 4.5:
+                avg_grade_across_periods = 'b'
+            elif numerical_grade_avg < 4 and numerical_grade_avg > 3:
+                avg_grade_across_periods = 'c'
+            elif numerical_grade_avg < 2.5 and numerical_grade_avg > 1.5:
+                avg_grade_across_periods = 'd'
+            elif numerical_grade_avg < 1.5:
+                avg_grade_across_periods = 'f'
+            else:
+                avg_grade_across_periods = None
 
 
+            # do same thing for average goal grades
+            if numerical_goal_grade_avg == 7:
+                avg_goal_grade_across_periods = 'a+'
+            elif numerical_goal_grade_avg == 6.5:
+                avg_goal_grade_across_periods = 'a'
+            elif numerical_goal_grade_avg == 6:
+                avg_goal_grade_across_periods = 'a-'
+            elif numerical_goal_grade_avg == 5.5:
+                avg_goal_grade_across_periods = 'b+'
+            elif numerical_goal_grade_avg == 5:
+                avg_goal_grade_across_periods = 'b'
+            elif numerical_goal_grade_avg == 4.5:
+                avg_goal_grade_across_periods = 'b-'
+            elif numerical_goal_grade_avg == 4:
+                avg_goal_grade_across_periods = 'c+'
+            elif numerical_goal_grade_avg == 3.5:
+                avg_goal_grade_across_periods = 'c'
+            elif numerical_goal_grade_avg == 3:
+                avg_goal_grade_across_periods = 'c-'
+            elif numerical_goal_grade_avg == 2.5:
+                avg_goal_grade_across_periods = 'd+'
+            elif numerical_goal_grade_avg == 2:
+                avg_goal_grade_across_periods = 'd'
+            elif numerical_goal_grade_avg == 1.5:
+                avg_goal_grade_across_periods = 'd-'
+            elif numerical_goal_grade_avg == 1:
+                avg_goal_grade_across_periods = 'f'
+            elif numerical_goal_grade_avg < 7 and numerical_goal_grade_avg > 6:
+                avg_goal_grade_across_periods = 'a'
+            elif numerical_goal_grade_avg < 5.5 and numerical_goal_grade_avg > 4.5:
+                avg_goal_grade_across_periods = 'b'
+            elif numerical_goal_grade_avg < 4 and numerical_goal_grade_avg > 3:
+                avg_goal_grade_across_periods = 'c'
+            elif numerical_goal_grade_avg < 2.5 and numerical_goal_grade_avg > 1.5:
+                avg_goal_grade_across_periods = 'd'
+            elif numerical_goal_grade_avg < 1.5:
+                avg_goal_grade_across_periods = 'f'
+            else:
+                avg_goal_grade_across_periods = None
 
-        for s in sections_list:
-            sec_count+=1
-            current_section_info = self.get_solo_section_statistics(s)
-            current_section_goal_info = self.get_solo_section_statistics(s, True)
+            # calculating average A,B,C, etc. across sections
+            avg_of_each_letter = {}
+            avg_ap = all_grades['a+']/sec_count
+            avg_of_each_letter['a+'] = avg_ap
+            avg_a = all_grades['a']/sec_count
+            avg_of_each_letter['a'] = avg_a
+            avg_am = all_grades['a-'] / sec_count
+            avg_of_each_letter['a-'] = avg_am
+            avg_bp = all_grades['b+'] / sec_count
+            avg_of_each_letter['b+'] = avg_bp
+            avg_b = all_grades['b'] / sec_count
+            avg_of_each_letter['b'] = avg_b
+            avg_bm = all_grades['b-'] / sec_count
+            avg_of_each_letter['b-'] = avg_bm
+            avg_cp = all_grades['c+'] / sec_count
+            avg_of_each_letter['c+'] = avg_cp
+            avg_c = all_grades['c'] / sec_count
+            avg_of_each_letter['c'] = avg_c
+            avg_cm = all_grades['c-'] / sec_count
+            avg_of_each_letter['c-'] = avg_cm
+            avg_dp = all_grades['d+'] / sec_count
+            avg_of_each_letter['d+'] = avg_dp
+            avg_d = all_grades['d'] / sec_count
+            avg_of_each_letter['d'] = avg_d
+            avg_dm = all_grades['d-'] / sec_count
+            avg_of_each_letter['d-'] = avg_dm
+            avg_f= all_grades['f'] / sec_count
+            avg_of_each_letter['f'] = avg_f
+            avg_i = all_grades['i'] / sec_count
+            avg_of_each_letter['i'] = avg_i
+            avg_w = all_grades['w'] / sec_count
+            avg_of_each_letter['w'] = avg_w
 
-            total_students_enrolled_across_periods += current_section_info[0]
-            avg_grade_total_across_periods += current_section_info[2]
-            all_grades['a+'] += current_section_info[1].count_ap
-            all_grades['a'] += current_section_info[1].count_a
-            all_grades['a-'] += current_section_info[1].count_am
-            all_grades['b+'] += current_section_info[1].count_bp
-            all_grades['b'] += current_section_info[1].count_b
-            all_grades['b-'] += current_section_info[1].count_bm
-            all_grades['c+'] += current_section_info[1].count_cp
-            all_grades['c'] += current_section_info[1].count_c
-            all_grades['c-'] += current_section_info[1].count_cm
-            all_grades['d+'] += current_section_info[1].count_dp
-            all_grades['d'] += current_section_info[1].count_d
-            all_grades['d-'] += current_section_info[1].count_dm
-            all_grades['f'] += current_section_info[1].count_f
-            all_grades['i'] += current_section_info[1].count_i
-            all_grades['w'] += current_section_info[1].count_w
 
-            avg_goal_grade_total_across_periods += current_section_goal_info[1]
-            all_goal_grades['a+'] += current_section_goal_info[0].count_ap
-            all_goal_grades['a'] += current_section_goal_info[0].count_a
-            all_goal_grades['a-'] += current_section_goal_info[0].count_am
-            all_goal_grades['b+'] += current_section_goal_info[0].count_bp
-            all_goal_grades['b'] += current_section_goal_info[0].count_b
-            all_goal_grades['b-'] += current_section_goal_info[0].count_bm
-            all_goal_grades['c+'] += current_section_goal_info[0].count_cp
-            all_goal_grades['c'] += current_section_goal_info[0].count_c
-            all_goal_grades['c-'] += current_section_goal_info[0].count_cm
-            all_goal_grades['d+'] += current_section_goal_info[0].count_dp
-            all_goal_grades['d'] += current_section_goal_info[0].count_d
-            all_goal_grades['d-'] += current_section_goal_info[0].count_dm
-            all_goal_grades['f'] += current_section_goal_info[0].count_f
-
-        for i in avg_grade_total_across_periods:
-            if i == 'a+':
-                total_grade_count += 7
-            elif i == 'a':
-                total_grade_count += 6.5
-            elif i == 'a-':
-                total_grade_count += 6
-            elif i == 'b+':
-                total_grade_count += 5.5
-            elif i == 'b':
-                total_grade_count += 5
-            elif i == 'b-':
-                total_grade_count += 4.5
-            elif i == 'c+':
-                total_grade_count += 4
-            elif i == 'c':
-                total_grade_count += 3.5
-            elif i == 'c-':
-                total_grade_count += 3
-            elif i == 'd+':
-                total_grade_count += 2.5
-            elif i == 'd':
-                total_grade_count += 2
-            elif i == 'd-':
-                total_grade_count += 1.5
-            elif i == 'f':
-                total_grade_count += 1
-            elif i == 'i':
-                pass
-            elif i == 'w':
-                pass
-
-        for i in avg_goal_grade_total_across_periods:
-            if i == 'a+':
-                total_goal_grade_count += 7
-            elif i == 'a':
-                total_goal_grade_count += 6.5
-            elif i == 'a-':
-                total_goal_grade_count += 6
-            elif i == 'b+':
-                total_goal_grade_count += 5.5
-            elif i == 'b':
-                total_goal_grade_count += 5
-            elif i == 'b-':
-                total_goal_grade_count += 4.5
-            elif i == 'c+':
-                total_goal_grade_count += 4
-            elif i == 'c':
-                total_goal_grade_count += 3.5
-            elif i == 'c-':
-                total_goal_grade_count += 3
-            elif i == 'd+':
-                total_goal_grade_count += 2.5
-            elif i == 'd':
-                total_goal_grade_count += 2
-            elif i == 'd-':
-                total_goal_grade_count += 1.5
-            elif i == 'f':
-                total_goal_grade_count += 1
-            elif i == 'i':
-                pass
-            elif i == 'w':
-                pass
-
-        numerical_grade_avg = total_grade_count / sec_count
-        numerical_goal_grade_avg = total_goal_grade_count/sec_count
-        if numerical_grade_avg == 7:
-            avg_grade_across_periods = 'a+'
-        elif numerical_grade_avg == 6.5:
-            avg_grade_across_periods = 'a'
-        elif numerical_grade_avg == 6:
-            avg_grade_across_periods = 'a-'
-        elif numerical_grade_avg == 5.5:
-            avg_grade_across_periods = 'b+'
-        elif numerical_grade_avg == 5:
-            avg_grade_across_periods = 'b'
-        elif numerical_grade_avg == 4.5:
-            avg_grade_across_periods = 'b-'
-        elif numerical_grade_avg == 4:
-            avg_grade_across_periods = 'c+'
-        elif numerical_grade_avg == 3.5:
-            avg_grade_across_periods = 'c'
-        elif numerical_grade_avg == 3:
-            avg_grade_across_periods = 'c-'
-        elif numerical_grade_avg == 2.5:
-            avg_grade_across_periods = 'd+'
-        elif numerical_grade_avg == 2:
-            avg_grade_across_periods = 'd'
-        elif numerical_grade_avg == 1.5:
-            avg_grade_across_periods = 'd-'
-        elif numerical_grade_avg == 1:
-            avg_grade_across_periods = 'f'
-        elif numerical_grade_avg < 7 and numerical_grade_avg > 6:
-            avg_grade_across_periods = 'a'
-        elif numerical_grade_avg < 5.5 and numerical_grade_avg > 4.5:
-            avg_grade_across_periods = 'b'
-        elif numerical_grade_avg < 4 and numerical_grade_avg > 3:
-            avg_grade_across_periods = 'c'
-        elif numerical_grade_avg < 2.5 and numerical_grade_avg > 1.5:
-            avg_grade_across_periods = 'd'
-        elif numerical_grade_avg < 1.5:
-            avg_grade_across_periods = 'f'
+            return [total_students_enrolled_across_periods, all_grades, all_goal_grades,
+                    avg_grade_across_periods, avg_goal_grade_across_periods, avg_of_each_letter]
         else:
-            avg_grade_across_periods = None
-
-
-        # do same thing for average goal grades
-        if numerical_goal_grade_avg == 7:
-            avg_goal_grade_across_periods = 'a+'
-        elif numerical_goal_grade_avg == 6.5:
-            avg_goal_grade_across_periods = 'a'
-        elif numerical_goal_grade_avg == 6:
-            avg_goal_grade_across_periods = 'a-'
-        elif numerical_goal_grade_avg == 5.5:
-            avg_goal_grade_across_periods = 'b+'
-        elif numerical_goal_grade_avg == 5:
-            avg_goal_grade_across_periods = 'b'
-        elif numerical_goal_grade_avg == 4.5:
-            avg_goal_grade_across_periods = 'b-'
-        elif numerical_goal_grade_avg == 4:
-            avg_goal_grade_across_periods = 'c+'
-        elif numerical_goal_grade_avg == 3.5:
-            avg_goal_grade_across_periods = 'c'
-        elif numerical_goal_grade_avg == 3:
-            avg_goal_grade_across_periods = 'c-'
-        elif numerical_goal_grade_avg == 2.5:
-            avg_goal_grade_across_periods = 'd+'
-        elif numerical_goal_grade_avg == 2:
-            avg_goal_grade_across_periods = 'd'
-        elif numerical_goal_grade_avg == 1.5:
-            avg_goal_grade_across_periods = 'd-'
-        elif numerical_goal_grade_avg == 1:
-            avg_goal_grade_across_periods = 'f'
-        elif numerical_goal_grade_avg < 7 and numerical_goal_grade_avg > 6:
-            avg_goal_grade_across_periods = 'a'
-        elif numerical_goal_grade_avg < 5.5 and numerical_goal_grade_avg > 4.5:
-            avg_goal_grade_across_periods = 'b'
-        elif numerical_goal_grade_avg < 4 and numerical_goal_grade_avg > 3:
-            avg_goal_grade_across_periods = 'c'
-        elif numerical_goal_grade_avg < 2.5 and numerical_goal_grade_avg > 1.5:
-            avg_goal_grade_across_periods = 'd'
-        elif numerical_goal_grade_avg < 1.5:
-            avg_goal_grade_across_periods = 'f'
-        else:
-            avg_goal_grade_across_periods = None
-
-        # calculating average A,B,C, etc. across sections
-        avg_of_each_letter = {}
-        avg_ap = all_grades['a+']/sec_count
-        avg_of_each_letter['a+'] = avg_ap
-        avg_a = all_grades['a']/sec_count
-        avg_of_each_letter['a'] = avg_a
-        avg_am = all_grades['a-'] / sec_count
-        avg_of_each_letter['a-'] = avg_am
-        avg_bp = all_grades['b+'] / sec_count
-        avg_of_each_letter['b+'] = avg_bp
-        avg_b = all_grades['b'] / sec_count
-        avg_of_each_letter['b'] = avg_b
-        avg_bm = all_grades['b-'] / sec_count
-        avg_of_each_letter['b-'] = avg_bm
-        avg_cp = all_grades['c+'] / sec_count
-        avg_of_each_letter['c+'] = avg_cp
-        avg_c = all_grades['c'] / sec_count
-        avg_of_each_letter['c'] = avg_c
-        avg_cm = all_grades['c-'] / sec_count
-        avg_of_each_letter['c-'] = avg_cm
-        avg_dp = all_grades['d+'] / sec_count
-        avg_of_each_letter['d+'] = avg_dp
-        avg_d = all_grades['d'] / sec_count
-        avg_of_each_letter['d'] = avg_d
-        avg_dm = all_grades['d-'] / sec_count
-        avg_of_each_letter['d-'] = avg_dm
-        avg_f= all_grades['f'] / sec_count
-        avg_of_each_letter['f'] = avg_f
-        avg_i = all_grades['i'] / sec_count
-        avg_of_each_letter['i'] = avg_i
-        avg_w = all_grades['w'] / sec_count
-        avg_of_each_letter['w'] = avg_w
-
-
-        return [total_students_enrolled_across_periods, all_grades, all_goal_grades,
-                avg_grade_across_periods, avg_goal_grade_across_periods, avg_of_each_letter]
+            return
 
     def get_sections_of_a_course(self, course, year, semester_name):
         """Function to retrieve a list of sections based off of a course"""
@@ -799,3 +807,27 @@ class ClientModel:
     def remove_course(self, course):
         """Function to remove all the courses from the db"""
         self.adapter.remove_course(course)
+
+    def convert_to_str(self, stats):
+        """Aux function to present our stats"""
+        print(stats)
+
+        total_students = stats[0]
+        all_grades = stats[1]
+        all_goal_grades = stats[2]
+        avg_grade = stats[3]
+        avg_of_each_letter = stats[5]
+
+        ret_str = " "
+        ret_str += f"total students: {total_students} \n"
+        ret_str += f"all grades across sections:                                         Average Grade per section\n"
+        ret_str += f"A+ : {all_grades['a+']}        A: {all_grades['a']}       A- : {all_grades['a-']}                                  A+ : {avg_of_each_letter['a+']}        A: {avg_of_each_letter['a']}       A- : {avg_of_each_letter['a-']}\n"
+        ret_str += f"B+ : {all_grades['b+']}        B: {all_grades['b']}       B- : {all_grades['b-']}                                  B+ : {avg_of_each_letter['b+']}        B: {avg_of_each_letter['b']}       B- : {avg_of_each_letter['b-']}\n"
+        ret_str += f"C+ : {all_grades['c+']}        C: {all_grades['c']}       C- : {all_grades['c-']}                                  C+ : {avg_of_each_letter['c+']}        C: {avg_of_each_letter['c']}       C- : {avg_of_each_letter['c-']}\n"
+        ret_str += f"D+ : {all_grades['d+']}        D: {all_grades['d']}       D- : {all_grades['d-']}                                  D+ : {avg_of_each_letter['d+']}        D: {avg_of_each_letter['d']}       D- : {avg_of_each_letter['d-']}\n"
+        ret_str += f"F : {all_grades['f']}          I: {all_grades['i']}       W  : {all_grades['w']}                                   F  : {avg_of_each_letter['f']}         I: {avg_of_each_letter['i']}       W  : {avg_of_each_letter['w']}\n\n"
+        ret_str += f"Average Grade: {avg_grade}"
+
+
+
+        return ret_str

@@ -6,7 +6,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.tabbedpanel import TabbedPanel,TabbedPanelItem, TabbedPanelHeader
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
-from src.model.classes import SectionGrades, SectionGoalGrades
+from src.model.classes import SectionGrades, SectionGoalGrades, Course
 from src.widgets.dialogues import MessageDialogue
 from src.db.schema import SEMESTER_NAME_MAP
 import logging
@@ -223,9 +223,14 @@ class SectionStatsPanel(BoxLayout):
         start_sem = SEMESTER_NAME_MAP[self.ids.start_semester.text]
         end_sem = SEMESTER_NAME_MAP[self.ids.end_semester.text]
         stats = "<stats go here>"
-        #stats = self.app.client_model.get_aggregate_section_statistics(self, start_year=start_year, start_semester=start_sem,
-        #                                        end_year=end_year, end_semester=end_sem, course=self.section)
-        self.ids.stats_label.text = str(stats)
+        course = Course()
+        course.name = self.section.course_name
+        stats = self.app.client_model.get_aggregate_section_statistics(start_year=start_year, start_semester=start_sem,
+                                               end_year=end_year, end_semester=end_sem, course=course)
+        if stats:
+            self.ids.stats_label.text = self.app.client_model.convert_to_str(stats)
+        else:
+            self.ids.stats_label.text = str(stats)
 
 class GoalStatsPanel(BoxLayout):
     """" else str(grades_obj.count_w)"""

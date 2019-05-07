@@ -799,8 +799,9 @@ class DBAdapter:
                     if ctr%5 == 0:
                         ctr+=1
             # when we're done with each year, we pop off the end of semester_list until we have the right end semester
-            while semester_list[len(semester_list)-1] != sem1[end]:
-                semester_list.pop(len(semester_list)-1)
+            if semester_list:
+                while semester_list[len(semester_list)-1] != sem1[end]:
+                    semester_list.pop(len(semester_list)-1)
 
         else:
             year_list.append(start_year)
@@ -808,32 +809,37 @@ class DBAdapter:
                 year_list.append(i)
 
 
+        print(year_list)
+        print(semester_list)
+
 
         ret = None
         section_list1 = []
         section_list2 = []
         current_section = Section()
-        try:
-            for i in year_list:
-                for j in semester_list:
-                    self.db_cursor.execute(SECTION_GRADES, (j, i, course.name))
-                    section_list1 = self.db_cursor.fetchall()
-                    for k in section_list1:
-                        current_section.course_name = course.name
-                        current_section.section_id = k[0]
-                        current_section.num_students = k[1]
-                        current_section.comment1 = k[2]
-                        current_section.comment2 = k[3]
-                        current_section.year = i
-                        current_section.semester = j
-                        section_list2.append(current_section)
-            if section_list2:
-                ret = section_list2
-            else:
-                ret = None
+        #try:
+        for i in year_list:
+            print(i)
+            for j in semester_list:
+                print(j)
+                self.db_cursor.execute(SECTION_GRADES, (j, i, course.name))
+                section_list1 = self.db_cursor.fetchall()
+                for k in section_list1:
+                    current_section.course_name = course.name
+                    current_section.section_id = k[0]
+                    current_section.num_students = k[1]
+                    current_section.comment1 = k[2]
+                    current_section.comment2 = k[3]
+                    current_section.year = i
+                    current_section.semester = j
+                    section_list2.append(current_section)
+        if section_list2:
+            ret = section_list2
+        else:
+            ret = None
 
-        except:
-            logging.warning("DBAdapter: Error- cannot retrieve sections: " + str(id))
+        #except:
+            #logging.warning("DBAdapter: Error- cannot retrieve sections: " + str(id))
 
         return ret
 
