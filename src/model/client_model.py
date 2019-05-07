@@ -494,6 +494,8 @@ class ClientModel:
         all_grades['d'] = 0
         all_grades['d-'] = 0
         all_grades['f'] = 0
+        all_grades['i'] = 0
+        all_grades['w'] = 0
 
         all_goal_grades['a+'] = 0
         all_goal_grades['a'] = 0
@@ -531,6 +533,8 @@ class ClientModel:
             all_grades['d'] += current_section_info[1].count_d
             all_grades['d-'] += current_section_info[1].count_dm
             all_grades['f'] += current_section_info[1].count_f
+            all_grades['i'] += current_section_info[1].count_i
+            all_grades['w'] += current_section_info[1].count_w
 
             avg_goal_grade_total_across_periods += current_section_goal_info[1]
             all_goal_grades['a+'] += current_section_goal_info[0].count_ap
@@ -693,8 +697,42 @@ class ClientModel:
         else:
             avg_goal_grade_across_periods = None
 
+        # calculating average A,B,C, etc. across sections
+        avg_of_each_letter = {}
+        avg_ap = all_grades['a+']/sec_count
+        avg_of_each_letter['a+'] = avg_ap
+        avg_a = all_grades['a']/sec_count
+        avg_of_each_letter['a'] = avg_a
+        avg_am = all_grades['a-'] / sec_count
+        avg_of_each_letter['a-'] = avg_am
+        avg_bp = all_grades['b+'] / sec_count
+        avg_of_each_letter['b+'] = avg_bp
+        avg_b = all_grades['b'] / sec_count
+        avg_of_each_letter['b'] = avg_b
+        avg_bm = all_grades['b-'] / sec_count
+        avg_of_each_letter['b-'] = avg_bm
+        avg_cp = all_grades['c+'] / sec_count
+        avg_of_each_letter['c+'] = avg_cp
+        avg_c = all_grades['c'] / sec_count
+        avg_of_each_letter['c'] = avg_c
+        avg_cm = all_grades['c-'] / sec_count
+        avg_of_each_letter['c-'] = avg_cm
+        avg_dp = all_grades['d+'] / sec_count
+        avg_of_each_letter['d+'] = avg_dp
+        avg_d = all_grades['d'] / sec_count
+        avg_of_each_letter['d'] = avg_d
+        avg_dm = all_grades['d-'] / sec_count
+        avg_of_each_letter['d-'] = avg_dm
+        avg_f= all_grades['f'] / sec_count
+        avg_of_each_letter['f'] = avg_f
+        avg_i = all_grades['i'] / sec_count
+        avg_of_each_letter['i'] = avg_i
+        avg_w = all_grades['w'] / sec_count
+        avg_of_each_letter['w'] = avg_w
+
+
         return [total_students_enrolled_across_periods, all_grades, all_goal_grades,
-                avg_grade_across_periods, avg_goal_grade_across_periods]
+                avg_grade_across_periods, avg_goal_grade_across_periods, avg_of_each_letter]
 
     def get_sections_of_a_course(self, course, year, semester_name):
         """Function to retrieve a list of sections based off of a course"""
