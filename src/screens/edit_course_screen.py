@@ -40,7 +40,8 @@ class EditCourseScreenRoot(Widget):
         self.course = self.app.client_model._course_to_edit
         for ct in self.course.topics:
             ctopic = self.app.client_model.get_course_topic(ct, self.course.name)
-            self.course_topics[ct] = self.app.client_model.get_topic(ctopic[1])
+            if ctopic:
+                self.course_topics[ct] = self.app.client_model.get_topic(ctopic[1])
         for cg in self.course.goals:
             self.course_goals[cg] = self.app.client_model.get_context_free_goal(cg) # putting in context free goal here
         self.update_live_description_callback()
@@ -80,6 +81,7 @@ class EditCourseScreenRoot(Widget):
             del self.course_topics[rem_topic.id]
             self.ids.topics_list.remove_selected_row()
             self.ids.sv_topics_list.height = max(dp(200), self.ids.topics_list.get_height())
+            self.populate()
 
     def add_topic_callback(self):
         topic_id_txt = self.ids.course_topic_id.text
@@ -107,6 +109,7 @@ class EditCourseScreenRoot(Widget):
             self.ids.topics_list.addRow(topic)
             self.ids.sv_topics_list.height = self.ids.topics_list.get_height()
             self.ids.course_topic_id.text = ''
+            self.populate()
 
     def add_goal_callback(self):
         goal_id_txt = self.ids.course_goal_id.text
