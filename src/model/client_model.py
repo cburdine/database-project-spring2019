@@ -779,6 +779,7 @@ class ClientModel:
     def edit_course(self, new_course):
         """Function to edit a course using a course object"""
         self.adapter.edit_course(new_course)
+        self._course_map[new_course.name] = new_course
 
     def remove_course_goals(self, course):
         """Function to remove course goals based off of course object"""
