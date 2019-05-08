@@ -13,7 +13,7 @@ from kivy.properties import ObjectProperty
 from src.widgets.dialogues import MessageDialogue, ConfirmDialogue, ProgressBarDialogue
 
 kivy.require('1.10.1')
-FILE_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
+FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 """
 This class represents the Login screen (This is an instance of a 
@@ -26,7 +26,7 @@ class LoginScreen(Screen):
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        self.root_widget = Builder.load_file(FILE_DIR + self.view_kv_filepath)
+        self.root_widget = Builder.load_file(os.path.join(FILE_DIR, self.view_kv_filepath))
         self.root_widget.link_to_app(app_ref=root_app)
         self.add_widget(self.root_widget)
 

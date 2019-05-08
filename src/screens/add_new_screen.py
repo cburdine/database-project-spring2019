@@ -6,7 +6,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
 import os
 
-FILE_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
+FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 class AddNewScreen(Screen):
 
@@ -16,7 +16,7 @@ class AddNewScreen(Screen):
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        self.root_widget = Builder.load_file(FILE_DIR + self.view_kv_filepath)
+        self.root_widget = Builder.load_file(os.path.join(FILE_DIR,self.view_kv_filepath))
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 
