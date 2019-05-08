@@ -231,7 +231,8 @@ class SectionStatsPanel(BoxLayout):
             self.ids.stats_label.text = self.app.client_model.convert_to_str(stats)
         else:
             stats = self.app.client_model.get_solo_section_statistics(self.section)
-            self.ids.stats_label.text = self.app.client_model.convert_to_str(stats, True)
+            goal_stats = self.app.client_model.get_solo_section_statistics(self.section)
+            self.ids.stats_label.text = self.app.client_model.convert_to_str(stats, goal_stats, True)
 
 class GoalStatsPanel(BoxLayout):
     """" else str(grades_obj.count_w)"""
