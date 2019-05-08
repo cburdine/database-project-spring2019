@@ -13,6 +13,10 @@ import logging
 from kivy.app import Widget
 from kivy.metrics import dp
 from kivy.clock import Clock
+import os
+
+FILE_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
+
 """
 This class represents the Enter Grades screen (This is an instance of a
 kivy Screen object, which is managed by a ScreenManager in the app.py App class.
@@ -20,11 +24,11 @@ kivy Screen object, which is managed by a ScreenManager in the app.py App class.
 class ViewSectionStatsScreen(Screen):
 
     screen_name = 'view_section_stats'
-    view_kv_filepath = 'screens/view_section_stats_screen.kv'
+    view_kv_filepath = 'view_section_stats_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        self.root_widget = Builder.load_file(self.view_kv_filepath)
+        self.root_widget = Builder.load_file(FILE_DIR + self.view_kv_filepath)
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 

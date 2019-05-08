@@ -1,5 +1,4 @@
 #!usr/bin/python3
-
 from src.model.app import CurriculaApp
 
 def main():

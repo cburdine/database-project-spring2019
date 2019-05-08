@@ -10,6 +10,11 @@ from src.db import adapter
 from src.model import client_model
 import logging
 from src.widgets.dialogues import MessageDialogue
+import os
+
+FILE_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
+
+
 
 # todo: error I'm getting that I don't understand is that if I try to enter in a topic back to back it crashes
 
@@ -17,11 +22,11 @@ class NewTopicScreen(Screen):
 
     screen_name = 'new_topic'
 
-    view_kv_filepath = 'screens/new_topic_screen.kv'
+    view_kv_filepath = 'new_topic_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        self.root_widget = Builder.load_file(self.view_kv_filepath)
+        self.root_widget = Builder.load_file(FILE_DIR + self.view_kv_filepath)
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 

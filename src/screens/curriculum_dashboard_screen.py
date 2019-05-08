@@ -7,6 +7,9 @@ from src.widgets.tree_widgets import InteractiveTreeWidget
 from kivy.app import Widget
 from kivy.clock import Clock
 from kivy.metrics import dp
+import os
+
+FILE_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
 
 """
 This class represents the Curriculum Dashboard screen (This is an instance of a 
@@ -15,11 +18,11 @@ kivy Screen object, which is managed by a ScreenManager in the app.py App class.
 class CurriculumDashboardScreen(Screen):
 
     screen_name = 'curriculum_dashboard'
-    view_kv_filepath = 'screens/curriculum_dashboard_screen.kv'
+    view_kv_filepath = 'curriculum_dashboard_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        self.root_widget = Builder.load_file(self.view_kv_filepath)
+        self.root_widget = Builder.load_file(FILE_DIR + self.view_kv_filepath)
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 

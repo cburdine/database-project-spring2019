@@ -5,6 +5,10 @@ from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
 from kivy.app import Widget
+import os
+
+FILE_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
+
 
 """
 This class represents the Main Menu screen (This is an instance of a 
@@ -14,11 +18,11 @@ class MainScreen(Screen):
 
     screen_name = 'main'
 
-    view_kv_filepath = 'screens/main_screen.kv'
+    view_kv_filepath = 'main_screen.kv'
 
     def __init__(self, root_app=None):
         Screen.__init__(self, name=self.screen_name)
-        self.root_widget = Builder.load_file(self.view_kv_filepath)
+        self.root_widget = Builder.load_file(FILE_DIR + self.view_kv_filepath)
         self.root_widget.link_to_app(root_app)
         self.add_widget(self.root_widget)
 
