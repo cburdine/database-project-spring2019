@@ -809,19 +809,13 @@ class DBAdapter:
                 year_list.append(i)
 
 
-        print(year_list)
-        print(semester_list)
-
-
         ret = None
         section_list1 = []
         section_list2 = []
         current_section = Section()
         #try:
         for i in year_list:
-            print(i)
             for j in semester_list:
-                print(j)
                 self.db_cursor.execute(SECTION_GRADES, (j, i, course.name))
                 section_list1 = self.db_cursor.fetchall()
                 for k in section_list1:

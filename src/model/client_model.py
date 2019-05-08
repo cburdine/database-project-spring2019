@@ -359,7 +359,7 @@ class ClientModel:
 
     def get_section_goal_grades(self, section_goal):
         """Auxilary function to get_section_statistics to get the grades for each section"""
-        ret = self.adapter.get_section_grades(section=section_goal,section_goal=True)
+        ret = self.adapter.get_section_grades(section=section_goal, section_goal=True)
         return ret
 
     def get_section_goal_grades_by_id(self, section, goal_id):
@@ -380,9 +380,9 @@ class ClientModel:
             number_of_students_enrolled = section.num_students
 
         if not section_goal:
-            grades = self.get_section_grades(section) # section grades
+            grades = self.get_section_grades(section)  # section grades
         else:
-            grades = self.get_section_grades(section, True) # section goal grades
+            grades = self.get_section_grades(section, True)  # section goal grades
 
         if grades:
             total_grade_count = 0  # sum of each grade count
@@ -810,7 +810,6 @@ class ClientModel:
 
     def convert_to_str(self, stats, goal_stats=None,solo_stats=False):
         """Aux function to present our stats"""
-        print(stats)
         ret_str = " "
 
         if stats:
